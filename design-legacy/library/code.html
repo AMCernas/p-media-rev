@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#71717a",
+                    "on-primary": "#0a0012",
+                    "tertiary-container": "#065f46",
+                    "surface-container-highest": "#1e1e22",
+                    "on-primary-container": "#ede9fe",
+                    "on-surface-variant": "#a1a1aa",
+                    "inverse-primary": "#5b21b6",
+                    "inverse-on-surface": "#09090b",
+                    "on-tertiary-container": "#bbf7d0",
+                    "surface-bright": "#18181b",
+                    "on-tertiary": "#001a12",
+                    "tertiary-fixed": "#bbf7d0",
+                    "background": "#09090b",
+                    "on-error-container": "#fca5a5",
+                    "inverse-surface": "#fafafa",
+                    "on-background": "#fafafa",
+                    "on-error": "#1a0000",
+                    "primary-container": "#7c3aed",
+                    "primary-fixed": "#ede9fe",
+                    "on-secondary-fixed": "#18181b",
+                    "error-container": "#3b1111",
+                    "surface-variant": "#18181b",
+                    "error": "#ef4444",
+                    "on-secondary-fixed-variant": "#3f3f46",
+                    "surface": "#0c0c0f",
+                    "surface-tint": "#a78bfa",
+                    "tertiary-fixed-dim": "#6ee7b7",
+                    "primary-fixed-dim": "#c4b5fd",
+                    "on-secondary": "#09090b",
+                    "secondary": "#71717a",
+                    "outline-variant": "#27272a",
+                    "outline": "#52525b",
+                    "primary": "#a78bfa",
+                    "on-surface": "#fafafa",
+                    "surface-container-low": "#0f0f12",
+                    "secondary-fixed": "#a1a1aa",
+                    "secondary-container": "#27272a",
+                    "on-secondary-container": "#a1a1aa",
+                    "tertiary": "#34d399",
+                    "on-primary-fixed": "#2e1065",
+                    "surface-dim": "#0c0c0f",
+                    "on-tertiary-fixed": "#003318",
+                    "surface-container-high": "#18181b",
+                    "on-tertiary-fixed-variant": "#047857",
+                    "surface-container-lowest": "#09090b",
+                    "surface-container": "#121215",
+                    "on-primary-fixed-variant": "#5b21b6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {},
+            "fontFamily": {
+                    "headline": ["Geist"],
+                    "body": ["Geist"],
+                    "label": ["Geist"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        @font-face {
+            font-family: 'Geist';
+            src: url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+        }
+        body {
+            font-family: 'Geist', sans-serif;
+            background-color: #09090b;
+            color: #fafafa;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary/30">
+<!-- SideNavBar (Updated Component) -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col bg-[#0c0c0f] border-r border-[#27272a] font-geist text-sm text-[#fafafa] z-50 overflow-y-auto">
+<div class="p-6 mb-2">
+<h1 class="text-lg font-black text-[#fafafa]">Obsidian</h1>
+<p class="text-xs text-[#a1a1aa] mt-1">Precision Media Tracking</p>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<!-- Dashboard with Sub-links -->
+<div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<div class="ml-9 mt-1 space-y-1">
+<a class="block px-3 py-1.5 text-xs text-[#a1a1aa] hover:text-[#a78bfa] transition-colors" href="#">Movies</a>
+<a class="block px-3 py-1.5 text-xs text-[#a1a1aa] hover:text-[#a78bfa] transition-colors" href="#">Series</a>
+<a class="block px-3 py-1.5 text-xs text-[#a1a1aa] hover:text-[#a78bfa] transition-colors" href="#">Books</a>
+</div>
+</div>
+<!-- Library (Active) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a78bfa] bg-[#18181b] border-l-2 border-[#a78bfa] font-semibold transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span>Library</span>
+</a>
+<!-- Editor (Moved from TopBar) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span>Editor</span>
+</a>
+<!-- Settings -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-all cursor-pointer" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-6 border-t border-[#27272a]">
+<button class="w-full py-2 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 active:scale-95 duration-150 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="edit">edit</span>
+                Write Review
+            </button>
+<div class="mt-6 flex items-center gap-3">
+<img alt="User profile avatar" class="w-8 h-8 rounded-full border border-outline-variant" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJNGo12zwjNagXpdMmzVBEbcC_87lizkn3bmarXnmUdM6OrvZyZYCuOwdM1Qbd_cu0Vn3fma00spGpnuBUDXkJTrwMCnVYu-fWvmxR6PWJMFCDOrkftCPSRfFPvrKkFlcdiO6r3ZE3j4xKvOWNpa7ON7Lu0JQWGu7xONu807RME7uvurvQ1Mut8JmiilHCFX3WnVZLgniFEUhocBH-NtictNHNFHhL20mttOZlmfQlnBfP9waqSeJ05fBwdXZsPKwWSQaOI-e4Q0w"/>
+<div class="overflow-hidden">
+<p class="text-sm font-medium text-[#fafafa] truncate">Alex Chen</p>
+<p class="text-xs text-[#a1a1aa] truncate">Pro Critic</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Updated Component) -->
+<header class="fixed top-0 right-0 left-64 h-16 px-6 flex justify-between items-center bg-[#09090b] border-b border-[#27272a] font-geist tracking-tight text-[#fafafa] z-40">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] text-sm" data-icon="search">search</span>
+<input class="bg-[#18181b] border border-[#27272a] rounded-full py-1.5 pl-10 pr-4 text-sm focus:ring-1 focus:ring-[#a78bfa] focus:outline-none w-full text-[#fafafa] placeholder:text-[#a1a1aa]/50" placeholder="Search collection..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-20 px-8 pb-12">
+<!-- Hero Stats/Banner Section -->
+<section class="grid grid-cols-12 gap-6 mb-12">
+<div class="col-span-12 lg:col-span-8 bg-surface-container border border-outline-variant p-8 rounded-xl relative overflow-hidden group">
+<div class="relative z-10">
+<h2 class="text-3xl font-extrabold tracking-tighter mb-2">My Media Archives</h2>
+<p class="text-on-surface-variant max-w-md mb-6">Track your cinematic journey and literary explorations with precision. Every review refined, every rating calculated.</p>
+<div class="flex gap-4">
+<div class="px-4 py-2 bg-zinc-950/50 rounded-lg border border-zinc-800">
+<span class="block text-2xl font-bold text-violet-400">124</span>
+<span class="text-[10px] uppercase tracking-widest text-zinc-500">In Library</span>
+</div>
+<div class="px-4 py-2 bg-zinc-950/50 rounded-lg border border-zinc-800">
+<span class="block text-2xl font-bold text-tertiary">42</span>
+<span class="text-[10px] uppercase tracking-widest text-zinc-500">Published</span>
+</div>
+</div>
+</div>
+<div class="absolute right-0 top-0 w-1/3 h-full opacity-20 pointer-events-none grayscale group-hover:grayscale-0 transition-all duration-700">
+<img class="w-full h-full object-cover" data-alt="Abstract cinematic composition of movie film reels and vintage theater curtains in deep purple tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZ6a595m0tpGLNYUnk1BQMCGf-unNW_jf6kjPko9Rng5yuYoNYwkdfETK8nZY3uktPKFggTmHXFUP1jzGyLEt_AYdshRbqGrWVG50-NcR4eEUIb1CXzu5lUjjhJDRDQhHN0UH2KenIhiKeB0vGs_9EbxeXnfTTLVOs5bCYKnQdX0BZQEHq-G0kcLH1HNREEz8_H8JlEeOHJQUARq23LDI1089i0uzA4WGCmui1jMOg4qafCLbKrus6DM8qzglkSxCSh9rWl3QAO5Q"/>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 bg-primary-container p-8 rounded-xl flex flex-col justify-between border border-primary/20">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-4xl text-on-primary-container" data-icon="auto_awesome">auto_awesome</span>
+<span class="text-[10px] font-bold bg-on-primary-container text-primary-container px-2 py-0.5 rounded">WEEKLY DIGEST</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-on-primary-container leading-tight">Generate AI insights for your watchlist</h3>
+<p class="text-on-primary-container/70 text-sm mt-2">Discover patterns in your taste and find your next favorite based on recent ratings.</p>
+</div>
+</div>
+</section>
+<!-- Published Reviews Section -->
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" data-icon="verified">verified</span>
+<h3 class="text-xl font-bold tracking-tight">Published Reviews</h3>
+</div>
+<button class="text-sm text-zinc-500 hover:text-primary transition-colors flex items-center gap-1">
+                View all archives <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+<!-- Review Card 1 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:border-primary/50 transition-all group">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Cinematic shot of neon city lights reflected in puddles at night with deep teal and pink hues" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpcMPyPPmp0ewRr6jc5XEuNantFsiKGlhsfIrfXaloicucSFwgjsG_flsScFrTcK6xUttyjLnr-jY7P8cZDecHMhi2CWVBenJMtTJ_E6ZR53aytneSDAZ_WeEm8rFkHXxWsM3a9JHWgp9NboK1tl2MBSzfThBCoP3EGqx1EJyjyo_lscP6rQSqoAjHOPtYCONhBqGu9r2nRfqoq5CKGFDmiEli4wb0rgYPutkCcPipfoCkjoqWNoJKudhyxnVq-1PsmN4NjLpS9JE"/>
+<div class="absolute top-3 right-3 flex gap-2">
+<span class="bg-tertiary-container/80 backdrop-blur-md text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded">PUBLISHED</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-zinc-100">Cyber City 2077</h4>
+<span class="text-tertiary font-bold text-sm">9.2</span>
+</div>
+<p class="text-xs text-zinc-500 line-clamp-2 mb-4">A visual masterpiece that redefines the genre with its intricate world-building and narrative depth.</p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800">
+<span class="text-[10px] text-zinc-500">MAY 24, 2024</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-xs text-zinc-600" data-icon="chat" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="text-[10px] text-zinc-600">12</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Review Card 2 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:border-primary/50 transition-all group">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="High contrast black and white portrait of a classic film projector lens with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAu6rVsA8k2oU7h0odwZqirIyhDnT-1qrAV0D-TL-HSOecuYJrwmSP-xbxVzTet8SbQs1yGKdjW4gXdnBO4-UbF4_khSZzFQCwnopgVKFL2vKHR9Gm4P3NGR06Nb8fgRwyau_QZ49VgTlqNh_x3HkGNMRVFi_UcpcTRPnQEbv7fdvZNqtQQ4wF7zyKz2xQp83w3gqmJM241-E8DzojA9GnZUlzGbFRLWWbEP_xMqDQ72x39ELgP1sHVgFbkMTzBB4e6mWgNMECZZrs"/>
+<div class="absolute top-3 right-3 flex gap-2">
+<span class="bg-tertiary-container/80 backdrop-blur-md text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded">PUBLISHED</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-zinc-100">Midnight Noir</h4>
+<span class="text-tertiary font-bold text-sm">8.7</span>
+</div>
+<p class="text-xs text-zinc-500 line-clamp-2 mb-4">The pacing suffers in the second act, but the cinematography saves it from mediocrity.</p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800">
+<span class="text-[10px] text-zinc-500">APR 12, 2024</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-xs text-zinc-600" data-icon="chat" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="text-[10px] text-zinc-600">4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Review Card 3 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:border-primary/50 transition-all group">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close-up of a stack of old leather bound books in a dark library with soft golden light hitting the spines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCJgHOOHXk2iGTOwDAdIBnbkF1r4iNnDB7rYruy-L78sRLUHnDOFL2OGLU7-sR0LHCWsalWtLsJ14P-IH3vOoaZfOlU8YG6babuaDMAuXe8fOuKI32OwCBKuF4znOsjEA9Pudr0jlxwni17fuwvt3_CzBP0zEF9UY5VUtGqvrpMTGBk8U3odyYd72Kl7D8-P1qosDz4NZ6DtNVxdDdxHEqnzEeAJYZ9Q3T-WjVvU-A2YyVuBJT-KBdvi0DOKQ72mlEmbNHo3688evw"/>
+<div class="absolute top-3 right-3 flex gap-2">
+<span class="bg-tertiary-container/80 backdrop-blur-md text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded">PUBLISHED</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-zinc-100">The Silent Archive</h4>
+<span class="text-tertiary font-bold text-sm">9.5</span>
+</div>
+<p class="text-xs text-zinc-500 line-clamp-2 mb-4">A haunting literary debut that explores the boundaries of memory and reality.</p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800">
+<span class="text-[10px] text-zinc-500">MAR 28, 2024</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-xs text-zinc-600" data-icon="chat" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="text-[10px] text-zinc-600">31</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Review Card 4 -->
+<div class="bg-surface-container border border-outline-variant rounded-lg overflow-hidden flex flex-col hover:border-primary/50 transition-all group">
+<div class="h-40 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Vibrant digital painting of a futuristic spacecraft floating above a gas giant planet with glowing rings" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB57TAohqWx4Z0r-1AkMtXVtSmYkFKM86pCfjfhmjJmEYqIoo5PlI-Uh2Xm23dS1YT8bNco_sWTsM_NkWIZsAKPJnHa9g3WpNxYpvDnoFn3aDsc0USgDJKkpogaa5mJH2m65gXp3sccwdtIEgpsC1lJrbiJb9tc2PmJJOtRLzFXt4dtuXlzyKRXPlxTBB2RIqdsfKsEZaoa36ZJV8H3IEXJqNe79Zg0Aw9pfcqriTfUVstUlmvDzK9n5iFgZOVhq6psTmWBXfZ9PxE"/>
+<div class="absolute top-3 right-3 flex gap-2">
+<span class="bg-tertiary-container/80 backdrop-blur-md text-on-tertiary-container text-[10px] font-bold px-2 py-0.5 rounded">PUBLISHED</span>
+</div>
+</div>
+<div class="p-4 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h4 class="font-bold text-zinc-100">Nebula Voyager</h4>
+<span class="text-tertiary font-bold text-sm">7.1</span>
+</div>
+<p class="text-xs text-zinc-500 line-clamp-2 mb-4">Technically impressive but emotionally hollow. Great visuals can't save a weak script.</p>
+<div class="mt-auto flex items-center justify-between pt-4 border-t border-zinc-800">
+<span class="text-[10px] text-zinc-500">MAR 05, 2024</span>
+<div class="flex gap-1">
+<span class="material-symbols-outlined text-xs text-zinc-600" data-icon="chat" data-weight="fill" style="font-variation-settings: 'FILL' 1;">chat</span>
+<span class="text-[10px] text-zinc-600">8</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Watchlist Section -->
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="bookmark">bookmark</span>
+<h3 class="text-xl font-bold tracking-tight">Watchlist</h3>
+</div>
+<div class="flex gap-2">
+<button class="p-1 border border-outline-variant rounded hover:bg-zinc-900 text-zinc-400">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+</button>
+<button class="p-1 border border-outline-variant rounded hover:bg-zinc-900 text-zinc-400">
+<span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Watchlist Item 1 -->
+<div class="flex gap-4 p-3 bg-surface-container-low border border-outline-variant rounded-lg group hover:bg-surface-container transition-colors">
+<div class="w-24 h-32 flex-shrink-0 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized movie poster aesthetic with a dark silhouetted figure against a stark red background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG79UcdeTep83ZqWAMOQq5qYy-fJCkbO_j66SwcDa5dF6sO43DNvbZgVxnNae3omMn6IK2KpTdTZCP3Nhkm2flngd_-NO-Nd_mVrljMUZdcacdKvn6kGI9Ierd8Tyb_D_0iQUD-pxPfhQs39smq5sQpe_fVH6hK_xmh4lk_FIfb8Ax_ddaxrCCw4xJ5cmq-buT_H0cKaYf7tpc2FP0pzqdaIYjtvXcehJqjJvpPRE878wvrtWI-vJsCJGVJr1NOX1-5h-0WYvn_38"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-violet-400 uppercase tracking-tighter">MOVIE</span>
+<span class="w-1 h-1 rounded-full bg-zinc-700"></span>
+<span class="text-[10px] text-zinc-500 font-bold">2H 15M</span>
+</div>
+<h4 class="font-bold text-zinc-100 group-hover:text-primary transition-colors">Shadow Protocol</h4>
+<p class="text-xs text-zinc-500 mt-1 line-clamp-2">A retired agent is pulled back into the world of espionage.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3 py-1 bg-zinc-900 text-[10px] font-bold text-zinc-300 rounded border border-zinc-700 hover:text-primary hover:border-primary transition-all">START REVIEW</button>
+<span class="bg-zinc-800 text-zinc-400 text-[10px] font-bold px-2 py-0.5 rounded">PENDING</span>
+</div>
+</div>
+</div>
+<!-- Watchlist Item 2 -->
+<div class="flex gap-4 p-3 bg-surface-container-low border border-outline-variant rounded-lg group hover:bg-surface-container transition-colors">
+<div class="w-24 h-32 flex-shrink-0 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Surreal landscape of a desert at night with multiple moons in the sky and glowing sand" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7dF9q-V2N2cH7OAYgM7H0virJTpHTk27YVnVH9ZlJl6R7WDycXEcfEbOg0cpMzYzYQI1srZE_Eomgmyxaz3JFgeudeSJ-NK5AIe5OMr0279vfko09L1SQLN5Ic7EWMqMJJcalHC_G3urigRHMeoiFL3jFyw8W0DFkcrxDGmnzUg2ScLnMQcKqNPO1QLebS7txNBa8F6yBoSDAtj1BI6qY2O9OavB8s3l0AQs8hDiX9NsW72dN3bJ-Wg3rwt6z2VmLbCyxXLmU_kg"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-emerald-400 uppercase tracking-tighter">SERIES</span>
+<span class="w-1 h-1 rounded-full bg-zinc-700"></span>
+<span class="text-[10px] text-zinc-500 font-bold">10 EPISODES</span>
+</div>
+<h4 class="font-bold text-zinc-100 group-hover:text-primary transition-colors">Beyond Horizon</h4>
+<p class="text-xs text-zinc-500 mt-1 line-clamp-2">Humanity's first colony on a rogue planet faces extinction.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3 py-1 bg-zinc-900 text-[10px] font-bold text-zinc-300 rounded border border-zinc-700 hover:text-primary hover:border-primary transition-all">START REVIEW</button>
+<span class="bg-zinc-800 text-zinc-400 text-[10px] font-bold px-2 py-0.5 rounded">WATCHING</span>
+</div>
+</div>
+</div>
+<!-- Watchlist Item 3 -->
+<div class="flex gap-4 p-3 bg-surface-container-low border border-outline-variant rounded-lg group hover:bg-surface-container transition-colors">
+<div class="w-24 h-32 flex-shrink-0 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="An open book floating in a dark room with sparks and light emanating from the pages" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdVB9kuOHhtIQqae6JBLXNPi1C8BtX5ZF9N7Km8ljDIiSCS_iiox6NgRMKXOBmHOypJ1g3-LgKMuwzpC3YTJglDkSEIuGptO8FCRaqCCIeyAoFknz89Vc6cY6mgxM-erPW_ufwOlyhFhC7SDjl_QzSui3VE0k_Sst0oGk9bKVnIDMcqZVflLGy2mypxvfB0QU9my7ji-Se6aFdpcU8nAApPoPIIvztOiEYbyWghQzDXmdikbTGvK0zi7QQlfsmgM3MtAv4OEOi21c"/>
+</div>
+<div class="flex flex-col justify-between py-1">
+<div>
+<div class="flex items-center gap-2 mb-1">
+<span class="text-[10px] font-bold text-amber-400 uppercase tracking-tighter">BOOK</span>
+<span class="w-1 h-1 rounded-full bg-zinc-700"></span>
+<span class="text-[10px] text-zinc-500 font-bold">342 PAGES</span>
+</div>
+<h4 class="font-bold text-zinc-100 group-hover:text-primary transition-colors">The Alchemist Engine</h4>
+<p class="text-xs text-zinc-500 mt-1 line-clamp-2">Steampunk fantasy set in a world powered by metallic magic.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3 py-1 bg-zinc-900 text-[10px] font-bold text-zinc-300 rounded border border-zinc-700 hover:text-primary hover:border-primary transition-all">START REVIEW</button>
+<span class="bg-zinc-800 text-zinc-400 text-[10px] font-bold px-2 py-0.5 rounded">PENDING</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform z-50 group">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+<span class="absolute right-16 bg-zinc-900 text-zinc-100 text-xs px-3 py-1.5 rounded border border-zinc-800 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">New Entry</span>
+</button>
+</body></html>

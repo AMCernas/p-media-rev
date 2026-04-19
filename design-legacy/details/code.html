@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#71717a",
+                    "on-primary": "#0a0012",
+                    "tertiary-container": "#065f46",
+                    "surface-container-highest": "#1e1e22",
+                    "on-primary-container": "#ede9fe",
+                    "on-surface-variant": "#a1a1aa",
+                    "inverse-primary": "#5b21b6",
+                    "inverse-on-surface": "#09090b",
+                    "on-tertiary-container": "#bbf7d0",
+                    "surface-bright": "#18181b",
+                    "on-tertiary": "#001a12",
+                    "tertiary-fixed": "#bbf7d0",
+                    "background": "#09090b",
+                    "on-error-container": "#fca5a5",
+                    "inverse-surface": "#fafafa",
+                    "on-background": "#fafafa",
+                    "on-error": "#1a0000",
+                    "primary-container": "#7c3aed",
+                    "primary-fixed": "#ede9fe",
+                    "on-secondary-fixed": "#18181b",
+                    "error-container": "#3b1111",
+                    "surface-variant": "#18181b",
+                    "error": "#ef4444",
+                    "on-secondary-fixed-variant": "#3f3f46",
+                    "surface": "#0c0c0f",
+                    "surface-tint": "#a78bfa",
+                    "tertiary-fixed-dim": "#6ee7b7",
+                    "primary-fixed-dim": "#c4b5fd",
+                    "on-secondary": "#09090b",
+                    "secondary": "#71717a",
+                    "outline-variant": "#27272a",
+                    "outline": "#52525b",
+                    "primary": "#a78bfa",
+                    "on-surface": "#fafafa",
+                    "surface-container-low": "#0f0f12",
+                    "secondary-fixed": "#a1a1aa",
+                    "secondary-container": "#27272a",
+                    "on-secondary-container": "#a1a1aa",
+                    "tertiary": "#34d399",
+                    "on-primary-fixed": "#2e1065",
+                    "surface-dim": "#0c0c0f",
+                    "on-tertiary-fixed": "#003318",
+                    "surface-container-high": "#18181b",
+                    "on-tertiary-fixed-variant": "#047857",
+                    "surface-container-lowest": "#09090b",
+                    "surface-container": "#121215",
+                    "on-primary-fixed-variant": "#5b21b6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Geist"],
+                    "body": ["Geist"],
+                    "label": ["Geist"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; background-color: #09090b; color: #fafafa; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0c0c0f; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-background text-on-background overflow-x-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-screen w-64 flex flex-col bg-[#0c0c0f] border-r border-[#27272a] font-geist text-sm text-[#fafafa] z-50 transition-all duration-200">
+<div class="p-6 mb-2">
+<h1 class="text-lg font-black text-[#fafafa]">Obsidian</h1>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-widest opacity-60">Precision Media Tracking</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<!-- Dashboard with Sublinks -->
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b]" href="#">
+<span class="material-symbols-outlined text-lg">dashboard</span>
+<span class="font-medium">Dashboard</span>
+</a>
+<div class="pl-10 space-y-1">
+<a class="block py-1.5 text-xs text-[#a1a1aa] hover:text-[#a78bfa] transition-colors" href="#">Movies</a>
+<a class="block py-1.5 text-xs text-[#a78bfa] font-semibold" href="#">Series</a>
+<a class="block py-1.5 text-xs text-[#a1a1aa] hover:text-[#a78bfa] transition-colors" href="#">Books</a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-[#a78bfa] bg-[#18181b] border-l-2 border-[#a78bfa] font-semibold" href="#">
+<span class="material-symbols-outlined text-lg">auto_stories</span>
+<span class="font-medium">Library</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b]" href="#">
+<span class="material-symbols-outlined text-lg">edit_note</span>
+<span class="font-medium">Editor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b]" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+<span class="font-medium">Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-[#27272a]">
+<button class="w-full flex items-center justify-center gap-2 bg-primary py-2.5 rounded text-on-primary font-bold text-sm transition-opacity hover:opacity-90 active:scale-95 duration-150">
+                Write Review
+            </button>
+<div class="mt-4 flex items-center gap-3 px-2">
+<div class="h-8 w-8 rounded-full bg-zinc-800 overflow-hidden border border-zinc-700">
+<img alt="User profile" data-alt="Portrait of a professional man with short dark hair and a confident expression in front of a dark neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0mIwCHy1zCDZFoJMmkt12RSzwuL2-28eIusvVDeKdaop1TOQaCYvv73dvsVa4w5nYCkJTakCBjBPQMAqemWP-_rYf9l18EkqsJVezv-9qNWweKhOR54SkaLsAEiIOJsaoFcDVWNhKp4bCq5bARX0ZyI8qmWKWq_LBugVyLoXuJVHI27E1baFK2_JaFxkvd-mdTOZABiAM2hrGoXHTbIZnjQLcIp4zn_8rjEBNQjDkP4z95ekBZRm1T3VzDq-UJoO3ze-jMyfYR10"/>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-bold text-on-surface truncate">Alex Rivera</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-tighter">Pro Member</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 min-h-screen relative">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-[#09090b] border-b border-[#27272a] font-geist tracking-tight text-[#fafafa] flex justify-between items-center px-6 z-40">
+<div class="flex items-center flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-sm">search</span>
+<input class="bg-[#121215] border border-[#27272a] rounded-full pl-10 pr-4 py-1.5 text-sm focus:ring-2 focus:ring-[#a78bfa] focus:outline-none w-full transition-all group-hover:border-zinc-600" placeholder="Search Obsidian..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="w-full pt-16">
+<!-- Hero Section -->
+<section class="relative h-[665px] w-full overflow-hidden">
+<div class="absolute inset-0">
+<img class="w-full h-full object-cover" data-alt="Intense high-contrast close-up of a professional chef in a dark industrial kitchen with warm copper lighting and steam rising" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqbzBpl8Fqhyv3cEmgg_v050NAiNxgd0LI2Pwb_9EcRKaV9jL4l11LlHikjmdSHwFa4SGAP-wAf2UOUW5SHJMhPEt5P35CpItyK8lSMbjDSdWAOAxLOc4Y9ldIfQMzmZA70dHWpaOmwl9At_5WzeouOdrgC3Y_vy0GUzW_0rxrFO14YjTKi-YxW4wK_-2aiFpMthHo2C4l5FRiwT1XifWNEl1hCdIaL9cr9bEi1iBUKPzoQrERk1BxP2IAu3LRyYUdULylPLcydjU"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent"></div>
+</div>
+<div class="absolute bottom-0 left-0 p-12 w-full max-w-4xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="bg-primary-container/20 text-primary border border-primary/30 px-2 py-0.5 rounded text-xs font-bold tracking-widest uppercase">Series</span>
+<span class="text-secondary text-sm font-medium">S2 • 10 Episodes • 2023</span>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-sm font-bold">8.6</span>
+</div>
+</div>
+<h2 class="text-6xl font-extrabold tracking-tighter mb-4 text-fafafa">The Bear</h2>
+<p class="text-secondary text-lg leading-relaxed max-w-2xl mb-8">
+                        A young chef from the fine dining world comes home to Chicago to run his family sandwich shop after a heartbreaking death in his family. A gritty, high-stakes exploration of family, food, and the pressure of perfection.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="flex items-center gap-2 bg-primary text-on-primary px-8 py-4 rounded font-bold text-base transition-transform hover:scale-[1.02] active:scale-95 shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined">playlist_add</span>
+                            Add to Watchlist
+                        </button>
+<button class="flex items-center gap-2 bg-zinc-900 border border-zinc-700 text-fafafa px-8 py-4 rounded font-bold text-base transition-transform hover:scale-[1.02] hover:bg-zinc-800 active:scale-95">
+<span class="material-symbols-outlined">edit_note</span>
+                            Write Review
+                        </button>
+</div>
+</div>
+</section>
+<!-- Bento Metadata Section -->
+<section class="p-12 grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Cast & Crew -->
+<div class="md:col-span-8 bg-surface-container border border-outline-variant p-8 rounded-xl">
+<div class="flex justify-between items-center mb-8">
+<h3 class="text-xl font-bold tracking-tight">Main Cast</h3>
+<button class="text-xs text-primary font-bold uppercase tracking-widest hover:underline">Full Credits</button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-6">
+<div class="space-y-3">
+<div class="aspect-square rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700">
+<img class="w-full h-full object-cover" data-alt="Portrait of a young man with curly hair and an intense gaze looking directly at the camera in cinematic low lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQUo6R_IkGrvCmQodg8k8BLIqBrHfvH96JRikmoEGEhw3fevCJqWs39vfbJSsWXpbYpXoHyYp3un-mkdK4LWkkOhyciFgYZQWyCM-ttirS1YTrKUo1iRBp75p_q-3krRYCQTZzn5CWCB4lLHRjjcBLBgjIFMAZh4cFxGT9VZA6rYZad2Va0tWcIzg8EhM1viWePDyuLEhyxCi0gQFZ1HK6HLsWS6W0PpxIAx_wcI2PCpbvN4Dn2ZSm843azOSSB8VJot64lLd46uo"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Jeremy Allen White</p>
+<p class="text-xs text-on-surface-variant">Carmy Berzatto</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="aspect-square rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700">
+<img class="w-full h-full object-cover" data-alt="Close up portrait of a young woman with a warm smile and dark hair against a soft blurred background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZVDeNyZU0EjF2NqwTYyVAPc6g2AKMiDZYkl25cTW7yCD2YYn5dafLnI75IhDTDTS5oqRPJVNa6Cs-8ECwdp1YWz8MY0U89EWhQHjv1RIZk5A-om32SqLsZ27jsskbJWLWvLACRoljfYNBUpnnWDJjbxakFZf1_Yl3akesyFLyzBqY0gVO05Rj0ETAJPoDCubQTGnq8fz7iT4EEGmrzM8ew6PiLWWiMlhcxEIIOTA0V2NBqBnedXEWSXKEf-evJkL9m2kI0E7aV_4"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Ayo Edebiri</p>
+<p class="text-xs text-on-surface-variant">Sydney Adamu</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="aspect-square rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700">
+<img class="w-full h-full object-cover" data-alt="Headshot of a middle-aged man with short hair and a determined expression in a professional studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCb1aapmR9GkhiTSig-CeaqQrNDUrLlVmUWKyKK0ssS_uZpIRw8AvvDlN2spK052W32AX5Abi7Gc0v9Y7dgZY41qQ3-9dhY0ahayK_Ia-w0P4GJC4clymIJJU-t9xJY8Of6ylbFfOtrWpCVQ2oEwxAC-6Olh84eJawi0CK7swzZN7p9_PJfT8SuzklMjk4Ebvl7-LRs-t4P_rWy3QJZjVyQvBTTDqV9FDoNMvAzPe7m8k9cAjJeWLnXtfjGcdv2ks_3j7P5dYUa4rM"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Ebon Moss-Bachrach</p>
+<p class="text-xs text-on-surface-variant">Richie Jerimovich</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="aspect-square rounded-lg bg-zinc-800 overflow-hidden border border-zinc-700">
+<img class="w-full h-full object-cover" data-alt="Candid portrait of a smiling man with a beard and glasses in soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqfr5z2Rz9zqittr5ymVJ2bIG7oQ43Yvge6fKjU24ut6QsUgLFcJ3lmjtbO8ra3Dms1SjuWPVN4xukzji20peewqSGLnqDo0xodg7xsMhU7gLsjOj6kZDACqbZNi51q4CDzKj751CjPdyjXqhkZs_fwMrXOmtY2yvyyfTQXQ5RHH-DsXft3csHYXdsio8UXj2EpsdkZSCdwIE5ZmLDyL9j7niPt76Pqiu2tc9JaNKQSS9xOMdDf8nb8KWQJ75hYAwS7E2eP1zVoxI"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Lionel Boyce</p>
+<p class="text-xs text-on-surface-variant">Marcus</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Stats Sidebar Bento -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<div class="bg-surface-container border border-outline-variant p-6 rounded-xl">
+<h4 class="text-xs text-zinc-500 font-bold uppercase tracking-widest mb-4">Metadata</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center py-2 border-b border-zinc-800">
+<span class="text-zinc-400 text-sm">Status</span>
+<span class="text-tertiary text-sm font-bold">Renewed</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-zinc-800">
+<span class="text-zinc-400 text-sm">Network</span>
+<span class="text-fafafa text-sm font-bold">FX on Hulu</span>
+</div>
+<div class="flex justify-between items-center py-2 border-b border-zinc-800">
+<span class="text-zinc-400 text-sm">Genre</span>
+<span class="text-fafafa text-sm font-bold">Drama, Comedy</span>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 border border-primary/20 p-6 rounded-xl">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+<span class="text-sm font-bold text-primary">Obsidian Metric</span>
+</div>
+<div class="text-3xl font-extrabold tracking-tighter text-fafafa">Top 1%</div>
+<p class="text-xs text-zinc-500 mt-2">Currently in the 99th percentile of tracked series this month.</p>
+</div>
+</div>
+</section>
+<!-- Episodes Section -->
+<section class="px-12 pb-24">
+<div class="flex justify-between items-center mb-8">
+<div class="flex items-center gap-6">
+<h3 class="text-3xl font-extrabold tracking-tighter">Season 2</h3>
+<div class="flex gap-2">
+<button class="bg-zinc-900 px-4 py-1 rounded-full text-xs font-bold border border-zinc-700">Season 1</button>
+<button class="bg-primary/20 text-primary px-4 py-1 rounded-full text-xs font-bold border border-primary/30">Season 2</button>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<!-- Episode Items -->
+<div class="group flex items-center gap-6 p-4 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer border border-transparent hover:border-zinc-800">
+<span class="text-2xl font-black text-zinc-800 group-hover:text-violet-400 transition-colors w-8">01</span>
+<div class="h-20 w-36 flex-shrink-0 rounded bg-zinc-800 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="Action shot of a bustling restaurant kitchen with pans on high flame and chefs working quickly" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBkhSE7f7rMSGwJJBIr9tM4GuArYeIpAWQk2REFIVePw1TKEx4wwk6pBkEM8Q9p2uRiG1bGniLvvQeZn0AjzKT74DADm-Lrgai1tT9atyNob2GIBH6hl854r2kqgBhs6SHKlTD5ap3BpC0bvY9WdEEBAdKgQKu5T-9Afk8yjK8ZrvXSYwEN1ZbBtoFl12Uh1KGye81nObVq97he7L3hhaY8v7nrX4C2vvEsB1_8Rhgld7x-jTsFWq9xBb0xJvViIUxt-t_0nVDKbSw"/>
+</div>
+<div class="flex-1">
+<h5 class="font-bold text-fafafa group-hover:text-primary transition-colors">Beef</h5>
+<p class="text-sm text-zinc-500 line-clamp-1">The Bear is back. Carmy, Sydney, and Richie work to transform their grimy sandwich shop into a next-level spot.</p>
+</div>
+<div class="flex items-center gap-8 px-4">
+<span class="text-xs text-zinc-500 font-mono">31 MIN</span>
+<button class="material-symbols-outlined text-zinc-600 hover:text-fafafa transition-colors">check_circle</button>
+</div>
+</div>
+<div class="group flex items-center gap-6 p-4 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer border border-transparent hover:border-zinc-800">
+<span class="text-2xl font-black text-zinc-800 group-hover:text-violet-400 transition-colors w-8">02</span>
+<div class="h-20 w-36 flex-shrink-0 rounded bg-zinc-800 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="Artistic overhead shot of architectural blueprints spread out on a dark wooden table with a vintage ruler" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYKZaKdo81btuArV1Cs_-wCvDTQ54xT85V93udSnjMCMvMbzBHEVXwZoLL-FxSI6n6xSufV1jQTM_tXkGT9LnVnyqUxF_HAXHzBr0U7qBEb8WMCFAWmsDmlPKZ26Cd92Ksg4rKxFoU-TtVnHjPGD8TgvZcKRy6lb9FyACQFqEae0htiExtdqV54c9KZlevYos3PtayR1avZgQw0GkWuWpouca3fEaEx0z_8GCXf7zwiIAdYfOZk5HvbFl9k-dnNII38r1ctY02GjI"/>
+</div>
+<div class="flex-1">
+<h5 class="font-bold text-fafafa group-hover:text-primary transition-colors">Pasta</h5>
+<p class="text-sm text-zinc-500 line-clamp-1">The team faces the crushing reality of a remodel. Sydney searches for inspiration across the city.</p>
+</div>
+<div class="flex items-center gap-8 px-4">
+<span class="text-xs text-zinc-500 font-mono">28 MIN</span>
+<button class="material-symbols-outlined text-zinc-600 hover:text-fafafa transition-colors">check_circle</button>
+</div>
+</div>
+<div class="group flex items-center gap-6 p-4 rounded-xl hover:bg-zinc-900 transition-colors cursor-pointer border border-transparent hover:border-zinc-800">
+<span class="text-2xl font-black text-zinc-800 group-hover:text-violet-400 transition-colors w-8">03</span>
+<div class="h-20 w-36 flex-shrink-0 rounded bg-zinc-800 overflow-hidden">
+<img class="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" data-alt="Dramatic shot of a single empty glass of wine on a dark bar counter with reflections of neon city lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX-Vt2OOWXdUvXMbWUXAy-3vCRCS8Va0P915uuZ-AP0Q_2lTJQ7Ccyp7w0AcUzENvELYumWKXlX0xjhy9tTxoQRX5KeRzriy13YsSMbKKqxrGEtKC5hk2IicuNn1fBmsUMhI0bhqCnWfKuMM8lDcPXhVcjGpc95BO6fqlx8y85Nk_rRFqSkrIYnUWwHkowE-Cy_5s2IK4pRRIZroJa2fGLXaXSQSHGTd6pkC9VoSG71HawWP6HSdkirXUEyM6a80T-4ppt_oXHsUA"/>
+</div>
+<div class="flex-1">
+<h5 class="font-bold text-fafafa group-hover:text-primary transition-colors">Sundae</h5>
+<p class="text-sm text-zinc-500 line-clamp-1">Sydney spends the day tasting her way through Chicago. Carmy struggles to find balance in his personal life.</p>
+</div>
+<div class="flex items-center gap-8 px-4">
+<span class="text-xs text-zinc-500 font-mono">35 MIN</span>
+<button class="material-symbols-outlined text-zinc-600 hover:text-fafafa transition-colors">check_circle</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
