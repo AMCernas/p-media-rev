@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#71717a",
+                    "on-primary": "#0a0012",
+                    "tertiary-container": "#065f46",
+                    "surface-container-highest": "#1e1e22",
+                    "on-primary-container": "#ede9fe",
+                    "on-surface-variant": "#a1a1aa",
+                    "inverse-primary": "#5b21b6",
+                    "inverse-on-surface": "#09090b",
+                    "on-tertiary-container": "#bbf7d0",
+                    "surface-bright": "#18181b",
+                    "on-tertiary": "#001a12",
+                    "tertiary-fixed": "#bbf7d0",
+                    "background": "#09090b",
+                    "on-error-container": "#fca5a5",
+                    "inverse-surface": "#fafafa",
+                    "on-background": "#fafafa",
+                    "on-error": "#1a0000",
+                    "primary-container": "#7c3aed",
+                    "primary-fixed": "#ede9fe",
+                    "on-secondary-fixed": "#18181b",
+                    "error-container": "#3b1111",
+                    "surface-variant": "#18181b",
+                    "error": "#ef4444",
+                    "on-secondary-fixed-variant": "#3f3f46",
+                    "surface": "#0c0c0f",
+                    "surface-tint": "#a78bfa",
+                    "tertiary-fixed-dim": "#6ee7b7",
+                    "primary-fixed-dim": "#c4b5fd",
+                    "on-secondary": "#09090b",
+                    "secondary": "#71717a",
+                    "outline-variant": "#27272a",
+                    "outline": "#52525b",
+                    "primary": "#a78bfa",
+                    "on-surface": "#fafafa",
+                    "surface-container-low": "#0f0f12",
+                    "secondary-fixed": "#a1a1aa",
+                    "secondary-container": "#27272a",
+                    "on-secondary-container": "#a1a1aa",
+                    "tertiary": "#34d399",
+                    "on-primary-fixed": "#2e1065",
+                    "surface-dim": "#0c0c0f",
+                    "on-tertiary-fixed": "#003318",
+                    "surface-container-high": "#18181b",
+                    "on-tertiary-fixed-variant": "#047857",
+                    "surface-container-lowest": "#09090b",
+                    "surface-container": "#121215",
+                    "on-primary-fixed-variant": "#5b21b6"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Geist"],
+                    "body": ["Geist"],
+                    "label": ["Geist"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Geist', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar: From COMPONENTS_7 -->
+<aside class="fixed left-0 top-0 h-screen w-64 bg-[#0c0c0f] border-r border-[#27272a] flex flex-col font-geist text-sm text-[#fafafa] z-50">
+<!-- Header -->
+<div class="flex items-center gap-3 p-6 mb-4">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">diamond</span>
+</div>
+<div>
+<h1 class="text-lg font-black text-[#fafafa]">Obsidian</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-zinc-500 font-bold">Precision Media Tracking</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex-1 px-4 space-y-1">
+<!-- Dashboard with sub-links -->
+<div>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a78bfa] bg-[#18181b] border-l-2 border-[#a78bfa] font-semibold cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<div class="ml-11 mt-1 space-y-1">
+<a class="block py-2 text-xs text-[#a1a1aa] hover:text-[#fafafa] transition-all" href="#">Movies</a>
+<a class="block py-2 text-xs text-[#a1a1aa] hover:text-[#fafafa] transition-all" href="#">Series</a>
+<a class="block py-2 text-xs text-[#a1a1aa] hover:text-[#fafafa] transition-all" href="#">Books</a>
+</div>
+</div>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span>Library</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+<span>Editor</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b] transition-all cursor-pointer duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<!-- Profile section -->
+<div class="p-4 border-t border-[#27272a]">
+<button class="w-full mb-4 py-3 px-4 bg-primary text-on-primary font-bold rounded-lg hover:brightness-110 transition-all">
+            Write Review
+        </button>
+<div class="flex items-center gap-3 p-2 bg-surface-container rounded-xl border border-outline-variant">
+<img alt="User profile" class="w-10 h-10 rounded-full bg-zinc-800" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmL78YWQw_dx-X-t792UW7KBNrFfFmFFNEfETUH-h14ifBt0hqXNTwg-1LOERM0tSGA4A5XYO_a0M3rSON_EnVVDKXMZQ_f81Mm-1t05RFjcILf6noX0ysDjwKsIdEQfP_1GuwYF3eqy5e-mQ0KVForrUHC7aXQUvF5R8bZRzfwMLZM4JRWiPyI6ya9IPGZ2vHFKrf50EZVR7j63Ji9aX8mbcwupdmY6lqOqU4YCYp-Rpf58i0ssgpMBXVQfnJh2N0X_2XEMPIvV0"/>
+<div class="overflow-hidden">
+<p class="text-sm font-semibold text-zinc-100 truncate">Alex Obsidian</p>
+<p class="text-xs text-zinc-500 truncate">Pro Analyst</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas Area -->
+<main class="ml-64 min-h-screen flex flex-col">
+<!-- TopNavBar: From COMPONENTS_7 -->
+<header class="sticky top-0 z-40 bg-[#09090b] border-b border-[#27272a] font-geist tracking-tight text-[#fafafa] transition-all duration-200">
+<div class="flex justify-between items-center w-full px-8 h-16">
+<div class="flex items-center gap-8">
+<!-- Search bar on left as per component spec -->
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-zinc-500 text-sm" data-icon="search">search</span>
+<input class="bg-surface-container-low border border-outline-variant rounded-full py-1.5 pl-10 pr-4 text-sm w-64 focus:ring-2 focus:ring-primary focus:outline-none transition-all placeholder:text-zinc-600" placeholder="Search Obsidian..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8 space-y-10 max-w-[1400px]">
+<!-- Bento Highlights Section -->
+<section>
+<div class="flex justify-between items-end mb-6">
+<div>
+<h3 class="text-2xl font-bold text-zinc-100 tracking-tight">Active Pulse</h3>
+<p class="text-zinc-500 text-sm">Your most engaged media this week</p>
+</div>
+<button class="text-violet-400 text-sm font-bold flex items-center gap-1 hover:underline">
+                    View Analytics <span class="material-symbols-outlined text-sm">trending_up</span>
+</button>
+</div>
+<div class="grid grid-cols-12 grid-rows-2 gap-4 h-[400px]">
+<!-- Primary Feature (Bento Large) -->
+<div class="col-span-6 row-span-2 relative rounded-xl overflow-hidden border border-zinc-800 group">
+<img class="absolute inset-0 w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-700" data-alt="Cinematic wide shot of a futuristic neon-lit city street at night with rain reflecting on the pavement and dark silhouettes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzVnBSKzaxXfPVjV6KRDnPOdWo6Fcj1mPnzU1NvVIb_7H5jny3YMwMOHgUiwaugGv5nccQYNLdHR257Hs7VhV81R4Ht6lotHFvU0jfjHZ7tjRJ5fwGlET0kr14R_GBhFN2zF1bNP7xjxveS9EC-7lTNvhck1IU8vWkVHUhlHfVXLrZkkLoidbY_iGUoa1WLrTDKJn4J2mfri_3cSvdjMYOgLNJqJykTBh-Qzpz9wqRvDeld7pbwVo0V_4Kz-Vm4xad5pbI8BZCQx4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-8 w-full">
+<span class="bg-violet-500 text-on-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase mb-3 inline-block tracking-widest">Trending Series</span>
+<h4 class="text-3xl font-extrabold text-zinc-100 mb-2">The Terminal Shift</h4>
+<div class="flex items-center gap-4 text-sm text-zinc-400">
+<span class="flex items-center gap-1 text-tertiary"><span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">star</span> 9.2</span>
+<span>S2 • Episode 8</span>
+<span>Thriller</span>
+</div>
+</div>
+</div>
+<!-- Secondary Feature (Bento Mid) -->
+<div class="col-span-6 row-span-1 bg-surface-container border border-zinc-800 rounded-xl p-6 flex items-center justify-between">
+<div class="space-y-2">
+<h5 class="text-zinc-500 text-xs font-bold uppercase tracking-widest">Currently Reading</h5>
+<h4 class="text-xl font-bold text-zinc-100">Neuromancer</h4>
+<p class="text-zinc-400 text-sm">William Gibson</p>
+<div class="w-48 h-1 bg-zinc-800 rounded-full mt-4 overflow-hidden">
+<div class="w-3/4 h-full bg-primary shadow-[0_0_8px_rgba(167,139,250,0.5)]"></div>
+</div>
+<p class="text-[10px] text-zinc-500 mt-1">75% Complete</p>
+</div>
+<div class="w-24 h-32 bg-zinc-900 rounded shadow-2xl rotate-3 border border-zinc-700">
+<img class="w-full h-full object-cover rounded" data-alt="Minimalist abstract book cover with geometric shapes and sharp typography on a dark textured background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3rZDYmyqnvqpULlP3PV9tNq3VcWpWHF3D4LR6f4rV3u2tdqv_8Lv063RBE9kpHSzK2CZM_1izaRMOI8-twmdhYfbguHoMP8Yy1OlJe7q_SnSLQOb-VjLT1QPMhI9sytd1EFLgZI5IgVSVUN1iX5NET7ZZ4GSNonlzWGGBjKU7lmHFYDLZqF5m7T8-x-6Jzjq5-ajv1mrzbKnCGihiwVQ9AgjCHxxQPOo-gMUVWVSyI4Exl46sc7ziahQRlTptjqeIdb9kWGBaBas"/>
+</div>
+</div>
+<!-- Small Stats (Bento Small) -->
+<div class="col-span-3 row-span-1 bg-surface-container border border-zinc-800 rounded-xl p-6 flex flex-col justify-center items-center text-center">
+<span class="text-4xl font-extrabold text-tertiary mb-1">12</span>
+<p class="text-xs font-bold text-zinc-500 uppercase tracking-widest">Reviews this month</p>
+</div>
+<!-- Small Interaction (Bento Small) -->
+<div class="col-span-3 row-span-1 bg-violet-500 rounded-xl p-6 flex flex-col justify-between hover:bg-violet-400 transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-on-primary text-3xl">add_circle</span>
+<div>
+<p class="text-on-primary font-bold text-lg leading-tight">Quick Review</p>
+<p class="text-on-primary/80 text-xs">Instantly log your last watch</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Media Grid Section -->
+<section>
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-4">
+<h3 class="text-xl font-bold text-zinc-100">Recent Logs</h3>
+<div class="flex bg-surface-container-low p-1 rounded-lg border border-outline-variant">
+<button class="px-3 py-1 text-xs font-bold bg-zinc-800 text-zinc-100 rounded shadow-sm">All</button>
+<button class="px-3 py-1 text-xs font-bold text-zinc-500 hover:text-zinc-300">Movies</button>
+<button class="px-3 py-1 text-xs font-bold text-zinc-500 hover:text-zinc-300">Series</button>
+</div>
+</div>
+<button class="text-zinc-500 hover:text-zinc-100 transition-all">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+<!-- Media Card 1 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-zinc-800 mb-3 bg-zinc-900">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Classic cinema reel silhouette against a golden spotlight background with atmospheric dust motes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoutuo9tJAze_8aZMVb1t7uTwNygYse68O7paTtaTMCOxBLu1ZhBQJKrQlP4-9LO_qAyFwcW0HsXNrLDNVPzmzEXGU6Lv5__lwHTU5x3p1DCsl6QWqQaDdzUZHKowr19h-nFt9Vd5wi7wSqJZ3dt2LB6AHz_ZoWFe23Nr2IBl_H-qSH47osu6HNvJiuT2_W6DrO1MyMguPN1TaQVyaWK0BGQP5-uT8DHU3owACgpqKJbmptdwJCdaJ8ihjZXH6Fm_0JvYFQsiIhnQ"/>
+<div class="absolute top-2 right-2 bg-zinc-950/80 backdrop-blur px-2 py-1 rounded-lg border border-zinc-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-violet-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold text-zinc-100">8.5</span>
+</div>
+<div class="absolute inset-0 bg-zinc-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<span class="text-xs font-bold text-zinc-100">View Details</span>
+</div>
+</div>
+<h5 class="text-sm font-bold text-zinc-100 truncate group-hover:text-violet-400 transition-colors">Shadows of Aethelgard</h5>
+<p class="text-xs text-zinc-500">Watched 2 days ago</p>
+</div>
+<!-- Media Card 2 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-zinc-800 mb-3 bg-zinc-900">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Dramatic high contrast movie poster aesthetic showing a lone figure on a foggy bridge in monochrome" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW-YiSB-pbnb8Abbb-wexe8nVid7z6u-tBDSIy-ba43JHLZ3zPhsdhD0fe35L9ncjYzqZ6G8Nz8Z8PT5lTwtciuN4AB9mZ870OCIRVzIj8xBI9EUg3R1LmqE8TT6gexA6qeNVZU__-JkTCeK42gWjq4zh1jhEzaksZr6LtT6uNc9drN-1luq2-crv-ttdFLcq9WMflWRMOEpuR_RwGlaO0kUetlT-1yRFqnaihLycux98NoROak3OTmBLved14JhXrjaBmQIwM6xY"/>
+<div class="absolute top-2 right-2 bg-zinc-950/80 backdrop-blur px-2 py-1 rounded-lg border border-zinc-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-violet-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold text-zinc-100">9.0</span>
+</div>
+<div class="absolute inset-0 bg-zinc-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<span class="text-xs font-bold text-zinc-100">View Details</span>
+</div>
+</div>
+<h5 class="text-sm font-bold text-zinc-100 truncate group-hover:text-violet-400 transition-colors">Vector Protocol</h5>
+<p class="text-xs text-zinc-500">Watched 5 days ago</p>
+</div>
+<!-- Media Card 3 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-zinc-800 mb-3 bg-zinc-900">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Vibrant pop-art style illustration of a detective with a magnifying glass and stylized comic book bubbles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAF9kjliMl5MP-G8cIcIYI1zCl4K1tDNWoeTWnKkxJhxfyAS0h-XJYPFicIAjXsjSURlUzxSdVMODFiW3KlHD16Z-wyn1P2P3_G_kT13FmrsitGP-GKZs_CKJEwjww4POOQX79NEx-pyKRsmDF4NBc-Wg9LoZnHE-8ub7FkiftebvYnDNBzFoGJPe40dTGqmL9YKab5Sj8AO5h1UP_whUSd9ypZhJ2nJ-KVOLe8ZPgOtXcqRtZbu6MQYQFEATZ_yBTlmgnbFmNfgoM"/>
+<div class="absolute top-2 right-2 bg-zinc-950/80 backdrop-blur px-2 py-1 rounded-lg border border-zinc-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-violet-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold text-zinc-100">7.2</span>
+</div>
+<div class="absolute inset-0 bg-zinc-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<span class="text-xs font-bold text-zinc-100">View Details</span>
+</div>
+</div>
+<h5 class="text-sm font-bold text-zinc-100 truncate group-hover:text-violet-400 transition-colors">The Neon Clue</h5>
+<p class="text-xs text-zinc-500">Watched 1 week ago</p>
+</div>
+<!-- Media Card 4 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-zinc-800 mb-3 bg-zinc-900">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Ethereal space scene with a colorful nebula and a distant white dwarf star in deep black void" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-flltsDm2zJCeq8yEmwJAvwXQGEmPlSfmZZRjsYwOkff8_DZBo3yq2j4_cGyDDBuSXw4gO_33eesezMz1jhpqNoTxa4CSAEUM1HAIP7zWnmOHFEm75HKZE9VXN2KiqZ4IOk68aMkl53BdekBQPBdWnXigOjH7uDdm0b2oEwh381IkdXElSUb7BYqJy6wQGOphH3nTCpjO2oONi6K67hDXa-2oI5hz8k3-UNpopFVmIVO8bok8QAR4cLlZzxJDsj7qckoYy2RqDVY"/>
+<div class="absolute top-2 right-2 bg-zinc-950/80 backdrop-blur px-2 py-1 rounded-lg border border-zinc-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-violet-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold text-zinc-100">9.8</span>
+</div>
+<div class="absolute inset-0 bg-zinc-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<span class="text-xs font-bold text-zinc-100">View Details</span>
+</div>
+</div>
+<h5 class="text-sm font-bold text-zinc-100 truncate group-hover:text-violet-400 transition-colors">Beyond the Rim</h5>
+<p class="text-xs text-zinc-500">Watched 2 weeks ago</p>
+</div>
+<!-- Media Card 5 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-[2/3] rounded-xl overflow-hidden border border-zinc-800 mb-3 bg-zinc-900">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" data-alt="Moody cinematic close up of an antique typewriter with dark shadows and a single warm lamp light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2RL8JXiB9eNsh1h34IsLXYxTiTXOxZHtftPDg8vCZ3l3SJkVtpJjJZ0HOSKUzf7Ms8J0VX6vpxSfUXh0xJhobKN2btxcTHAeep0ZYZAfpdqWZXNi39CmIuAl6Pjz4gKRQB_94z_P-NGLLBYrPJA7JbToic3_6LTLwY_Cu9yxPKqvzFqxoMz3P9zb-kpQHmkTn8gSIQ2wnniPxHScJkM6Cl_QMgCESs4ONWpfj-Ywx2t_8SVWYFviz-lnC0ifLHboAYXs6zz7_3wc"/>
+<div class="absolute top-2 right-2 bg-zinc-950/80 backdrop-blur px-2 py-1 rounded-lg border border-zinc-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-violet-400" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold text-zinc-100">6.9</span>
+</div>
+<div class="absolute inset-0 bg-zinc-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-center items-center gap-4">
+<button class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+<span class="text-xs font-bold text-zinc-100">View Details</span>
+</div>
+</div>
+<h5 class="text-sm font-bold text-zinc-100 truncate group-hover:text-violet-400 transition-colors">Drafts of Destiny</h5>
+<p class="text-xs text-zinc-500">Watched 1 month ago</p>
+</div>
+</div>
+</section>
+<!-- Bottom Stats / Activity -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+<!-- Strictly personal: Social Feed removed -->
+<div class="bg-surface-container border border-zinc-800 rounded-2xl p-6">
+<h4 class="text-zinc-100 font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary">history_edu</span>
+                    Personal Milestone
+                </h4>
+<div class="space-y-4">
+<div class="flex gap-4 items-start pb-4 border-b border-zinc-800/50">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">emoji_events</span>
+</div>
+<div>
+<p class="text-xs text-zinc-300">You've reached <span class="font-bold text-zinc-100">100 Series Episodes</span> this year</p>
+<p class="text-[11px] text-zinc-500 mt-1">Keep it up! Your next milestone is at 150.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="w-8 h-8 rounded-full bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-sm">menu_book</span>
+</div>
+<div>
+<p class="text-xs text-zinc-300">New streak: <span class="font-bold text-zinc-100">5 days</span> of reading</p>
+<p class="text-[11px] text-zinc-500 mt-1">2 hours ago</p>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container border border-zinc-800 rounded-2xl p-6">
+<h4 class="text-zinc-100 font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">pie_chart</span>
+                    Genre Balance
+                </h4>
+<div class="flex items-center gap-8">
+<div class="relative w-24 h-24">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-zinc-800" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-primary" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="62.8" stroke-width="8"></circle>
+<circle class="text-tertiary" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="188.4" stroke-width="8"></circle>
+</svg>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-xs text-zinc-400">Sci-Fi (45%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span class="text-xs text-zinc-400">Thriller (30%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-zinc-700"></div>
+<span class="text-xs text-zinc-400">Other (25%)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
