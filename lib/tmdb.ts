@@ -7,8 +7,9 @@
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
 
+// Warn but don't throw - allows to build without API key
 if (!TMDB_API_KEY) {
-  throw new Error('TMDB_API_KEY environment variable is required');
+  console.warn('TMDB_API_KEY environment variable not set - TMDB features will be disabled');
 }
 
 interface TMDBResponse<T> {
@@ -80,6 +81,10 @@ interface TrendingResponse {
 }
 
 async function tmdbFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
+  if (!TMDB_API_KEY) {
+    throw new Error('TMDB_API_KEY not configured');
+  }
+  
   const url = new URL(`${TMDB_BASE_URL}${endpoint}`);
   url.searchParams.set('api_key', TMDB_API_KEY as string);
   
