@@ -8,26 +8,34 @@
  * Routes:
  * - /editor - new review
  * - /editor/[reviewId] - edit existing
+ * Query params (for new from details):
+ * - ?mediaId=X&mediaType=Y
  */
+
+import { EditorClient } from './editor-client';
 
 interface EditorPageProps {
   params: Promise<{
     reviewId?: string[];
   }>;
+  searchParams: Promise<{
+    mediaId?: string;
+    mediaType?: string;
+  }>;
 }
 
-export default async function EditorPage({ params }: EditorPageProps) {
+export default async function EditorPage({ params, searchParams }: EditorPageProps) {
   const resolved = await params;
+  const resolvedSearch = await searchParams;
   const reviewId = resolved.reviewId?.[0];
+  const mediaId = resolvedSearch.mediaId;
+  const mediaType = resolvedSearch.mediaType;
 
   return (
-    <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">
-        {reviewId ? "Edit Review" : "New Review"}
-      </h1>
-      <p className="text-muted-foreground">
-        Editor functionality coming in future phases.
-      </p>
-    </div>
+    <EditorClient
+      reviewId={reviewId}
+      mediaId={mediaId}
+      mediaType={mediaType as 'MOVIE' | 'SERIES' | 'BOOK' | undefined}
+    />
   );
 }
