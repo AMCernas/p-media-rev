@@ -7,15 +7,44 @@
  * - Filter by status (DRAFT, PUBLISHED, WATCHLIST)
  * - Combined filters
  * - Show rating for published reviews
+ * 
+ * This is a Server Component that fetches data on the server
  */
 
-export default function LibraryPage() {
+import { redirect } from 'next/navigation';
+import { getAuthenticatedUser } from '@/lib/supabase';
+import { prisma } from '@/lib/prisma';
+import { LibraryClient } from './library-client';
+
+export default async function LibraryPage() {
+  // Check authentication
+  const user = await getAuthenticatedUser();
+  
+  if (!user) {
+    redirect('/login');
+  }
+
+  // Fetch user's reviews (watchlist + reviews)
+  const reviews = await prisma.review.findMany({
+    where: {
+      userId: user.id,
+    },
+    orderBy: { updatedAt: 'desc' },
+    take: 100,
+  });
+
+  // Separate into watchlist and reviews
+  const watchlist = reviews.filter(r => r.status === 'WATCHLIST');
+  const drafts = reviews.filter(r => r.status === 'DRAFT');
+  const published = reviews.filter(r => r.status === 'PUBLISHED');
+
+  // Pass data to client component
   return (
-    <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">Library</h1>
-      <p className="text-muted-foreground">
-        Your library functionality coming in future phases.
-      </p>
-    </div>
+    <LibraryClient
+      initialReviews={reviews}
+      watchlistCount={watchlist.length}
+      draftsCount={drafts.length}
+      publishedCount={published.length}
+    />
   );
 }

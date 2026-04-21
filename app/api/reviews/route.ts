@@ -87,6 +87,14 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    // Validate content (max 10000 chars)
+    if (content !== undefined && content.length > 10000) {
+      return NextResponse.json(
+        { error: 'Content must be at most 10000 characters' },
+        { status: 400 }
+      );
+    }
     
     // Check for duplicate (same user, mediaId, mediaType)
     const existing = await prisma.review.findFirst({
@@ -218,6 +226,14 @@ export async function PATCH(request: NextRequest) {
     if (rating !== undefined && (rating < 1 || rating > 5)) {
       return NextResponse.json(
         { error: 'Rating must be between 1 and 5' },
+        { status: 400 }
+      );
+    }
+
+    // Validate content (max 10000 chars)
+    if (content !== undefined && content.length > 10000) {
+      return NextResponse.json(
+        { error: 'Content must be at most 10000 characters' },
         { status: 400 }
       );
     }
