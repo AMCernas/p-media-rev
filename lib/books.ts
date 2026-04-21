@@ -7,8 +7,9 @@
 const BOOKS_BASE_URL = 'https://www.googleapis.com/books/v1';
 const GOOGLE_BOOKS_API_KEY = process.env.GOOGLE_BOOKS_API_KEY;
 
+// Warn but don't throw - allows build without API key
 if (!GOOGLE_BOOKS_API_KEY) {
-  throw new Error('GOOGLE_BOOKS_API_KEY environment variable is required');
+  console.warn('GOOGLE_BOOKS_API_KEY environment variable not set - Books features will be disabled');
 }
 
 export interface GoogleBookVolume {
@@ -52,6 +53,10 @@ interface BookDetailsResponse {
 }
 
 async function booksFetch<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
+  if (!GOOGLE_BOOKS_API_KEY) {
+    throw new Error('GOOGLE_BOOKS_API_KEY not configured');
+  }
+  
   const url = new URL(`${BOOKS_BASE_URL}${endpoint}`);
   url.searchParams.set('key', GOOGLE_BOOKS_API_KEY as string);
   
