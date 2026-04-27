@@ -19,7 +19,7 @@ enum MediaType {
 
 enum ReviewStatus {
   DRAFT
-  PUBLISHED
+  COMPLETED
   WATCHLIST
 }
 

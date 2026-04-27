@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import type { Review, MediaType } from '@/lib/types';
 
@@ -94,11 +95,14 @@ export function WatchlistSection({
           key={`${item.mediaType}-${item.mediaId}`}
           className={cn(
             'flex items-center gap-4 p-3 rounded-lg border bg-card',
-            'transition-colors duration-150'
+            'transition-colors duration-150 group'
           )}
         >
-          {/* Poster/Image */}
-          <div className="relative w-12 h-16 flex-shrink-0 rounded overflow-hidden bg-muted">
+          {/* Poster/Image - Clickable */}
+          <Link
+            href={`/details/${item.mediaType.toLowerCase()}/${item.mediaId}`}
+            className="relative w-12 h-16 flex-shrink-0 rounded overflow-hidden bg-muted hover:opacity-80 transition-opacity"
+          >
             {item.imageUrl ? (
               <Image
                 src={item.imageUrl}
@@ -112,10 +116,13 @@ export function WatchlistSection({
                 {getMediaTypeLabel(item.mediaType)[0]}
               </div>
             )}
-          </div>
+          </Link>
 
-          {/* Info */}
-          <div className="flex-1 min-w-0">
+          {/* Info - Clickable link to details */}
+          <Link
+            href={`/details/${item.mediaType.toLowerCase()}/${item.mediaId}`}
+            className="flex-1 min-w-0 hover:opacity-80 transition-opacity"
+          >
             <div className="flex items-center gap-2 mb-1">
               <span
                 className={cn(
@@ -132,11 +139,15 @@ export function WatchlistSection({
             <h3 className="font-medium text-sm truncate">
               {item.title || item.mediaId}
             </h3>
-          </div>
+          </Link>
 
           {/* Remove button */}
           <button
-            onClick={() => handleRemove(item)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleRemove(item);
+            }}
             disabled={removingId === item.id || isLoading}
             className={cn(
               'flex-shrink-0 p-2 rounded-lg border',

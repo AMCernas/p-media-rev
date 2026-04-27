@@ -159,7 +159,7 @@ export default async function DetailsPage({ params, searchParams }: DetailsPageP
   }
   
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#09090b]">
       {/* Hero Section */}
       <DetailHero
         title={mediaData.title}
@@ -189,20 +189,23 @@ export default async function DetailsPage({ params, searchParams }: DetailsPageP
           <Link
             href={`/editor?mediaId=${id}&mediaType=${type.toUpperCase()}`}
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium',
-              'bg-primary text-primary-foreground hover:bg-primary/90',
+              'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold',
+              'bg-[#a78bfa] text-[#09090b] hover:bg-[#a78bfa]/90',
               'transition-colors'
             )}
           >
-            <span>✎</span>
+            <span className="material-symbols-outlined">edit</span>
             <span>Escribir Reseña</span>
           </Link>
         </div>
         
         {mediaData.overview && (
           <div className="mt-12 max-w-3xl mx-auto">
-            <h2 className="text-xl font-semibold mb-4">Sinopsis</h2>
-            <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            <h2 className="text-xl font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-[#a78bfa]">description</span>
+              Sinopsis
+            </h2>
+            <p className="text-[#a1a1aa] leading-relaxed whitespace-pre-line">
               {mediaData.overview}
             </p>
           </div>

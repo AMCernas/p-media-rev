@@ -10,8 +10,9 @@ export type MediaType = 'MOVIE' | 'SERIES' | 'BOOK';
 
 /**
  * Review status values
+ * Note: Using string literals to match Prisma enum values
  */
-export type ReviewStatus = 'DRAFT' | 'PUBLISHED' | 'WATCHLIST';
+export type ReviewStatus = 'DRAFT' | 'COMPLETED' | 'WATCHLIST';
 
 /**
  * Unified search result from TMDB or Google Books
@@ -39,7 +40,7 @@ export interface SearchResults {
 }
 
 /**
- * Review from database
+ * Review from database or enriched review with metadata
  */
 export interface Review {
   id: string;
@@ -51,6 +52,10 @@ export interface Review {
   content?: string | null;
   createdAt: Date;
   updatedAt: Date;
+  // Enriched fields from external APIs (optional, only present after enrichment)
+  title?: string;
+  imageUrl?: string | null;
+  year?: string;
 }
 
 /**

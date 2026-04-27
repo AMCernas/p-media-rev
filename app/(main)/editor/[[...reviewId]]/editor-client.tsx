@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import type { MediaType, Review, ReviewStatus } from '@/lib/types';
-import { Button } from '@/components/ui/button';
+import type { MediaType, Review } from '@/lib/types';
 
 interface EditorClientProps {
   reviewId?: string;
@@ -180,8 +179,8 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
     triggerAutoSave();
   };
   
-  // Publish review
-  const handlePublish = async () => {
+// Complete review
+  const handleComplete = async () => {
     if (!currentReviewId || isPublishing) return;
     
     setIsPublishing(true);
@@ -196,12 +195,12 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          status: 'PUBLISHED',
+          status: 'COMPLETED',
         }),
       });
       
       if (!response.ok) {
-        throw new Error('Failed to publish');
+        throw new Error('Failed to complete');
       }
       
       const updated: Review = await response.json();
@@ -209,12 +208,12 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
       // Redirect to library
       router.push('/library');
     } catch (error) {
-      console.error('Publish error:', error);
+      console.error('Complete error:', error);
       setSaveStatus('error');
       
       // Retry publish after 3 seconds
       retryTimeoutRef.current = setTimeout(() => {
-        handlePublish();
+        handleComplete();
       }, 3000);
     } finally {
       setIsPublishing(false);
@@ -240,84 +239,104 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
   
   if (isLoading) {
     return (
-      <div className="container py-8 flex items-center justify-center min-h-[400px]">
-        <div className="text-muted-foreground">Cargando...</div>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-2 border-[#a78bfa] border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-[#a1a1aa]">Cargando editor...</p>
+        </div>
       </div>
     );
   }
   
   return (
-    <div className="container py-8 max-w-3xl">
+    <div className="p-4 md:p-6 lg:p-8 max-w-4xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">
-          {reviewId ? 'Editar Reseña' : 'Nueva Reseña'}
-        </h1>
+      <div className="flex items-center justify-between mb-8">
+        <div>
+          <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight">
+            {reviewId ? 'Editar Reseña' : 'Nueva Reseña'}
+          </h1>
+          <p className="text-sm text-[#a1a1aa] mt-1">
+            Escribe tu opinión sobre esta obra
+          </p>
+        </div>
         
         {/* Save status indicator */}
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a]">
           {saveStatus === 'saving' && (
-            <span className="text-muted-foreground animate-pulse">Guardando...</span>
+            <>
+              <div className="w-3 h-3 border-2 border-[#a78bfa] border-t-transparent rounded-full animate-spin" />
+              <span className="text-xs text-[#a1a1aa]">Guardando...</span>
+            </>
           )}
           {saveStatus === 'saved' && (
-            <span className="text-green-500">Guardado</span>
+            <>
+              <span className="material-symbols-outlined text-sm text-[#34d399]">check_circle</span>
+              <span className="text-xs text-[#34d399]">Guardado</span>
+            </>
           )}
           {saveStatus === 'error' && (
-            <span className="text-destructive">Error al guardar</span>
+            <>
+              <span className="material-symbols-outlined text-sm text-[#ef4444]">error</span>
+              <span className="text-xs text-[#ef4444]">Error</span>
+            </>
           )}
           {saveStatus === 'idle' && lastSaved && (
-            <span className="text-muted-foreground">
-              Guardado a las {lastSaved.toLocaleTimeString('es-AR', { 
-                hour: '2-digit', 
-                minute: '2-digit' 
-              })}
-            </span>
+            <>
+              <span className="material-symbols-outlined text-sm text-[#a1a1aa]">schedule</span>
+              <span className="text-xs text-[#a1a1aa]">
+                {lastSaved.toLocaleTimeString('es-AR', { 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
+              </span>
+            </>
           )}
         </div>
       </div>
       
-      {/* Media info (if preloaded) */}
+      {/* Media info card */}
       {mediaInfo && (
-        <div className="flex gap-4 mb-6 p-4 bg-muted rounded-lg">
+        <div className="flex items-center gap-4 mb-8 p-4 rounded-xl bg-[#121215] border border-[#27272a]">
           {mediaInfo.imageUrl && (
             <img 
               src={mediaInfo.imageUrl} 
               alt={mediaInfo.title}
-              className="w-16 h-24 object-cover rounded"
+              className="w-16 h-24 object-cover rounded-lg"
             />
           )}
           <div>
-            <h2 className="font-semibold">{mediaInfo.title}</h2>
-            <p className="text-sm text-muted-foreground">{mediaType}</p>
+            <h2 className="font-semibold text-[#fafafa]">{mediaInfo.title}</h2>
+            <p className="text-sm text-[#a1a1aa] capitalize">{mediaType?.toLowerCase()}</p>
           </div>
         </div>
       )}
       
-      {/* Rating selector */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">
+      {/* Rating section */}
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-[#a1a1aa] mb-3">
           Tu calificación
         </label>
-        <div className="flex gap-1">
+        <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((star) => (
             <button
               key={star}
               type="button"
               onClick={() => handleRatingChange(star)}
-              className="p-1 transition-transform hover:scale-110 focus:outline-none"
+              className="p-2 rounded-lg transition-all duration-150 hover:bg-[#121215] focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50"
               aria-label={`Calificar ${star} estrellas`}
             >
               <svg
-                className={`w-8 h-8 ${
+                className={`w-10 h-10 transition-all duration-150 ${
                   rating !== null && star <= rating
-                    ? 'text-yellow-400 fill-yellow-400'
-                    : 'text-muted-foreground'
+                    ? 'text-yellow-400 fill-yellow-400 scale-110'
+                    : 'text-[#27272a] hover:text-[#52525b]'
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill={rating !== null && star <= rating ? 'currentColor' : 'none'}
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.5"
               >
                 <path
                   strokeLinecap="round"
@@ -328,38 +347,57 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
             </button>
           ))}
         </div>
+        <p className="text-xs text-[#a1a1aa] mt-2">
+          {rating ? `Seleccionaste ${rating} de 5 estrellas` : 'Haz clic para calificar'}
+        </p>
       </div>
       
       {/* Content textarea */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-2">
+      <div className="mb-8">
+        <label className="block text-sm font-medium text-[#a1a1aa] mb-3">
           Tu reseña
         </label>
         <textarea
           value={content}
           onChange={handleContentChange}
-          placeholder="Escribe tu reseña aquí..."
-          className="w-full min-h-[300px] p-4 rounded-lg border border-input bg-background text-sm resize-y focus:outline-none focus:ring-2 focus:ring-ring"
+          placeholder="Escribe tu reseña aquí... Cuéntanos qué te gustó, qué no, y a quién se la recomendarías."
+          className="w-full min-h-[320px] p-5 rounded-xl border border-[#27272a] bg-[#0c0c0f] text-[#fafafa] text-sm leading-relaxed resize-y focus:outline-none focus:border-[#a78bfa] focus:ring-2 focus:ring-[#a78bfa]/20 transition-all duration-200 placeholder:text-[#52525b]"
         />
-        <p className="text-xs text-muted-foreground mt-1">
-          {content.length}/10000 caracteres
-        </p>
+        <div className="flex justify-between items-center mt-2">
+          <p className="text-xs text-[#52525b]">
+            Los cambios se guardan automáticamente
+          </p>
+          <p className={`text-xs ${content.length > 9000 ? 'text-[#fb923c]' : 'text-[#52525b]'}`}>
+            {content.length}/10,000
+          </p>
+        </div>
       </div>
       
       {/* Action buttons */}
-      <div className="flex gap-3 justify-end">
-        <Button
-          variant="outline"
+      <div className="flex gap-3 justify-end pt-4 border-t border-[#27272a]">
+        <button
           onClick={handleCancel}
+          className="px-5 py-2.5 rounded-lg text-sm font-medium text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#121215] transition-colors"
         >
           Cancelar
-        </Button>
-        <Button
-          onClick={handlePublish}
+        </button>
+        <button
+          onClick={handleComplete}
           disabled={isPublishing}
+          className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#a78bfa] text-[#09090b] hover:bg-[#a78bfa]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
-          {isPublishing ? 'Publicando...' : 'Publicar'}
-        </Button>
+          {isPublishing ? (
+            <>
+              <div className="w-4 h-4 border-2 border-[#09090b] border-t-transparent rounded-full animate-spin" />
+              Completando...
+            </>
+          ) : (
+            <>
+              <span className="material-symbols-outlined text-lg">task_alt</span>
+              Completar Reseña
+            </>
+          )}
+        </button>
       </div>
     </div>
   );
