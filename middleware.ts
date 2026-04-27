@@ -53,7 +53,7 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith(route)
   );
 
-  // Root path also requires auth (redirect to dashboard after login)
+  // Root path - redirect to dashboard (main app entry)
   const isRoot = pathname === '/';
 
   // If accessing protected route without user, redirect to login
@@ -61,6 +61,11 @@ export async function middleware(request: NextRequest) {
     const redirectUrl = new URL('/login', request.url);
     redirectUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(redirectUrl);
+  }
+
+  // If user is logged in and accesses root, redirect to dashboard
+  if (user && isRoot) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
   // If user is logged in and tries to access /login, redirect to dashboard
