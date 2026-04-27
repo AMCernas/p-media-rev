@@ -14,6 +14,14 @@ import type { Review, MediaType, ReviewStatus } from '@/lib/types';
 
 interface LibraryClientProps {
   initialReviews: Review[];
+  watchlistItems: Array<{
+    id: string;
+    mediaId: string;
+    mediaType: MediaType;
+    title?: string;
+    imageUrl?: string | null;
+    year?: string;
+  }>;
   watchlistCount: number;
   draftsCount: number;
   publishedCount: number;
@@ -22,17 +30,9 @@ interface LibraryClientProps {
 type FilterType = MediaType | 'ALL';
 type FilterStatus = ReviewStatus | 'ALL';
 
-interface WatchlistItem {
-  id: string;
-  mediaId: string;
-  mediaType: MediaType;
-  title?: string;
-  imageUrl?: string | null;
-  year?: string;
-}
-
 export function LibraryClient({
   initialReviews,
+  watchlistItems,
   watchlistCount,
   draftsCount,
   publishedCount,
@@ -48,16 +48,6 @@ export function LibraryClient({
   const [refreshKey, setRefreshKey] = useState(0);
 
   // Separate items by type
-  const watchlistItems: WatchlistItem[] = useMemo(() => {
-    return initialReviews
-      .filter(r => r.status === 'WATCHLIST')
-      .map(r => ({
-        id: r.id,
-        mediaId: r.mediaId,
-        mediaType: r.mediaType,
-      }));
-  }, [initialReviews]);
-
   const reviewItems = useMemo(() => {
     return initialReviews.filter(r => r.status !== 'WATCHLIST');
   }, [initialReviews]);
@@ -118,64 +108,75 @@ export function LibraryClient({
   const statusOptions: { value: FilterStatus; label: string }[] = [
     { value: 'ALL', label: 'Todos' },
     { value: 'DRAFT', label: 'Borradores' },
-    { value: 'PUBLISHED', label: 'Publicadas' },
+    { value: 'COMPLETED', label: 'Completadas' },
   ];
 
   return (
-    <div className="container py-8">
-      <h1 className="text-2xl font-bold mb-6">Mi Biblioteca</h1>
+    <div className="p-4 md:p-6 lg:p-8">
+      <h1 className="text-2xl font-bold text-[#fafafa] mb-6">Mi Biblioteca</h1>
 
-      {/* Stats */}
+      {/* Hero Stats - Bento Grid */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="p-4 rounded-lg border bg-card">
-          <div className="text-2xl font-bold">{watchlistCount}</div>
-          <div className="text-sm text-muted-foreground">En Watchlist</div>
+        <div className="rounded-xl bg-gradient-to-br from-[#a78bfa]/20 to-[#a78bfa]/5 border border-[#a78bfa]/20 p-5">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="material-symbols-outlined text-[#a78bfa]">bookmark</span>
+          </div>
+          <div className="text-3xl font-bold text-[#fafafa]">{watchlistCount}</div>
+          <div className="text-sm text-[#a1a1aa]">En Watchlist</div>
         </div>
-        <div className="p-4 rounded-lg border bg-card">
-          <div className="text-2xl font-bold">{draftsCount}</div>
-          <div className="text-sm text-muted-foreground">Borradores</div>
+        <div className="rounded-xl bg-[#121215] border border-[#27272a] p-5">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="material-symbols-outlined text-[#fb923c]">draft</span>
+          </div>
+          <div className="text-3xl font-bold text-[#fafafa]">{draftsCount}</div>
+          <div className="text-sm text-[#a1a1aa]">Borradores</div>
         </div>
-        <div className="p-4 rounded-lg border bg-card">
-          <div className="text-2xl font-bold">{publishedCount}</div>
-          <div className="text-sm text-muted-foreground">Publicadas</div>
+        <div className="rounded-xl bg-[#121215] border border-[#27272a] p-5">
+          <div className="flex items-center gap-3 mb-2">
+            <span className="material-symbols-outlined text-[#34d399]">publish</span>
+          </div>
+          <div className="text-3xl font-bold text-[#fafafa]">{publishedCount}</div>
+          <div className="text-sm text-[#a1a1aa]">Publicadas</div>
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 mb-6 p-1 rounded-lg bg-muted/50">
+      {/* Tabs - with aria-pressed for accessibility */}
+      <div className="flex gap-2 mb-6 p-1 rounded-xl bg-[#121215] border border-[#27272a]">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
+            aria-pressed={activeTab === tab.id}
             className={cn(
-              'flex-1 px-4 py-2 rounded-md text-sm font-medium transition-colors',
+              "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
               activeTab === tab.id
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
+                ? "bg-[#a78bfa] text-[#09090b]"
+                : "text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b]"
             )}
           >
             {tab.label}
-            <span className="ml-2 text-xs opacity-70">({tab.count})</span>
+            <span className="text-xs opacity-70">({tab.count})</span>
           </button>
         ))}
       </div>
 
       {/* Filters - Only show for reviews tab */}
       {activeTab === 'reviews' && (
-        <div className="flex flex-wrap gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6 p-4 rounded-xl bg-[#121215] border border-[#27272a]">
           {/* Type filter */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-muted-foreground">Tipo:</label>
-            <div className="flex gap-1">
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-[#a1a1aa]">Tipo:</label>
+            <div className="flex gap-2">
               {typeOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => setFilterType(option.value)}
+                  aria-pressed={filterType === option.value}
                   className={cn(
-                    'px-3 py-1 text-sm rounded-md transition-colors',
+                    "px-3 py-1.5 text-sm rounded-lg transition-colors",
                     filterType === option.value
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted hover:bg-muted/80'
+                      ? "bg-[#a78bfa] text-[#09090b]"
+                      : "bg-[#18181b] text-[#a1a1aa] hover:text-[#fafafa]"
                   )}
                 >
                   {option.label}
@@ -185,18 +186,19 @@ export function LibraryClient({
           </div>
 
           {/* Status filter */}
-          <div className="flex items-center gap-2">
-            <label className="text-sm text-muted-foreground">Estado:</label>
-            <div className="flex gap-1">
+          <div className="flex items-center gap-3">
+            <label className="text-sm text-[#a1a1aa]">Estado:</label>
+            <div className="flex gap-2">
               {statusOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => setFilterStatus(option.value)}
+                  aria-pressed={filterStatus === option.value}
                   className={cn(
-                    'px-3 py-1 text-sm rounded-md transition-colors',
+                    "px-3 py-1.5 text-sm rounded-lg transition-colors",
                     filterStatus === option.value
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-muted hover:bg-muted/80'
+                      ? "bg-[#a78bfa] text-[#09090b]"
+                      : "bg-[#18181b] text-[#a1a1aa] hover:text-[#fafafa]"
                   )}
                 >
                   {option.label}
@@ -223,12 +225,14 @@ export function LibraryClient({
                 <ReviewCard
                   key={review.id}
                   review={review}
+                  mediaTitle={review.title}
                 />
               ))}
             </div>
           ) : (
-            <div className="py-8 text-center">
-              <p className="text-muted-foreground">
+            <div className="py-12 text-center rounded-xl bg-[#121215] border border-[#27272a]">
+              <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">search_off</span>
+              <p className="text-[#a1a1aa]">
                 No hay reseñas que coincidan con los filtros
               </p>
             </div>
@@ -240,7 +244,10 @@ export function LibraryClient({
             {/* Watchlist section */}
             {watchlistItems.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-lg font-semibold mb-4">Watchlist</h2>
+                <h2 className="text-lg font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#a78bfa]">bookmark</span>
+                  Watchlist
+                </h2>
                 <WatchlistSection
                   items={watchlistItems}
                   onRemove={handleRemoveFromWatchlist}
@@ -251,12 +258,16 @@ export function LibraryClient({
             {/* Reviews section */}
             {reviewItems.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold mb-4">Reseñas</h2>
+                <h2 className="text-lg font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-[#34d399]">edit_note</span>
+                  Reseñas
+                </h2>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {reviewItems.map((review) => (
                     <ReviewCard
                       key={review.id}
                       review={review}
+                      mediaTitle={review.title}
                     />
                   ))}
                 </div>
@@ -264,11 +275,12 @@ export function LibraryClient({
             )}
 
             {watchlistItems.length === 0 && reviewItems.length === 0 && (
-              <div className="py-8 text-center">
-                <p className="text-muted-foreground">
+              <div className="py-12 text-center rounded-xl bg-[#121215] border border-[#27272a]">
+                <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">library_books</span>
+                <p className="text-[#fafafa] font-medium">
                   Tu biblioteca está vacía
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">
+                <p className="text-sm text-[#a1a1aa] mt-2">
                   Busca películas, series o libros para agregar a tu lista
                 </p>
               </div>

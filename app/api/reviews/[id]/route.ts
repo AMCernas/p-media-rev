@@ -108,7 +108,7 @@ export async function PATCH(
     }
     
     // Validate status if provided
-    if (status && !['DRAFT', 'PUBLISHED', 'WATCHLIST'].includes(status)) {
+    if (status && !['DRAFT', 'COMPLETED', 'WATCHLIST'].includes(status)) {
       return NextResponse.json(
         { error: 'Invalid status' },
         { status: 400 }

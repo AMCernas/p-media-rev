@@ -140,8 +140,8 @@ async function deleteReviewApi(id: string): Promise<{ success: boolean; error?: 
 }
 
 /**
- * Publish a review (change status to PUBLISHED)
- * PATCH /api/reviews with status: PUBLISHED
+* Publish a review (change status to COMPLETED)
+ * PATCH /api/reviews with status: COMPLETED
  */
 async function publishReviewApi(id: string): Promise<{ success: boolean; review?: Review; error?: string }> {
   const response = await fetch('/api/reviews', {
@@ -149,7 +149,7 @@ async function publishReviewApi(id: string): Promise<{ success: boolean; review?
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       id,
-      status: 'PUBLISHED',
+      status: 'COMPLETED',
     }),
   });
 
@@ -245,7 +245,7 @@ export function useReviews() {
   }, []);
 
   /**
-   * Publish a review (change status to PUBLISHED)
+   * Publish a review (change status to COMPLETED)
    */
   const publishReview = useCallback(async (id: string) => {
     setState({ isLoading: true, error: null });

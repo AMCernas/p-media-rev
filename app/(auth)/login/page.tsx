@@ -61,14 +61,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-[#09090b] p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-3xl font-bold tracking-tight text-[#fafafa]">
             Screen Review
           </h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Sign in to your account
+          <p className="mt-2 text-sm text-[#a1a1aa]">
+            Inicia sesión en tu cuenta
           </p>
         </div>
 
@@ -76,21 +76,21 @@ export default function LoginPage() {
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-sm font-medium text-[#fafafa]"
             >
               Email
             </label>
             <input
               id="email"
               type="email"
-              placeholder="you@example.com"
+              placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
               className={cn(
-                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
-                "placeholder:text-muted-foreground",
-                "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                "flex h-10 w-full rounded-lg border border-[#27272a] bg-[#121215] px-3 py-2 text-sm text-[#fafafa]",
+                "placeholder:text-[#a1a1aa]",
+                "focus:outline-none focus:ring-2 focus:ring-[#a78bfa] focus:ring-offset-2 focus:ring-offset-[#09090b]",
                 "disabled:cursor-not-allowed disabled:opacity-50"
               )}
             />
@@ -99,9 +99,9 @@ export default function LoginPage() {
           <div className="space-y-2">
             <label
               htmlFor="password"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="text-sm font-medium text-[#fafafa]"
             >
-              Password
+              Contraseña
             </label>
             <input
               id="password"
@@ -111,16 +111,16 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className={cn(
-                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm",
-                "placeholder:text-muted-foreground",
-                "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                "flex h-10 w-full rounded-lg border border-[#27272a] bg-[#121215] px-3 py-2 text-sm text-[#fafafa]",
+                "placeholder:text-[#a1a1aa]",
+                "focus:outline-none focus:ring-2 focus:ring-[#a78bfa] focus:ring-offset-2 focus:ring-offset-[#09090b]",
                 "disabled:cursor-not-allowed disabled:opacity-50"
               )}
             />
           </div>
 
           {error && (
-            <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            <div className="rounded-lg bg-[#ef4444]/10 border border-[#ef4444]/20 p-3 text-sm text-[#ef4444]">
               {error}
             </div>
           )}
@@ -129,14 +129,13 @@ export default function LoginPage() {
             type="submit"
             disabled={loading}
             className={cn(
-              "w-full h-10 rounded-md bg-primary px-4 py-2 text-sm font-medium",
-              "text-primary-foreground",
-              "hover:opacity-90",
+              "w-full h-10 rounded-lg bg-[#a78bfa] text-[#09090b] px-4 py-2 text-sm font-semibold",
+              "hover:bg-[#a78bfa]/90",
               "disabled:pointer-events-none disabled:opacity-50",
-              "transition-opacity"
+              "transition-colors"
             )}
           >
-            {loading ? "Signing in..." : "Sign in"}
+            {loading ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
         </form>
       </div>

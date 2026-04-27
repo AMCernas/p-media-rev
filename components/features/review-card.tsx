@@ -56,13 +56,13 @@ function RatingStars({ rating }: { rating: number | null | undefined }) {
 function StatusBadge({ status }: { status: Review['status'] }) {
   const styles = {
     DRAFT: 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20',
-    PUBLISHED: 'bg-green-500/10 text-green-500 border-green-500/20',
+    COMPLETED: 'bg-green-500/10 text-green-500 border-green-500/20',
     WATCHLIST: 'bg-blue-500/10 text-blue-500 border-blue-500/20',
   };
 
   const labels = {
     DRAFT: 'Borrador',
-    PUBLISHED: 'Publicada',
+    COMPLETED: 'Completada',
     WATCHLIST: 'Watchlist',
   };
 

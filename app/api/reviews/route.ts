@@ -73,9 +73,9 @@ export async function POST(request: NextRequest) {
     }
     
     // Validate status
-    if (!['DRAFT', 'PUBLISHED', 'WATCHLIST'].includes(status)) {
+    if (!['DRAFT', 'COMPLETED', 'WATCHLIST'].includes(status)) {
       return NextResponse.json(
-        { error: 'Invalid status. Must be DRAFT, PUBLISHED, or WATCHLIST' },
+        { error: 'Invalid status. Must be DRAFT, COMPLETED, or WATCHLIST' },
         { status: 400 }
       );
     }
@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
       where.mediaType = type;
     }
     
-    if (status && ['DRAFT', 'PUBLISHED', 'WATCHLIST'].includes(status)) {
+    if (status && ['DRAFT', 'COMPLETED', 'WATCHLIST'].includes(status)) {
       where.status = status;
     }
     
@@ -239,7 +239,7 @@ export async function PATCH(request: NextRequest) {
     }
     
     // Validate status if provided
-    if (status && !['DRAFT', 'PUBLISHED', 'WATCHLIST'].includes(status)) {
+    if (status && !['DRAFT', 'COMPLETED', 'WATCHLIST'].includes(status)) {
       return NextResponse.json(
         { error: 'Invalid status' },
         { status: 400 }
