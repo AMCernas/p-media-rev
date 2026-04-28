@@ -101,15 +101,14 @@ export function WatchlistSection({
           {/* Poster/Image - Clickable */}
           <Link
             href={`/details/${item.mediaType.toLowerCase()}/${item.mediaId}`}
-            className="relative w-12 h-16 flex-shrink-0 rounded overflow-hidden bg-muted hover:opacity-80 transition-opacity"
+            className="w-12 h-16 flex-shrink-0 rounded overflow-hidden bg-muted hover:opacity-80 transition-opacity"
           >
             {item.imageUrl ? (
-              <Image
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
                 src={item.imageUrl}
                 alt={item.title || 'Poster'}
-                fill
-                className="object-cover"
-                sizes="48px"
+                className="w-full h-full object-cover"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground text-xs">

@@ -52,6 +52,7 @@ export interface TMDbMovieDetails {
   budget: number;
   revenue: number;
   production_companies: Array<{ id: number; name: string; logo_path: string | null }>;
+  original_language: string;
 }
 
 export interface TMDbSeriesDetails {
@@ -71,6 +72,63 @@ export interface TMDbSeriesDetails {
   number_of_seasons: number;
   number_of_episodes: number;
   production_companies: Array<{ id: number; name: string; logo_path: string | null }>;
+  original_language: string;
+  seasons?: TMDbSeason[];
+}
+
+// Cast/Crew types
+export interface TMDB_cast {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+  order: number;
+}
+
+export interface TMDB_crew {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+}
+
+export interface TMDbCredits {
+  id: number;
+  cast: TMDB_cast[];
+  crew: TMDB_crew[];
+}
+
+// Season and Episode types
+export interface TMDbEpisode {
+  id: number;
+  name: string;
+  overview: string | null;
+  episode_number: number;
+  season_number: number;
+  still_path: string | null;
+  air_date: string | null;
+  runtime: number | null;
+  vote_average: number;
+}
+
+export interface TMDbSeason {
+  id: number;
+  name: string;
+  season_number: number;
+  overview: string | null;
+  air_date: string | null;
+  poster_path: string | null;
+  episode_count: number;
+}
+
+export interface TMDbSeasonDetails {
+  id: number;
+  name: string;
+  season_number: number;
+  overview: string | null;
+  episodes: TMDbEpisode[];
+  poster_path: string | null;
 }
 
 interface TrendingResponse {
@@ -166,4 +224,32 @@ export async function getSeriesDetails(id: string): Promise<TMDbSeriesDetails> {
 export function getTMDBImageUrl(path: string | null, size: 'w185' | 'w500' | 'original' = 'w500'): string | null {
   if (!path) return null;
   return `https://image.tmdb.org/t/p/${size}${path}`;
+}
+
+/**
+ * Get movie credits (cast)
+ */
+export async function getMovieCredits(id: string): Promise<TMDbCredits> {
+  return tmdbFetch<TMDbCredits>(`/movie/${id}/credits`);
+}
+
+/**
+ * Get TV series credits (cast)
+ */
+export async function getSeriesCredits(id: string): Promise<TMDbCredits> {
+  return tmdbFetch<TMDbCredits>(`/tv/${id}/credits`);
+}
+
+/**
+ * Get TV series seasons list
+ */
+export async function getSeriesSeasons(id: string): Promise<{ seasons: TMDbSeason[] }> {
+  return tmdbFetch<{ seasons: TMDbSeason[] }>(`/tv/${id}`);
+}
+
+/**
+ * Get specific season details with episodes
+ */
+export async function getSeasonDetails(seriesId: string, seasonNumber: number): Promise<TMDbSeasonDetails> {
+  return tmdbFetch<TMDbSeasonDetails>(`/tv/${seriesId}/season/${seasonNumber}`);
 }
