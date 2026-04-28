@@ -43,8 +43,8 @@ export default async function MainLayout({
       <Sidebar user={user} />
 
       {/* Navbar - Mobile only */}
-      <header className="sticky top-0 z-50 w-full bg-[#09090b]/95 backdrop-blur border-b border-[#27272a] md:hidden">
-        <div className="flex h-14 items-center px-4">
+      <header className="sticky top-0 z-50 w-full bg-[#09090b]/95 backdrop-blur border-b border-white/[0.08] md:hidden">
+        <div className="flex h-16 items-center px-4 gap-3">
           <div className="flex-1 max-w-xl mx-auto w-full">
             <SearchBox />
           </div>
@@ -54,7 +54,7 @@ export default async function MainLayout({
       {/* Main content - offset for sidebar on desktop */}
       <main
         id="main-content"
-        className="md:ml-64 pt-14 md:pt-0 min-h-screen"
+        className="md:ml-64 pt-16 md:pt-0 min-h-screen"
       >
         {children}
       </main>
