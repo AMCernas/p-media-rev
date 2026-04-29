@@ -44,31 +44,46 @@ export function SearchBox({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const {
-    query,
+const {
+    query, // Keep to sync with inputValue
     results,
     isLoading,
     error,
     search,
     clearSearch,
-  } = useSearch({ debounceMs: 400 });
+    totalResults,
+  } = useSearch({ debounceMs: 250, minLength: 2 });
   
-  // Calculate total results
-  const totalResults = results.movies.length + results.series.length + results.books.length;
+  // LOCAL state for input - separate from hook to avoid re-render conflicts
+  const [inputValue, setInputValue] = useState('');
   
-  // Handle input change
+  // Sync inputValue when query is cleared externally
+  useEffect(() => {
+    if (!query && inputValue) {
+      setInputValue('');
+    }
+  }, [query]);
+  
+  const MAX_DROPDOWN_RESULTS = 4;
+  
+  // Handle input change - uses LOCAL state, NOT query from hook
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setInputValue(value); // Update local state immediately
     setIsOpen(value.length > 0);
-    search(value);
+    if (value.length >= 2) {
+      search(value);
+    } else if (value.length === 0) {
+      clearSearch();
+    }
   };
   
   // Handle form submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim() && totalResults > 0) {
-      // Navigate to search results page if exists
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
+    if (query.trim() || query) {
+      // Navigate to search results page - always works regardless of results
+      router.push(`/search?q=${encodeURIComponent(query)}`);
     }
   };
   
@@ -131,8 +146,15 @@ export function SearchBox({
           {/* Input */}
           <input
             type="text"
-            value={query}
+            inputMode="search"
+            value={inputValue}
             onChange={handleInputChange}
+            onKeyUp={(e) => {
+              // Force search on any key press
+              if (e.key === ' ' && query.trim() === '') {
+                search(' ');
+              }
+            }}
             placeholder={placeholder}
             autoFocus={autoFocus}
             className={cn(
@@ -232,7 +254,7 @@ export function SearchBox({
               <div className="sticky top-0 bg-muted/50 px-3 py-1.5 text-xs font-medium text-muted-foreground">
                 Movies ({results.movies.length})
               </div>
-              {results.movies.slice(0, 5).map((result) => (
+              {results.movies.slice(0, MAX_DROPDOWN_RESULTS).map((result) => (
                 <ResultItem
                   key={`movie-${result.id}`}
                   result={result}
@@ -248,7 +270,7 @@ export function SearchBox({
               <div className="sticky top-0 bg-muted/50 px-3 py-1.5 text-xs font-medium text-muted-foreground">
                 TV Series ({results.series.length})
               </div>
-              {results.series.slice(0, 5).map((result) => (
+              {results.series.slice(0, MAX_DROPDOWN_RESULTS).map((result) => (
                 <ResultItem
                   key={`series-${result.id}`}
                   result={result}
@@ -264,7 +286,7 @@ export function SearchBox({
               <div className="sticky top-0 bg-muted/50 px-3 py-1.5 text-xs font-medium text-muted-foreground">
                 Books ({results.books.length})
               </div>
-              {results.books.slice(0, 5).map((result) => (
+              {results.books.slice(0, MAX_DROPDOWN_RESULTS).map((result) => (
                 <ResultItem
                   key={`book-${result.id}`}
                   result={result}

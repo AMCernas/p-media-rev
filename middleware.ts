@@ -48,7 +48,7 @@ export async function middleware(request: NextRequest) {
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route));
 
   // Define protected routes that require auth
-  const protectedRoutes = ['/dashboard', '/library', '/editor', '/details'];
+  const protectedRoutes = ['/dashboard', '/library', '/editor', '/details', '/search'];
   const isProtectedRoute = protectedRoutes.some((route) =>
     pathname.startsWith(route)
   );
