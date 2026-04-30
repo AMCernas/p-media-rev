@@ -222,11 +222,10 @@ export async function PATCH(request: NextRequest) {
       );
     }
     
-    // Validate rating if provided
-    if (rating !== undefined && (rating < 1 || rating > 5)) {
+// Validate rating if provided (must be 1-5, allow null/0/undefined to skip)
+    if (rating != null && (rating < 1 || rating > 5)) {
       return NextResponse.json(
-        { error: 'Rating must be between 1 and 5' },
-        { status: 400 }
+        { error: 'Rating must be between 1 and 5', received: rating },        { status: 400 }
       );
     }
 
@@ -246,7 +245,7 @@ export async function PATCH(request: NextRequest) {
       );
     }
     
-    // Build update data
+    // Build update data (include null values explicitly)
     const updateData: any = {};
     if (rating !== undefined) updateData.rating = rating;
     if (content !== undefined) updateData.content = content;

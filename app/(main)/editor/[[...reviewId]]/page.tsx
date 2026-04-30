@@ -134,7 +134,31 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
     );
   }
 
-  // reviewId exists - render editor client, OR query params for new review
+  // If coming from details with mediaId/mediaType, check if review already exists
+  // and redirect to it instead of creating a new one (avoids 409 Conflict)
+  if (mediaId && mediaType) {
+    const user = await getAuthenticatedUser();
+    
+    if (!user) {
+      // Not authenticated → redirect to login
+      redirect('/login');
+    }
+    
+    const existing = await prisma.review.findFirst({
+      where: {
+        userId: user.id,
+        mediaId,
+        mediaType: mediaType as any,
+      },
+    });
+    
+    if (existing) {
+      // Redirect to existing review instead of creating new draft
+      redirect(`/editor/${existing.id}`);
+    }
+  }
+
+  // reviewId exists OR query params for new review (no duplicate found)
   return (
     <EditorClient
       reviewId={reviewId}

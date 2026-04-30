@@ -98,7 +98,15 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
   
   // Save function
   const doSave = useCallback(async (showFeedback = true) => {
-    if (!currentReviewId || !hasChanges()) {
+    console.log('[Editor] doSave called', { currentReviewId, hasChanges: hasChanges(), contentLength: content?.length, rating });
+    
+    if (!currentReviewId) {
+      console.log('[Editor] No currentReviewId, skipping save');
+      return;
+    }
+    
+    if (!hasChanges()) {
+      console.log('[Editor] No changes detected, skipping save');
       return;
     }
     
@@ -107,6 +115,7 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
     }
     
     try {
+      console.log('[Editor] Sending PATCH request...');
       const response = await fetch(`/api/reviews/${currentReviewId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -116,11 +125,16 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
         }),
       });
       
+      console.log('[Editor] Response status:', response.status);
+      
       if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('[Editor] Save failed:', errorData);
         throw new Error('Save failed');
       }
       
       const updated: Review = await response.json();
+      console.log('[Editor] Save successful:', updated);
       
       // Update refs
       lastSavedContentRef.current = content;
@@ -141,17 +155,17 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
       }, 2000);
       
     } catch (error) {
-      console.error('Auto-save error:', error);
+      console.error('[Editor] Auto-save error:', error);
       setSaveStatus('error');
       
-      // Retry after 3 seconds (REQ-AD-4)
+      // Retry after 3 seconds
       retryTimeoutRef.current = setTimeout(() => {
         doSave(false);
       }, 3000);
     }
   }, [currentReviewId, content, rating, hasChanges]);
   
-  // Debounced save trigger (1.5s - REQ-AD-1)
+  // Debounced save trigger - faster (800ms)
   const triggerAutoSave = useCallback(() => {
     if (!currentReviewId) return;
     
@@ -163,23 +177,33 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
     // Start new debounce timer
     saveTimeoutRef.current = setTimeout(() => {
       doSave(true);
-    }, 1500);
+    }, 800);
   }, [currentReviewId, doSave]);
+
+  // Save on unmount - critical for preserving drafts
+  useEffect(() => {
+    return () => {
+      // Save any unsaved changes when component unmounts
+      if (currentReviewId && hasChanges()) {
+        doSave(false);
+      }
+    };
+  }, [currentReviewId, hasChanges, doSave]);
   
   // Handle content change
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
     setContent(newContent);
     triggerAutoSave();
-  };
-  
+};
+   
   // Handle rating change
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
     triggerAutoSave();
   };
-  
-// Complete review
+
+  // Complete review
   const handleComplete = async () => {
     if (!currentReviewId || isPublishing) return;
     
