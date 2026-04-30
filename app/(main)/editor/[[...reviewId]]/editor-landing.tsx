@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import type { MediaType } from '@/lib/types';
 
@@ -200,31 +199,16 @@ export function EditorLanding({
   draftsCount,
   completedCount,
 }: EditorLandingProps) {
-  const router = useRouter();
-
-  const handleNewReview = () => {
-    router.push('/editor/new');
-  };
-
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-6xl mx-auto">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight">
-            Editor de Reseñas
-          </h1>
-          <p className="text-sm text-[#a1a1aa] mt-1">
-            Continúa escribiendo o comienza una nueva reseña
-          </p>
-        </div>
-        <button
-          onClick={handleNewReview}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#a78bfa] text-[#09090b] font-medium text-sm hover:bg-[#a78bfa]/90 transition-colors"
-        >
-          <span className="material-symbols-outlined text-lg">add</span>
-          Nueva Reseña
-        </button>
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight">
+          Editor de Reseñas
+        </h1>
+        <p className="text-sm text-[#a1a1aa] mt-1">
+          Continúa escribiendo tus reseñas desde la página de detalles
+        </p>
       </div>
 
       {/* Drafts Section */}
