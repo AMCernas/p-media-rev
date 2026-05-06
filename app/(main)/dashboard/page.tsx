@@ -13,18 +13,19 @@ export const dynamic = 'force-dynamic';
 
 import { getAuthenticatedUser } from '@/lib/supabase';
 import { prisma } from '@/lib/prisma';
-import { getTrending, getMovieDetails, getSeriesDetails, getTMDBImageUrl, type TMDBSearchResult } from '@/lib/tmdb';
-import { getBookDetails } from '@/lib/books';
+import { getTrending, getMovieDetails, getSeriesDetails, getTMDBImageUrl, getPopularMovies, getPopularTV, type TMDBSearchResult } from '@/lib/tmdb';
+import { getBookDetails, getPopularBooks, type GoogleBookVolume } from '@/lib/books';
 import type { ReviewStatus, MediaType } from '@/lib/types';
 import Link from "next/link";
 import { MediaCard } from '@/components/features/media-card';
+import { MediaRow } from '@/components/features/media-row';
 import { SearchBox } from '@/components/features/search-box';
 
 /**
  * Fetch user statistics from database
  */
 async function getUserStats(userId: string) {
-  const [watchlistCount, reviewsCount, publishedCount] = await Promise.all([
+  const [watchlistCount, draftsCount, publishedCount] = await Promise.all([
     // Total watchlist items
     prisma.review.count({
       where: { 
@@ -32,11 +33,14 @@ async function getUserStats(userId: string) {
         status: 'WATCHLIST',
       },
     }),
-    // Total reviews (all statuses)
+    // Only DRAFT status (actual review drafts)
     prisma.review.count({
-      where: { userId },
+      where: { 
+        userId,
+        status: 'DRAFT' as const,
+      },
     }),
-    // Published reviews (now called COMPLETED)
+    // Published reviews (COMPLETED)
     prisma.review.count({
       where: { 
         userId,
@@ -45,7 +49,10 @@ async function getUserStats(userId: string) {
     }),
   ]);
 
-  return { watchlistCount, reviewsCount, publishedCount };
+  // Total reviews = drafts + published (not including watchlist)
+  const totalReviews = draftsCount + publishedCount;
+
+  return { watchlistCount, totalReviews, draftsCount, publishedCount };
 }
 
 /**
@@ -134,11 +141,26 @@ export default async function DashboardPage() {
   }
 
   // Fetch data in parallel
-  const [trendingData, stats, recentActivityRaw] = await Promise.all([
+  const [trendingData, popularMoviesData, popularSeriesData, popularBooksData, stats, recentActivityRaw] = await Promise.all([
     // 7.2: Fetch Trending from TMDB
     getTrending(1).catch((error) => {
       console.error('Failed to fetch trending:', error);
       return { results: [] as TMDBSearchResult[], total_results: 0 };
+    }),
+    // Fetch Popular Movies from TMDB
+    getPopularMovies(1, 'es-ES').catch((error) => {
+      console.error('Failed to fetch popular movies:', error);
+      return { results: [] as TMDBSearchResult[], total_results: 0 };
+    }),
+    // Fetch Popular TV Series from TMDB
+    getPopularTV(1, 'es-ES').catch((error) => {
+      console.error('Failed to fetch popular series:', error);
+      return { results: [] as TMDBSearchResult[], total_results: 0 };
+    }),
+    // Fetch Popular Books from Google Books
+    getPopularBooks('subject:fiction', 6).catch((error) => {
+      console.error('Failed to fetch popular books:', error);
+      return { items: [] as GoogleBookVolume[], totalItems: 0 };
     }),
     // 7.4: Get User Statistics
     getUserStats(user.id),
@@ -152,6 +174,9 @@ export default async function DashboardPage() {
   const enrichedActivity = await enrichRecentActivity(recentActivityRaw as Array<{ id: string; mediaId: string; mediaType: string; status: string; rating: number | null; updatedAt: Date }>);
 
   const trending = trendingData.results.slice(0, 6); // Limit to 6 items
+  const popularMovies = popularMoviesData.results; // Already limited by maxResults param in API call
+  const popularSeries = popularSeriesData.results;
+  const popularBooks = popularBooksData.items || [];
   const recentActivity = enrichedActivity;
 
   return (
@@ -191,7 +216,7 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between mb-3">
               <span className="material-symbols-outlined text-[#34d399] text-xl">edit_note</span>
             </div>
-            <p className="text-3xl font-bold text-[#fafafa]">{stats.reviewsCount}</p>
+            <p className="text-3xl font-bold text-[#fafafa]">{stats.totalReviews}</p>
             <p className="text-sm text-[#a1a1aa] mt-1">Total Reseñas</p>
           </div>
 
@@ -209,7 +234,7 @@ export default async function DashboardPage() {
             <div className="flex items-center justify-between mb-3">
               <span className="material-symbols-outlined text-[#fb923c] text-xl">draft</span>
             </div>
-            <p className="text-3xl font-bold text-[#fafafa]">{stats.reviewsCount - stats.publishedCount}</p>
+            <p className="text-3xl font-bold text-[#fafafa]">{stats.draftsCount}</p>
             <p className="text-sm text-[#a1a1aa] mt-1">Borradores</p>
           </div>
         </div>
@@ -236,6 +261,27 @@ export default async function DashboardPage() {
           </div>
         )}
       </section>
+
+      {/* Popular Movies Section */}
+      <MediaRow 
+        title="Películas Populares" 
+        items={popularMovies} 
+        mediaType="movie" 
+      />
+
+      {/* Popular Series Section */}
+      <MediaRow 
+        title="Series Populares" 
+        items={popularSeries} 
+        mediaType="series" 
+      />
+
+      {/* Popular Books Section */}
+      <MediaRow 
+        title="Libros Populares" 
+        items={popularBooks} 
+        mediaType="book" 
+      />
 
       {/* 7.3: Recent Activity Section */}
       <section>

@@ -128,3 +128,17 @@ export function getISBN(volume: GoogleBookVolume): string | null {
   
   return null;
 }
+
+/**
+ * Get popular books from Google Books API
+ * Uses a subject-based query to get popular fiction books
+ */
+export async function getPopularBooks(
+  query: string = 'subject:fiction',
+  maxResults: number = 6
+): Promise<BooksSearchResponse> {
+  return booksFetch<BooksSearchResponse>('/volumes', {
+    q: query,
+    maxResults: String(maxResults),
+  });
+}
