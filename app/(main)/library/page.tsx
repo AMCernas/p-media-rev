@@ -156,8 +156,12 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
   });
   const watchlist = await enrichWatchlistItems(watchlistRaw);
 
+  // Limite de items para "Todo" (6 items cuando no hay search)
+  const isTodoView = true; // Always show limited for "Todo" tab
+  const todoLimit = search ? 100 : 6; // Si hay search, traer más para buscar
+
   // Fetch reviews (paginated via API-like query)
-  const limit = 12;
+  const limit = search ? 100 : 12; // Más items si hay búsqueda activa
   const skip = (page - 1) * limit;
   
   const [reviewsRaw, totalReviews] = await Promise.all([
@@ -169,8 +173,8 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
         ...(search ? { title: { contains: search, mode: 'insensitive' } } : {}),
       },
       orderBy: { updatedAt: 'desc' },
-      skip,
-      take: limit,
+      skip: search ? skip : 0, // Si no hay search, solo traer los primeros 6
+      take: search ? limit : todoLimit, // Si no hay search, limitado a 6
     }),
     prisma.review.count({
       where: { 
@@ -183,8 +187,11 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
 
   const reviewsTyped = reviewsRaw as unknown as Review[];
   const enrichedReviews = await enrichReviews(reviewsTyped);
-  const totalPages = Math.ceil(totalReviews / limit);
-  const hasMore = page < totalPages;
+  
+  // Calcular hasMore
+  // Si no hay search: siempre false (solo muestran 6)
+  // Si hay search: basado en total y límite
+  const hasMore = search ? totalReviews > reviewsRaw.length : false;
 
   // Pass data to client component
   return (

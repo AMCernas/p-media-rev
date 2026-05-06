@@ -76,6 +76,12 @@ export function LibraryClient({
     setHasMore(initialHasMore);
   }, [initialReviews, initialPage, initialTotalReviews, initialHasMore]);
 
+  // Sync searchQuery with URL search params
+  useEffect(() => {
+    const urlSearch = searchParams.get('search') || '';
+    setSearchQuery(urlSearch);
+  }, [searchParams]);
+
   // Handle search with debounce
   const handleSearchChange = useCallback((value: string) => {
     setSearchQuery(value);
