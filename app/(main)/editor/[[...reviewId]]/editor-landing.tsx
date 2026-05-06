@@ -180,6 +180,27 @@ function SectionHeader({
 }
 
 /**
+ * Button to view all items in a section
+ */
+function ViewAllButton({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      className={cn(
+        'inline-flex items-center gap-1 px-4 py-2 rounded-lg',
+        'text-sm font-medium text-[#a78bfa]',
+        'bg-[#a78bfa]/10 border border-[#a78bfa]/30',
+        'hover:bg-[#a78bfa]/20 hover:border-[#a78bfa]/50',
+        'transition-all duration-200'
+      )}
+    >
+      {label}
+      <span className="material-symbols-outlined text-sm">arrow_forward</span>
+    </a>
+  );
+}
+
+/**
  * Empty state for section
  */
 function EmptySection({ message, icon }: { message: string; icon: string }) {
@@ -219,11 +240,18 @@ export function EditorLanding({
           count={draftsCount}
         />
         {drafts.length > 0 ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {drafts.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {drafts.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
+            </div>
+            {draftsCount > 6 && (
+              <div className="mt-6 text-center">
+                <ViewAllButton href="/editor/drafts" label="Ver todos los borradores" />
+              </div>
+            )}
+          </>
         ) : (
           <EmptySection
             message="No hay borradores. Empieza una nueva reseña."
@@ -240,11 +268,18 @@ export function EditorLanding({
           count={completedCount}
         />
         {completed.length > 0 ? (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {completed.map((review) => (
-              <ReviewCard key={review.id} review={review} />
-            ))}
-          </div>
+          <>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {completed.map((review) => (
+                <ReviewCard key={review.id} review={review} />
+              ))}
+            </div>
+            {completedCount > 6 && (
+              <div className="mt-6 text-center">
+                <ViewAllButton href="/editor/completed" label="Ver todas las reseñas" />
+              </div>
+            )}
+          </>
         ) : (
           <EmptySection
             message="No hay reseñas completadas."
