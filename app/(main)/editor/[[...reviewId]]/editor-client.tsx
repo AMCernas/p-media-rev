@@ -91,21 +91,36 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
     initializeEditor();
   }, [reviewId, mediaId, mediaType]);
   
-  // Check if content changed
+  // Check if content changed (for use in effects)
   const hasChanges = useCallback(() => {
     return content !== lastSavedContentRef.current || rating !== lastSavedRatingRef.current;
   }, [content, rating]);
   
-  // Save function
-  const doSave = useCallback(async (showFeedback = true) => {
-    console.log('[Editor] doSave called', { currentReviewId, hasChanges: hasChanges(), contentLength: content?.length, rating });
+  // Save function - accepts optional override values to avoid React batching issues
+  const doSave = useCallback(async (
+    showFeedback: boolean, 
+    overrideRating?: number | null, 
+    overrideContent?: string
+  ) => {
+    // Use override values if provided, otherwise use state
+    const ratingToSave = overrideRating !== undefined ? overrideRating : rating;
+    const contentToSave = overrideContent !== undefined ? overrideContent : content;
+    
+    console.log('[Editor] doSave called', { 
+      currentReviewId, 
+      hasChanges: contentToSave !== lastSavedContentRef.current || ratingToSave !== lastSavedRatingRef.current, 
+      contentLength: contentToSave?.length, 
+      rating: ratingToSave 
+    });
     
     if (!currentReviewId) {
       console.log('[Editor] No currentReviewId, skipping save');
       return;
     }
     
-    if (!hasChanges()) {
+    // Check changes using the captured values
+    const hasChangesNow = contentToSave !== lastSavedContentRef.current || ratingToSave !== lastSavedRatingRef.current;
+    if (!hasChangesNow) {
       console.log('[Editor] No changes detected, skipping save');
       return;
     }
@@ -120,8 +135,8 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          rating: rating ?? null,
-          content: content || null,
+          rating: ratingToSave ?? null,
+          content: contentToSave || null,
         }),
       });
       
@@ -137,8 +152,8 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
       console.log('[Editor] Save successful:', updated);
       
       // Update refs
-      lastSavedContentRef.current = content;
-      lastSavedRatingRef.current = rating;
+      lastSavedContentRef.current = contentToSave;
+      lastSavedRatingRef.current = ratingToSave;
       
       setSaveStatus('saved');
       setLastSaved(new Date());
@@ -160,13 +175,13 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
       
       // Retry after 3 seconds
       retryTimeoutRef.current = setTimeout(() => {
-        doSave(false);
+        doSave(false, overrideRating, overrideContent);
       }, 3000);
     }
-  }, [currentReviewId, content, rating, hasChanges]);
-  
-  // Debounced save trigger - faster (800ms)
-  const triggerAutoSave = useCallback(() => {
+  }, [currentReviewId, rating, content]);
+
+  // Debounced save trigger - accepts optional override values
+  const triggerAutoSave = useCallback((overrideRating?: number | null) => {
     if (!currentReviewId) return;
     
     // Clear previous timeout
@@ -176,9 +191,20 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
     
     // Start new debounce timer
     saveTimeoutRef.current = setTimeout(() => {
-      doSave(true);
+      // Use override if provided, otherwise use current state
+      const ratingToSave = overrideRating !== undefined ? overrideRating : rating;
+      const contentToSave = content;
+      
+      const hasChangesNow = contentToSave !== lastSavedContentRef.current || ratingToSave !== lastSavedRatingRef.current;
+      
+      if (!hasChangesNow) {
+        console.log('[Editor] No changes detected, skipping save');
+        return;
+      }
+      
+      doSave(true, overrideRating, contentToSave);
     }, 800);
-  }, [currentReviewId, doSave]);
+  }, [currentReviewId, rating, content, doSave]);
 
   // Save on unmount - critical for preserving drafts
   useEffect(() => {
@@ -195,12 +221,12 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
     const newContent = e.target.value;
     setContent(newContent);
     triggerAutoSave();
-};
+  };
    
-  // Handle rating change
+  // Handle rating change - pass new rating directly to avoid React batching issue
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
-    triggerAutoSave();
+    triggerAutoSave(newRating);
   };
 
   // Complete review
