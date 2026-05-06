@@ -39,7 +39,7 @@ interface ReviewData {
   content?: string | null;
   createdAt: Date;
   updatedAt: Date;
-  title?: string;
+  title?: string | null;
   imageUrl?: string | null;
   year?: string;
 }

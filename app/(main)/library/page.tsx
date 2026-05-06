@@ -8,6 +8,10 @@
  * - Combined filters
  * - Show rating for published reviews
  * 
+ * New features:
+ * - Pagination for reviews (Load More)
+ * - Search by title
+ * 
  * This is a Server Component that fetches data on the server
  */
 
@@ -18,6 +22,11 @@ import { getMovieDetails, getSeriesDetails, getTMDBImageUrl } from '@/lib/tmdb';
 import { getBookDetails } from '@/lib/books';
 import { LibraryClient } from './library-client';
 import type { MediaType, Review } from '@/lib/types';
+
+interface SearchParams {
+  page?: string;
+  search?: string;
+}
 
 /**
  * Enrich watchlist items with metadata from external APIs
@@ -120,7 +129,7 @@ async function enrichReviews(
   return enriched as Review[];
 }
 
-export default async function LibraryPage() {
+export default async function LibraryPage(props: { searchParams: Promise<SearchParams> }) {
   // Check authentication
   const user = await getAuthenticatedUser();
   
@@ -128,38 +137,68 @@ export default async function LibraryPage() {
     redirect('/login');
   }
 
-  // Fetch user's reviews (watchlist + reviews)
-  const reviews = await prisma.review.findMany({
-    where: {
-      userId: user.id,
-    },
+  // Resolve search params
+  const searchParams = await props.searchParams;
+  const page = parseInt(searchParams.page || '1', 10);
+  const search = searchParams.search || '';
+
+  // Fetch counts (for stats display - not paginated)
+  const [watchlistCount, draftsCount, publishedCount] = await Promise.all([
+    prisma.review.count({ where: { userId: user.id, status: 'WATCHLIST' } }),
+    prisma.review.count({ where: { userId: user.id, status: 'DRAFT' } }),
+    prisma.review.count({ where: { userId: user.id, status: 'COMPLETED' } }),
+  ]);
+
+  // Fetch watchlist (not paginated - kept as before)
+  const watchlistRaw = await prisma.review.findMany({
+    where: { userId: user.id, status: 'WATCHLIST' },
     orderBy: { updatedAt: 'desc' },
-    take: 100,
   });
-
-  // Cast to proper type to avoid Prisma enum mismatch
-  const reviewsTyped = reviews as unknown as Review[];
-
-  // Separate into watchlist and reviews
-  const watchlistRaw = reviewsTyped.filter(r => r.status === 'WATCHLIST');
-  const drafts = reviewsTyped.filter(r => r.status === 'DRAFT');
-  const published = reviewsTyped.filter(r => r.status === 'COMPLETED');
-
-  // Enrich watchlist items with metadata
   const watchlist = await enrichWatchlistItems(watchlistRaw);
 
-  // Enrich review items (drafts + published) with metadata
-  const reviewItems = reviewsTyped.filter(r => r.status !== 'WATCHLIST');
-  const enrichedReviews = await enrichReviews(reviewItems);
+  // Fetch reviews (paginated via API-like query)
+  const limit = 12;
+  const skip = (page - 1) * limit;
+  
+  const [reviewsRaw, totalReviews] = await Promise.all([
+    prisma.review.findMany({
+      where: { 
+        userId: user.id,
+        status: { not: 'WATCHLIST' },
+        // Search by title (if available)
+        ...(search ? { title: { contains: search, mode: 'insensitive' } } : {}),
+      },
+      orderBy: { updatedAt: 'desc' },
+      skip,
+      take: limit,
+    }),
+    prisma.review.count({
+      where: { 
+        userId: user.id,
+        status: { not: 'WATCHLIST' },
+        ...(search ? { title: { contains: search, mode: 'insensitive' } } : {}),
+      },
+    }),
+  ]);
+
+  const reviewsTyped = reviewsRaw as unknown as Review[];
+  const enrichedReviews = await enrichReviews(reviewsTyped);
+  const totalPages = Math.ceil(totalReviews / limit);
+  const hasMore = page < totalPages;
 
   // Pass data to client component
   return (
     <LibraryClient
       initialReviews={enrichedReviews}
       watchlistItems={watchlist}
-      watchlistCount={watchlist.length}
-      draftsCount={drafts.length}
-      publishedCount={published.length}
+      watchlistCount={watchlistCount}
+      draftsCount={draftsCount}
+      publishedCount={publishedCount}
+      // New pagination props
+      initialPage={page}
+      initialSearch={search}
+      totalReviews={totalReviews}
+      hasMore={hasMore}
     />
   );
 }

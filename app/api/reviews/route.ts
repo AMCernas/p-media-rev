@@ -137,9 +137,12 @@ export async function POST(request: NextRequest) {
 /**
  * GET /api/reviews - List user's reviews
  * 
- * Query params: type?, status?
+ * Query params:
  * - type: filter by mediaType (MOVIE, SERIES, BOOK)
- * - status: filter by status (DRAFT, PUBLISHED, WATCHLIST)
+ * - status: filter by status (DRAFT, COMPLETED, WATCHLIST)
+ * - page: page number (default: 1)
+ * - limit: items per page (default: 12)
+ * - search: search by title (case-insensitive, partial match)
  */
 export async function GET(request: NextRequest) {
   try {
@@ -155,6 +158,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type')?.toUpperCase();
     const status = searchParams.get('status')?.toUpperCase();
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const limit = Math.min(50, Math.max(1, parseInt(searchParams.get('limit') || '12', 10)));
+    const search = searchParams.get('search')?.trim();
     
     // Build where clause
     const where: any = { userId: user.id };
@@ -167,13 +173,38 @@ export async function GET(request: NextRequest) {
       where.status = status;
     }
     
-    const reviews = await prisma.review.findMany({
-      where,
-      orderBy: { updatedAt: 'desc' },
-      take: 100,
-    });
+    // Search by title (case-insensitive partial match)
+    if (search && search.length > 0) {
+      where.title = {
+        contains: search,
+        mode: 'insensitive',
+      };
+    }
     
-    return NextResponse.json(reviews);
+    // Calculate skip for pagination
+    const skip = (page - 1) * limit;
+    
+    // Execute queries in parallel: data + count
+    const [reviews, total] = await Promise.all([
+      prisma.review.findMany({
+        where,
+        orderBy: { updatedAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.review.count({ where }),
+    ]);
+    
+    const totalPages = Math.ceil(total / limit);
+    const hasMore = page < totalPages;
+    
+    return NextResponse.json({
+      reviews,
+      total,
+      page,
+      totalPages,
+      hasMore,
+    });
   } catch (error) {
     console.error('GET /api/reviews error:', error);
     return NextResponse.json(
