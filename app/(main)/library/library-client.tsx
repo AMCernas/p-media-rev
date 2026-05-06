@@ -60,7 +60,8 @@ export function LibraryClient({
   // Pagination & Search state
   const [allLoadedReviews, setAllLoadedReviews] = useState<Review[]>(initialReviews);
   const [currentPage, setCurrentPage] = useState(initialPage);
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
+  const [searchQuery, setSearchQuery] = useState(initialSearch); // Para lógica
+  const [inputValue, setInputValue] = useState(initialSearch); // Para el input
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [totalReviews, setTotalReviews] = useState(initialTotalReviews);
@@ -68,32 +69,34 @@ export function LibraryClient({
   // Debounce ref for search
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Sync with initial data when page changes
+  // Sync con datos iniciales y URL
   useEffect(() => {
     setAllLoadedReviews(initialReviews);
     setCurrentPage(initialPage);
     setTotalReviews(initialTotalReviews);
     setHasMore(initialHasMore);
-  }, [initialReviews, initialPage, initialTotalReviews, initialHasMore]);
-
-  // Sync searchQuery with URL search params
-  useEffect(() => {
+    // Sync search desde URL
     const urlSearch = searchParams.get('search') || '';
     setSearchQuery(urlSearch);
-  }, [searchParams]);
+    setInputValue(urlSearch);
+  }, [initialReviews, initialPage, initialTotalReviews, initialHasMore, searchParams]);
 
-  // Handle search with debounce
+  // Handle search con debounce
   const handleSearchChange = useCallback((value: string) => {
-    setSearchQuery(value);
+    // Actualizar el input inmediatamente
+    setInputValue(value);
     
     // Clear existing timeout
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
     
-    // Set new timeout
+    // Set new timeout - solo navegar después de 300ms
     debounceRef.current = setTimeout(() => {
-      // Reset to page 1 when searching
+      // Sincronizar estado
+      setSearchQuery(value);
+      
+      // Navegar a la nueva URL
       const params = new URLSearchParams();
       if (value) params.set('search', value);
       params.set('page', '1');
@@ -252,7 +255,7 @@ export function LibraryClient({
             <input
               type="text"
               placeholder="Buscar por título..."
-              value={searchQuery}
+              value={inputValue}
               onChange={(e) => handleSearchChange(e.target.value)}
               className={cn(
                 "w-full pl-10 pr-4 py-2.5 rounded-xl",
@@ -262,9 +265,14 @@ export function LibraryClient({
                 "transition-colors"
               )}
             />
-            {searchQuery && (
+            {inputValue && (
               <button
-                onClick={() => handleSearchChange('')}
+                type="button"
+                onClick={() => {
+                  setInputValue('');
+                  setSearchQuery('');
+                  router.push('/library?page=1');
+                }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#fafafa]"
               >
                 <span className="material-symbols-outlined text-sm">close</span>

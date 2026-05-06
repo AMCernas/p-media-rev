@@ -149,19 +149,16 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
     prisma.review.count({ where: { userId: user.id, status: 'COMPLETED' } }),
   ]);
 
-  // Fetch watchlist (not paginated - kept as before)
+  // Fetch watchlist (limit to 6 items for "Todo" view)
   const watchlistRaw = await prisma.review.findMany({
     where: { userId: user.id, status: 'WATCHLIST' },
     orderBy: { updatedAt: 'desc' },
+    take: 6, // Limit to 6 for "Todo" view
   });
   const watchlist = await enrichWatchlistItems(watchlistRaw);
 
-  // Limite de items para "Todo" (6 items cuando no hay search)
-  const isTodoView = true; // Always show limited for "Todo" tab
-  const todoLimit = search ? 100 : 6; // Si hay search, traer más para buscar
-
-  // Fetch reviews (paginated via API-like query)
-  const limit = search ? 100 : 12; // Más items si hay búsqueda activa
+  // Fetch reviews (paginated - 12 items per page)
+  const limit = 12;
   const skip = (page - 1) * limit;
   
   const [reviewsRaw, totalReviews] = await Promise.all([
@@ -173,8 +170,8 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
         ...(search ? { title: { contains: search, mode: 'insensitive' } } : {}),
       },
       orderBy: { updatedAt: 'desc' },
-      skip: search ? skip : 0, // Si no hay search, solo traer los primeros 6
-      take: search ? limit : todoLimit, // Si no hay search, limitado a 6
+      skip,
+      take: limit,
     }),
     prisma.review.count({
       where: { 
@@ -187,11 +184,8 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
 
   const reviewsTyped = reviewsRaw as unknown as Review[];
   const enrichedReviews = await enrichReviews(reviewsTyped);
-  
-  // Calcular hasMore
-  // Si no hay search: siempre false (solo muestran 6)
-  // Si hay search: basado en total y límite
-  const hasMore = search ? totalReviews > reviewsRaw.length : false;
+  const totalPages = Math.ceil(totalReviews / limit);
+  const hasMore = page < totalPages;
 
   // Pass data to client component
   return (
