@@ -101,22 +101,37 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
       redirect('/login');
     }
 
-    // Fetch user's drafts and completed reviews
-    const draftsRaw = await prisma.review.findMany({
-      where: {
-        userId: user.id,
-        status: 'DRAFT' as $Enums.ReviewStatus,
-      },
-      orderBy: { updatedAt: 'desc' },
-    });
-
-    const completedRaw = await prisma.review.findMany({
-      where: {
-        userId: user.id,
-        status: 'COMPLETED' as $Enums.ReviewStatus,
-      },
-      orderBy: { updatedAt: 'desc' },
-    });
+    // Fetch user's drafts and completed reviews (limit 6 for landing page)
+    const [draftsRaw, completedRaw, draftsCount, completedCount] = await Promise.all([
+      prisma.review.findMany({
+        where: {
+          userId: user.id,
+          status: 'DRAFT' as $Enums.ReviewStatus,
+        },
+        orderBy: { updatedAt: 'desc' },
+        take: 6,
+      }),
+      prisma.review.findMany({
+        where: {
+          userId: user.id,
+          status: 'COMPLETED' as $Enums.ReviewStatus,
+        },
+        orderBy: { updatedAt: 'desc' },
+        take: 6,
+      }),
+      prisma.review.count({
+        where: {
+          userId: user.id,
+          status: 'DRAFT' as $Enums.ReviewStatus,
+        },
+      }),
+      prisma.review.count({
+        where: {
+          userId: user.id,
+          status: 'COMPLETED' as $Enums.ReviewStatus,
+        },
+      }),
+    ]);
 
     // Enrich with media metadata
     const [drafts, completed] = await Promise.all([
@@ -128,8 +143,8 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
       <EditorLanding
         drafts={drafts}
         completed={completed}
-        draftsCount={drafts.length}
-        completedCount={completed.length}
+        draftsCount={draftsCount}
+        completedCount={completedCount}
       />
     );
   }

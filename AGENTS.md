@@ -339,7 +339,7 @@ DATABASE_URL=
 
 ---
 
-## Estado Actual de la App (Abr 2026)
+## Estado Actual de la App (May 2026)
 
 | Feature | Status |
 |---------|--------|
@@ -351,15 +351,14 @@ DATABASE_URL=
 | Completar reseñas | ✅ |
 | Editor Landing (lista drafts/completadas) | ✅ |
 | Build pasa | ✅ |
-| Branch: fix/review-save-and-complete | ✅ |
-| Dashboard: listas Películas, Series y Libros Populares | 🔲 |
+| Dashboard: listas Películas, Series y Libros Populares | ✅ |
+| Componente reutilizable MediaRow | ✅ |
+| Editor Landing: límite de 6 elementos por sección | ✅ |
+| Editor Landing: botón "Ver todos" → /editor/drafts | ✅ |
+| Editor Landing: botón "Ver todas" → /editor/completed | ✅ |
+| Página /editor/drafts (vista completa borradores) | ✅ |
+| Página /editor/completed (vista completa completadas) | ✅ |
 | Library: botón "Editar" en ReviewCard | 🔲 |
-| Editor Landing: límite de 6 elementos por sección | 🔲 |
-| Editor Landing: botón "Ver todos" → /editor/drafts | 🔲 |
-| Editor Landing: botón "Ver todas" → /editor/completed | 🔲 |
-| Página /editor/drafts (vista completa borradores) | 🔲 |
-| Página /editor/completed (vista completa completadas) | 🔲 |
-| Componente reutilizable MediaRow | 🔲 |
 
 ---
 
