@@ -253,3 +253,29 @@ export async function getSeriesSeasons(id: string): Promise<{ seasons: TMDbSeaso
 export async function getSeasonDetails(seriesId: string, seasonNumber: number): Promise<TMDbSeasonDetails> {
   return tmdbFetch<TMDbSeasonDetails>(`/tv/${seriesId}/season/${seasonNumber}`);
 }
+
+/**
+ * Get popular movies from TMDB
+ */
+export async function getPopularMovies(
+  page: number = 1,
+  language: string = 'es-ES'
+): Promise<TMDBResponse<TMDBSearchResult>> {
+  return tmdbFetch<TMDBResponse<TMDBSearchResult>>('/movie/popular', {
+    page: String(page),
+    language,
+  });
+}
+
+/**
+ * Get popular TV series from TMDB
+ */
+export async function getPopularTV(
+  page: number = 1,
+  language: string = 'es-ES'
+): Promise<TMDBResponse<TMDBSearchResult>> {
+  return tmdbFetch<TMDBResponse<TMDBSearchResult>>('/tv/popular', {
+    page: String(page),
+    language,
+  });
+}
