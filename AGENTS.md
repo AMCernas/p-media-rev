@@ -358,7 +358,7 @@ DATABASE_URL=
 | Editor Landing: botón "Ver todas" → /editor/completed | ✅ |
 | Página /editor/drafts (vista completa borradores) | ✅ |
 | Página /editor/completed (vista completa completadas) | ✅ |
-| Library: botón "Editar" en ReviewCard | 🔲 |
+| Library: botón "Editar" en ReviewCard | ✅ |
 
 ---
 
@@ -372,4 +372,6 @@ DATABASE_URL=
 - **Build**: Eliminado `[id]/route.ts` corrupto y recreado limpio
 - **Planeado**: Dashboard — agregar listas de Películas, Series y Libros Populares con `MediaRow`
 - **Planeado**: Library — botón "Editar" en cada `ReviewCard` hacia `/editor/[reviewId]`
-- **Planeado**: Editor Landing — limitar a 6 elementos por sección + rutas `/editor/drafts` y `/editor/completed`
+- **Feat**: Editor Enhancement — paginación 6 items, botones "Ver todos", páginas /editor/drafts y /editor/completed
+- **Feat**: Dashboard Enhancement — listas Películas, Series, Libros Populares con MediaRow
+- **Planeado**: Library — botón "Editar" en cada `ReviewCard` hacia `/editor/[reviewId]`
