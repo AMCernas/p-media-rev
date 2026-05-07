@@ -112,6 +112,23 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Fetch title from external API
+    let title: string | null = null;
+    try {
+      if (mediaType === 'MOVIE') {
+        const details = await fetch(`https://api.themoviedb.org/3/movie/${mediaId}?api_key=${process.env.TMDB_API_KEY}`).then(r => r.json());
+        title = details.title || null;
+      } else if (mediaType === 'SERIES') {
+        const details = await fetch(`https://api.themoviedb.org/3/tv/${mediaId}?api_key=${process.env.TMDB_API_KEY}`).then(r => r.json());
+        title = details.name || null;
+      } else if (mediaType === 'BOOK') {
+        const details = await fetch(`https://www.googleapis.com/books/v1/volumes/${mediaId}?key=${process.env.GOOGLE_BOOKS_API_KEY}`).then(r => r.json());
+        title = details.volumeInfo?.title || null;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch title for', mediaType, mediaId);
+    }
+
     // Create the review/watchlist item
     const review = await prisma.review.create({
       data: {
@@ -121,6 +138,7 @@ export async function POST(request: NextRequest) {
         status: status as any,
         rating: rating ?? null,
         content: content ?? null,
+        title,
       },
     });
     

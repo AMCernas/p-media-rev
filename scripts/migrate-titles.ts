@@ -7,6 +7,7 @@
  * y les agrega el título desde TMDB o Google Books APIs.
  */
 
+import 'dotenv/config';
 import { prisma } from '../lib/prisma';
 import { getMovieDetails, getSeriesDetails } from '../lib/tmdb';
 import { getBookDetails } from '../lib/books';
