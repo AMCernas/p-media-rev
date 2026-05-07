@@ -31,9 +31,11 @@ model Review {
   status    ReviewStatus @default(DRAFT)
   rating    Int?
   content   String?
+  title     String?     // Denormalized title for search (populated on creation/enrichment)
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
   // Index para queries frecuentes por usuario
   @@index([userId])
+  @@index([title]) // Index for search performance
 }
