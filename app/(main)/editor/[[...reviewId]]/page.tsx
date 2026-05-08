@@ -173,12 +173,62 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
     }
   }
 
+  // Get media info for header (enrich review with title/imageUrl/year)
+  let mediaTitle: string | undefined;
+  let mediaImageUrl: string | undefined;
+  let mediaYear: string | undefined;
+
+  // Case 1: Editing existing review (has reviewId)
+  if (reviewId) {
+    const review = await prisma.review.findUnique({
+      where: { id: reviewId },
+    });
+    if (review) {
+      const enriched = await enrichReviews([{
+        id: review.id,
+        mediaId: review.mediaId,
+        mediaType: review.mediaType,
+        status: review.status,
+        rating: review.rating,
+        content: review.content,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
+      }]);
+      if (enriched[0]) {
+        mediaTitle = enriched[0].title || undefined;
+        mediaImageUrl = enriched[0].imageUrl || undefined;
+        mediaYear = enriched[0].year;
+      }
+    }
+  } 
+  // Case 2: Creating new review from details (has mediaId + mediaType)
+  else if (mediaId && mediaType) {
+    const enriched = await enrichReviews([{
+      id: '',
+      mediaId,
+      mediaType: mediaType as any,
+      status: 'DRAFT',
+      rating: null,
+      content: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }]);
+    if (enriched[0]) {
+      mediaTitle = enriched[0].title || undefined;
+      mediaImageUrl = enriched[0].imageUrl || undefined;
+      mediaYear = enriched[0].year;
+    }
+  }
+
   // reviewId exists OR query params for new review (no duplicate found)
   return (
     <EditorClient
       reviewId={reviewId}
       mediaId={mediaId}
       mediaType={mediaType}
+      mediaTitle={mediaTitle}
+      mediaImageUrl={mediaImageUrl}
+      mediaYear={mediaYear}
     />
   );
 }
