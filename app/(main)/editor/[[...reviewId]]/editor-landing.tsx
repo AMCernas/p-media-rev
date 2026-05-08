@@ -154,20 +154,37 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
           )}
         </div>
         <button
-          type="button"
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className={cn(
-            'w-6 h-6 flex items-center justify-center rounded-lg text-[#52525b] hover:text-[#ef4444] hover:bg-[#ef4444]/10',
-            'transition-colors duration-150 flex-shrink-0',
-            isDeleting && 'opacity-50'
-          )}
-          title="Eliminar"
-        >
-          <span className="material-symbols-outlined text-sm leading-none">
-            {isDeleting ? 'hourglass_empty' : 'close'}
-          </span>
-        </button>
+            type="button"
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className={cn(
+              'flex-shrink-0 p-2 rounded-lg border',
+              'text-[#52525b] hover:text-[#ef4444] hover:border-[#ef4444]/50',
+              'focus:outline-none focus:ring-2 focus:ring-[#ef4444]/50',
+              'transition-colors duration-150',
+              isDeleting && 'opacity-50 cursor-not-allowed'
+            )}
+            title="Eliminar"
+          >
+            {isDeleting ? (
+              <span className="animate-spin">⏳</span>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            )}
+          </button>
       </div>
 
       {/* Poster + Rating */}
