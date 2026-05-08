@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import type { MediaType } from '@/lib/types';
 
@@ -97,8 +99,38 @@ function MediaTypeBadge({ mediaType }: { mediaType: string }) {
 /**
  * Review card for editor landing
  */
-function ReviewCard({ review }: { review: EnrichedReview }) {
+function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (id: string) => void }) {
   const contentPreview = review.content?.substring(0, 120)?.trim();
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleDelete = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Confirm dialog
+    const confirmed = window.confirm(
+      `¿Estás seguro de eliminar esta ${review.status === 'DRAFT' ? 'borrador' : 'reseña'}?`
+    );
+    
+    if (!confirmed) return;
+    
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/reviews/${review.id}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok && onDelete) {
+        onDelete(review.id);
+      } else {
+        alert('Error al eliminar');
+      }
+    } catch (error) {
+      alert('Error al eliminar');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <a
@@ -107,17 +139,35 @@ function ReviewCard({ review }: { review: EnrichedReview }) {
         'block w-full text-left p-4 rounded-xl border bg-[#121215]',
         'hover:bg-[#18181b] hover:border-[#a78bfa]/30',
         'transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50'
+        'focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50',
+        isDeleting && 'opacity-50 pointer-events-none'
       )}
     >
-      {/* Header: Type and Title */}
-      <div className="flex items-start gap-2 mb-3">
-        <MediaTypeBadge mediaType={review.mediaType} />
-        {review.title && (
-          <span className="font-medium text-[#fafafa] text-sm truncate">
-            {review.title}
+      {/* Header: Type and Title + Delete button */}
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="flex items-start gap-2 flex-1 min-w-0">
+          <MediaTypeBadge mediaType={review.mediaType} />
+          {review.title && (
+            <span className="font-medium text-[#fafafa] text-sm truncate">
+              {review.title}
+            </span>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={handleDelete}
+          disabled={isDeleting}
+          className={cn(
+            'p-1.5 rounded-lg text-[#52525b] hover:text-[#ef4444] hover:bg-[#ef4444]/10',
+            'transition-colors duration-150 flex-shrink-0',
+            isDeleting && 'opacity-50'
+          )}
+          title="Eliminar"
+        >
+          <span className="material-symbols-outlined text-sm">
+            {isDeleting ? 'hourglass_empty' : 'delete'}
           </span>
-        )}
+        </button>
       </div>
 
       {/* Poster + Rating */}
@@ -220,6 +270,14 @@ export function EditorLanding({
   draftsCount,
   completedCount,
 }: EditorLandingProps) {
+  const router = useRouter();
+  
+  const handleDelete = useCallback((id: string) => {
+    // Filter out the deleted item locally for immediate feedback
+    // The page will fully refresh via router.refresh() below
+    router.refresh();
+  }, [router]);
+
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-6xl mx-auto">
       {/* Header */}
@@ -243,7 +301,7 @@ export function EditorLanding({
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {drafts.map((review) => (
-                <ReviewCard key={review.id} review={review} />
+                <ReviewCard key={review.id} review={review} onDelete={handleDelete} />
               ))}
             </div>
             {draftsCount > 6 && (
@@ -271,7 +329,7 @@ export function EditorLanding({
           <>
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {completed.map((review) => (
-                <ReviewCard key={review.id} review={review} />
+                <ReviewCard key={review.id} review={review} onDelete={handleDelete} />
               ))}
             </div>
             {completedCount > 6 && (
