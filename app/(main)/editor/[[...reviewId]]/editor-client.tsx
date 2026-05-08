@@ -8,18 +8,30 @@ interface EditorClientProps {
   reviewId?: string;
   mediaId?: string;
   mediaType?: MediaType;
+  mediaTitle?: string;
+  mediaImageUrl?: string;
+  mediaYear?: string;
 }
 
 type SaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
-export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps) {
+export function EditorClient({ 
+  reviewId, 
+  mediaId, 
+  mediaType,
+  mediaTitle,
+  mediaImageUrl,
+  mediaYear,
+}: EditorClientProps) {
   const router = useRouter();
   
   // Form state
   const [rating, setRating] = useState<number | null>(null);
   const [content, setContent] = useState<string>('');
   const [currentReviewId, setCurrentReviewId] = useState<string | undefined>(reviewId);
-  const [mediaInfo, setMediaInfo] = useState<{ title: string; imageUrl?: string } | null>(null);
+  const [mediaInfo, setMediaInfo] = useState<{ title: string; imageUrl?: string; year?: string } | null>(
+    mediaTitle ? { title: mediaTitle, imageUrl: mediaImageUrl, year: mediaYear } : null
+  );
   
   // Save state
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
@@ -300,6 +312,34 @@ export function EditorClient({ reviewId, mediaId, mediaType }: EditorClientProps
   
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-4xl mx-auto">
+      {/* Media Header - Show when we have media info */}
+      {mediaInfo && (
+        <div className="flex items-center gap-4 p-4 mb-6 rounded-xl bg-[#121215] border border-[#27272a]">
+          {mediaInfo.imageUrl && (
+            <img
+              src={mediaInfo.imageUrl}
+              alt={mediaInfo.title}
+              className="w-16 h-24 object-cover rounded-lg flex-shrink-0"
+            />
+          )}
+          <div className="flex-1 min-w-0">
+            <h2 className="text-lg font-semibold text-[#fafafa] truncate">
+              {mediaInfo.title}
+            </h2>
+            {mediaInfo.year && (
+              <p className="text-sm text-[#52525b]">{mediaInfo.year}</p>
+            )}
+          </div>
+          <a
+            href={`/details/${mediaType?.toLowerCase() || 'movie'}/${mediaId}`}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm text-[#a78bfa] hover:text-[#c4b5fd] transition-colors"
+          >
+            <span className="material-symbols-outlined text-sm">open_in_new</span>
+            Ver detalles
+          </a>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
