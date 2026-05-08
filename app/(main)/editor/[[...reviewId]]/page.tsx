@@ -178,6 +178,7 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
   let mediaImageUrl: string | undefined;
   let mediaYear: string | undefined;
 
+  // Case 1: Editing existing review (has reviewId)
   if (reviewId) {
     const review = await prisma.review.findUnique({
       where: { id: reviewId },
@@ -198,6 +199,24 @@ export default async function EditorPage({ params, searchParams }: EditorPagePro
         mediaImageUrl = enriched[0].imageUrl || undefined;
         mediaYear = enriched[0].year;
       }
+    }
+  } 
+  // Case 2: Creating new review from details (has mediaId + mediaType)
+  else if (mediaId && mediaType) {
+    const enriched = await enrichReviews([{
+      id: '',
+      mediaId,
+      mediaType: mediaType as any,
+      status: 'DRAFT',
+      rating: null,
+      content: null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }]);
+    if (enriched[0]) {
+      mediaTitle = enriched[0].title || undefined;
+      mediaImageUrl = enriched[0].imageUrl || undefined;
+      mediaYear = enriched[0].year;
     }
   }
 

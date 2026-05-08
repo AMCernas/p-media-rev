@@ -385,23 +385,6 @@ export function EditorClient({
         </div>
       </div>
       
-      {/* Media info card */}
-      {mediaInfo && (
-        <div className="flex items-center gap-4 mb-8 p-4 rounded-xl bg-[#121215] border border-[#27272a]">
-          {mediaInfo.imageUrl && (
-            <img 
-              src={mediaInfo.imageUrl} 
-              alt={mediaInfo.title}
-              className="w-16 h-24 object-cover rounded-lg"
-            />
-          )}
-          <div>
-            <h2 className="font-semibold text-[#fafafa]">{mediaInfo.title}</h2>
-            <p className="text-sm text-[#a1a1aa] capitalize">{mediaType?.toLowerCase()}</p>
-          </div>
-        </div>
-      )}
-      
       {/* Rating section */}
       <div className="mb-8">
         <label className="block text-sm font-medium text-[#a1a1aa] mb-3">
