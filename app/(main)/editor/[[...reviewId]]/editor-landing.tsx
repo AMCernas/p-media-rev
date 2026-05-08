@@ -158,13 +158,13 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
           onClick={handleDelete}
           disabled={isDeleting}
           className={cn(
-            'p-1.5 rounded-lg text-[#52525b] hover:text-[#ef4444] hover:bg-[#ef4444]/10',
+            'p-1 rounded-lg text-[#52525b] hover:text-[#ef4444] hover:bg-[#ef4444]/10',
             'transition-colors duration-150 flex-shrink-0',
             isDeleting && 'opacity-50'
           )}
           title="Eliminar"
         >
-          <span className="material-symbols-outlined text-sm">
+          <span className="material-symbols-outlined text-base">
             {isDeleting ? 'hourglass_empty' : 'close'}
           </span>
         </button>
