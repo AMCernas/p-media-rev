@@ -165,7 +165,7 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
           title="Eliminar"
         >
           <span className="material-symbols-outlined text-sm">
-            {isDeleting ? 'hourglass_empty' : 'delete'}
+            {isDeleting ? 'hourglass_empty' : 'close'}
           </span>
         </button>
       </div>
