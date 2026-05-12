@@ -14,6 +14,7 @@ interface MediaRowProps {
   title: string;
   items: (TMDBSearchResult | GoogleBookVolume)[];
   mediaType: 'movie' | 'series' | 'book';
+  viewMoreHref?: string;
 }
 
 /**
@@ -70,7 +71,7 @@ function getItemRating(item: TMDBSearchResult | GoogleBookVolume): number | null
   return item.vote_average && item.vote_average > 0 ? item.vote_average : null;
 }
 
-export function MediaRow({ title, items, mediaType }: MediaRowProps) {
+export function MediaRow({ title, items, mediaType, viewMoreHref }: MediaRowProps) {
   const displayItems = items.slice(0, 6);
   
   const typeLabel = mediaType === 'series' ? 'Serie' : mediaType === 'book' ? 'Libro' : 'Película';
@@ -79,6 +80,15 @@ export function MediaRow({ title, items, mediaType }: MediaRowProps) {
     <section>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-[#fafafa]">{title}</h2>
+        {viewMoreHref && (
+          <Link
+            href={viewMoreHref}
+            className="text-sm text-[#a78bfa] hover:text-[#c4b5fd] flex items-center gap-1 transition-colors"
+          >
+            Ver más
+            <span className="material-symbols-outlined text-sm">arrow_forward</span>
+          </Link>
+        )}
       </div>
       {displayItems.length > 0 ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">

@@ -244,8 +244,9 @@ export default async function DashboardPage() {
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-[#fafafa]">Trending Esta Semana</h2>
-          <Link href="/dashboard" className="text-sm text-[#a1a1aa] hover:text-[#a78bfa] transition-colors">
+          <Link href="/explore?type=trending&section=trending&page=1" className="text-sm text-[#a78bfa] hover:text-[#c4b5fd] flex items-center gap-1 transition-colors">
             Ver más
+            <span className="material-symbols-outlined text-sm">arrow_forward</span>
           </Link>
         </div>
         {trending.length > 0 ? (
@@ -267,6 +268,7 @@ export default async function DashboardPage() {
         title="Películas Populares" 
         items={popularMovies} 
         mediaType="movie" 
+        viewMoreHref="/explore?type=movie&section=popular&page=1"
       />
 
       {/* Popular Series Section */}
@@ -274,6 +276,7 @@ export default async function DashboardPage() {
         title="Series Populares" 
         items={popularSeries} 
         mediaType="series" 
+        viewMoreHref="/explore?type=series&section=popular&page=1"
       />
 
       {/* Popular Books Section */}
@@ -281,6 +284,7 @@ export default async function DashboardPage() {
         title="Libros Populares" 
         items={popularBooks} 
         mediaType="book" 
+        viewMoreHref="/explore?type=book&section=popular&page=1"
       />
 
       {/* 7.3: Recent Activity Section */}
