@@ -13,8 +13,7 @@
 import { redirect } from 'next/navigation';
 import { getAuthenticatedUser } from '@/lib/supabase';
 import { prisma } from '@/lib/prisma';
-import { getMovieDetails, getSeriesDetails, getTMDBImageUrl } from '@/lib/tmdb';
-import { getBookDetails } from '@/lib/books';
+import { enrichReviewItems } from '@/lib/enrich';
 import { EditorClient } from './editor-client';
 import { EditorLanding } from './editor-landing';
 import type { MediaType } from '@/lib/types';
@@ -44,43 +43,9 @@ interface ReviewData {
   year?: string;
 }
 
+// Wrapper que usa enrichReviewItems de lib/enrich
 async function enrichReviews(reviews: ReviewData[]): Promise<ReviewData[]> {
-  const enriched = await Promise.all(
-    reviews.map(async (review) => {
-      try {
-        if (review.mediaType === 'MOVIE') {
-          const details = await getMovieDetails(review.mediaId);
-          return {
-            ...review,
-            title: details.title,
-            imageUrl: getTMDBImageUrl(details.poster_path, 'w185'),
-            year: details.release_date ? details.release_date.split('-')[0] : undefined,
-          };
-        } else if (review.mediaType === 'SERIES') {
-          const details = await getSeriesDetails(review.mediaId);
-          return {
-            ...review,
-            title: details.name,
-            imageUrl: getTMDBImageUrl(details.poster_path, 'w185'),
-            year: details.first_air_date ? details.first_air_date.split('-')[0] : undefined,
-          };
-        } else if (review.mediaType === 'BOOK') {
-          const details = await getBookDetails(review.mediaId);
-          const imageUrl = details.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') || null;
-          return {
-            ...review,
-            title: details.volumeInfo.title,
-            imageUrl,
-            year: details.volumeInfo.publishedDate?.split('-')[0],
-          };
-        }
-      } catch (error) {
-        console.warn(`Failed to enrich ${review.mediaType} ${review.mediaId}:`, error);
-      }
-      return review;
-    })
-  );
-  return enriched;
+  return enrichReviewItems(reviews as any) as any;
 }
 
 export default async function EditorPage({ params, searchParams }: EditorPageProps) {
