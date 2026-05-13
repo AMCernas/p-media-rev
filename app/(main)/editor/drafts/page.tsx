@@ -7,8 +7,7 @@
 import { redirect } from 'next/navigation';
 import { getAuthenticatedUser } from '@/lib/supabase';
 import { prisma } from '@/lib/prisma';
-import { getMovieDetails, getSeriesDetails, getTMDBImageUrl } from '@/lib/tmdb';
-import { getBookDetails } from '@/lib/books';
+import { enrichReviewItems } from '@/lib/enrich';
 import { $Enums } from '@prisma/client';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -25,45 +24,6 @@ interface EnrichedReview {
   title?: string | null;
   imageUrl?: string | null;
   year?: string;
-}
-
-async function enrichReviews(reviews: EnrichedReview[]): Promise<EnrichedReview[]> {
-  const enriched = await Promise.all(
-    reviews.map(async (review) => {
-      try {
-        if (review.mediaType === 'MOVIE') {
-          const details = await getMovieDetails(review.mediaId);
-          return {
-            ...review,
-            title: details.title,
-            imageUrl: getTMDBImageUrl(details.poster_path, 'w185'),
-            year: details.release_date ? details.release_date.split('-')[0] : undefined,
-          };
-        } else if (review.mediaType === 'SERIES') {
-          const details = await getSeriesDetails(review.mediaId);
-          return {
-            ...review,
-            title: details.name,
-            imageUrl: getTMDBImageUrl(details.poster_path, 'w185'),
-            year: details.first_air_date ? details.first_air_date.split('-')[0] : undefined,
-          };
-        } else if (review.mediaType === 'BOOK') {
-          const details = await getBookDetails(review.mediaId);
-          const imageUrl = details.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://') || null;
-          return {
-            ...review,
-            title: details.volumeInfo.title,
-            imageUrl,
-            year: details.volumeInfo.publishedDate?.split('-')[0],
-          };
-        }
-      } catch (error) {
-        console.warn(`Failed to enrich ${review.mediaType} ${review.mediaId}:`, error);
-      }
-      return review;
-    })
-  );
-  return enriched;
 }
 
 function formatDate(date: Date | string) {
@@ -192,7 +152,8 @@ export default async function DraftsPage() {
     orderBy: { updatedAt: 'desc' },
   });
 
-  const drafts = await enrichReviews(draftsRaw);
+  const draftsTyped = await enrichReviewItems(draftsRaw);
+  const drafts = draftsTyped as unknown as EnrichedReview[];
 
   return (
     <div className="p-4 md:p-6 lg:p-8 max-w-6xl mx-auto">

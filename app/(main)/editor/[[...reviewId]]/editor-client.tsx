@@ -118,22 +118,13 @@ export function EditorClient({
     const ratingToSave = overrideRating !== undefined ? overrideRating : rating;
     const contentToSave = overrideContent !== undefined ? overrideContent : content;
     
-    console.log('[Editor] doSave called', { 
-      currentReviewId, 
-      hasChanges: contentToSave !== lastSavedContentRef.current || ratingToSave !== lastSavedRatingRef.current, 
-      contentLength: contentToSave?.length, 
-      rating: ratingToSave 
-    });
-    
     if (!currentReviewId) {
-      console.log('[Editor] No currentReviewId, skipping save');
       return;
     }
     
     // Check changes using the captured values
     const hasChangesNow = contentToSave !== lastSavedContentRef.current || ratingToSave !== lastSavedRatingRef.current;
     if (!hasChangesNow) {
-      console.log('[Editor] No changes detected, skipping save');
       return;
     }
     
@@ -142,7 +133,6 @@ export function EditorClient({
     }
     
     try {
-      console.log('[Editor] Sending PATCH request...');
       const response = await fetch(`/api/reviews/${currentReviewId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -152,8 +142,6 @@ export function EditorClient({
         }),
       });
       
-      console.log('[Editor] Response status:', response.status);
-      
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         console.error('[Editor] Save failed:', errorData);
@@ -161,7 +149,6 @@ export function EditorClient({
       }
       
       const updated: Review = await response.json();
-      console.log('[Editor] Save successful:', updated);
       
       // Update refs
       lastSavedContentRef.current = contentToSave;
@@ -210,7 +197,6 @@ export function EditorClient({
       const hasChangesNow = contentToSave !== lastSavedContentRef.current || ratingToSave !== lastSavedRatingRef.current;
       
       if (!hasChangesNow) {
-        console.log('[Editor] No changes detected, skipping save');
         return;
       }
       

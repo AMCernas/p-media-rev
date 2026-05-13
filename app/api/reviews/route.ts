@@ -13,6 +13,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuthenticatedUser } from '@/lib/supabase';
 import { prisma } from '@/lib/prisma';
+import { getMovieDetails, getSeriesDetails } from '@/lib/tmdb';
+import { getBookDetails } from '@/lib/books';
 import type { MediaType, ReviewStatus } from '@/lib/types';
 
 interface CreateReviewBody {
@@ -112,17 +114,17 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Fetch title from external API
+    // Fetch title from external API using lib functions
     let title: string | null = null;
     try {
       if (mediaType === 'MOVIE') {
-        const details = await fetch(`https://api.themoviedb.org/3/movie/${mediaId}?api_key=${process.env.TMDB_API_KEY}`).then(r => r.json());
+        const details = await getMovieDetails(mediaId);
         title = details.title || null;
       } else if (mediaType === 'SERIES') {
-        const details = await fetch(`https://api.themoviedb.org/3/tv/${mediaId}?api_key=${process.env.TMDB_API_KEY}`).then(r => r.json());
+        const details = await getSeriesDetails(mediaId);
         title = details.name || null;
       } else if (mediaType === 'BOOK') {
-        const details = await fetch(`https://www.googleapis.com/books/v1/volumes/${mediaId}?key=${process.env.GOOGLE_BOOKS_API_KEY}`).then(r => r.json());
+        const details = await getBookDetails(mediaId);
         title = details.volumeInfo?.title || null;
       }
     } catch (e) {
