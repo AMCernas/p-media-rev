@@ -15,45 +15,10 @@ import { getAuthenticatedUser } from '@/lib/supabase';
 import { prisma } from '@/lib/prisma';
 import { getTrending, getMovieDetails, getSeriesDetails, getTMDBImageUrl, getPopularMovies, getPopularTV, type TMDBSearchResult } from '@/lib/tmdb';
 import { getBookDetails, getPopularBooks, type GoogleBookVolume } from '@/lib/books';
-import type { ReviewStatus, MediaType } from '@/lib/types';
 import Link from "next/link";
 import { MediaCard } from '@/components/features/media-card';
 import { MediaRow } from '@/components/features/media-row';
 import { SearchBox } from '@/components/features/search-box';
-
-/**
- * Fetch user statistics from database
- */
-async function getUserStats(userId: string) {
-  const [watchlistCount, draftsCount, publishedCount] = await Promise.all([
-    // Total watchlist items
-    prisma.review.count({
-      where: { 
-        userId,
-        status: 'WATCHLIST',
-      },
-    }),
-    // Only DRAFT status (actual review drafts)
-    prisma.review.count({
-      where: { 
-        userId,
-        status: 'DRAFT' as const,
-      },
-    }),
-    // Published reviews (COMPLETED)
-    prisma.review.count({
-      where: { 
-        userId,
-        status: 'COMPLETED' as const,
-      },
-    }),
-  ]);
-
-  // Total reviews = drafts + published (not including watchlist)
-  const totalReviews = draftsCount + publishedCount;
-
-  return { watchlistCount, totalReviews, draftsCount, publishedCount };
-}
 
 /**
  * Fetch recent activity (last 5 items updated)
@@ -107,6 +72,8 @@ async function enrichRecentActivity(
   return enriched;
 }
 
+
+
 /**
  * Get media title from mediaId (simplified - just store in activity)
  * For full details, we'd need to query TMDB/Books
@@ -141,8 +108,8 @@ export default async function DashboardPage() {
   }
 
   // Fetch data in parallel
-  const [trendingData, popularMoviesData, popularSeriesData, popularBooksData, stats, recentActivityRaw] = await Promise.all([
-    // 7.2: Fetch Trending from TMDB
+  const [trendingData, popularMoviesData, popularSeriesData, popularBooksData, recentActivityRaw] = await Promise.all([
+    // Fetch Trending from TMDB
     getTrending(1).catch((error) => {
       console.error('Failed to fetch trending:', error);
       return { results: [] as TMDBSearchResult[], total_results: 0 };
@@ -162,9 +129,7 @@ export default async function DashboardPage() {
       console.error('Failed to fetch popular books:', error);
       return { items: [] as GoogleBookVolume[], totalItems: 0 };
     }),
-    // 7.4: Get User Statistics
-    getUserStats(user.id),
-    // 7.3: Fetch Activity from DB
+    // Fetch Activity from DB
     getRecentActivity(user.id).catch((error) => {
       console.error('Failed to fetch recent activity:', error);
       return [];
@@ -197,50 +162,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      {/* 7.4: Stats Bento - Bento Grid Layout */}
-      <section>
-        <div className="grid grid-cols-2 lg:grid-cols-12 gap-4">
-          {/* Hero Card - Watchlist */}
-          <div className="col-span-2 lg:col-span-6 lg:row-span-2 rounded-xl bg-gradient-to-br from-[#a78bfa] to-[#7c3aed] p-6 flex flex-col justify-between min-h-[180px]">
-            <div>
-              <p className="text-white/80 text-sm font-medium">En tu Watchlist</p>
-              <p className="text-5xl font-bold text-white mt-2">{stats.watchlistCount}</p>
-            </div>
-            <Link href="/library?tab=watchlist" className="text-white/90 text-sm font-medium hover:text-white transition-colors">
-              Ver Biblioteca →
-            </Link>
-          </div>
-
-          {/* Reviews Card */}
-          <div className="col-span-1 lg:col-span-3 rounded-xl bg-[#121215] border border-[#27272a] p-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="material-symbols-outlined text-[#34d399] text-xl">edit_note</span>
-            </div>
-            <p className="text-3xl font-bold text-[#fafafa]">{stats.totalReviews}</p>
-            <p className="text-sm text-[#a1a1aa] mt-1">Total Reseñas</p>
-          </div>
-
-          {/* Published Card */}
-          <div className="col-span-1 lg:col-span-3 rounded-xl bg-[#121215] border border-[#27272a] p-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="material-symbols-outlined text-[#a78bfa] text-xl">publish</span>
-            </div>
-            <p className="text-3xl font-bold text-[#fafafa]">{stats.publishedCount}</p>
-            <p className="text-sm text-[#a1a1aa] mt-1">Publicadas</p>
-          </div>
-
-          {/* Drafts Card */}
-          <div className="col-span-2 lg:col-span-6 rounded-xl bg-[#121215] border border-[#27272a] p-5">
-            <div className="flex items-center justify-between mb-3">
-              <span className="material-symbols-outlined text-[#fb923c] text-xl">draft</span>
-            </div>
-            <p className="text-3xl font-bold text-[#fafafa]">{stats.draftsCount}</p>
-            <p className="text-sm text-[#a1a1aa] mt-1">Borradores</p>
-          </div>
-        </div>
-      </section>
-
-      {/* 7.1: Trending Section */}
+      {/* Trending Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-[#fafafa]">Trending Esta Semana</h2>
@@ -287,40 +209,48 @@ export default async function DashboardPage() {
         viewMoreHref="/explore?type=book&section=popular&page=1"
       />
 
-      {/* 7.3: Recent Activity Section */}
+      {/* Recent Activity Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-[#fafafa]">Actividad Reciente</h2>
         </div>
         {recentActivity.length > 0 ? (
           <div className="rounded-xl bg-[#121215] border border-[#27272a] divide-y divide-[#27272a]">
-            {recentActivity.map((item) => (
-              <div 
-                key={item.id}
-                className="flex items-center justify-between p-4 hover:bg-[#18181b] transition-colors"
-              >
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#fafafa] truncate">
-                    {item.title || item.mediaId}
-                  </p>
-                  <p className="text-xs text-[#a1a1aa] mt-1">
-                    {getMediaTypeLabel(item.mediaType)}
-                    {item.rating && ` • ★ ${item.rating}/5`}
-                  </p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs px-3 py-1 rounded-full bg-[#18181b] text-[#a1a1aa] border border-[#27272a]">
-                    {getStatusLabel(item.status)}
-                  </span>
-                  <span className="text-xs text-[#a1a1aa]">
-                    {item.updatedAt.toLocaleDateString('es-AR', {
-                      day: 'numeric',
-                      month: 'short',
-                    })}
-                  </span>
-                </div>
-              </div>
-            ))}
+            {recentActivity.map((item) => {
+              const typeRoute = item.mediaType === 'MOVIE' ? 'movie' : item.mediaType === 'SERIES' ? 'series' : 'book';
+              const href = item.status === 'WATCHLIST'
+                ? `/details/${typeRoute}/${item.mediaId}`
+                : `/editor/${item.id}`;
+              
+              return (
+                <Link
+                  key={item.id}
+                  href={href}
+                  className="flex items-center justify-between p-4 hover:bg-[#18181b] transition-colors"
+                >
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-[#fafafa] truncate">
+                      {item.title || item.mediaId}
+                    </p>
+                    <p className="text-xs text-[#a1a1aa] mt-1">
+                      {getMediaTypeLabel(item.mediaType)}
+                      {item.rating && ` • ★ ${item.rating}/5`}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs px-3 py-1 rounded-full bg-[#18181b] text-[#a1a1aa] border border-[#27272a]">
+                      {getStatusLabel(item.status)}
+                    </span>
+                    <span className="text-xs text-[#a1a1aa]">
+                      {item.updatedAt.toLocaleDateString('es-AR', {
+                        day: 'numeric',
+                        month: 'short',
+                      })}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         ) : (
           <div className="rounded-xl bg-[#121215] border border-[#27272a] p-8 text-center">
