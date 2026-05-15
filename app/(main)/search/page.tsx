@@ -3,11 +3,49 @@
 import { useSearch } from "@/hooks/use-search";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { SearchResult } from "@/lib/types";
 
 const MAX_RESULTS = 8;
+
+type TabType = 'all' | 'movies' | 'series' | 'books';
+
+function TabBar({ 
+  activeTab, 
+  onTabChange, 
+  counts 
+}: { 
+  activeTab: TabType; 
+  onTabChange: (tab: TabType) => void;
+  counts: { all: number; movies: number; series: number; books: number };
+}) {
+  const tabs: { id: TabType; label: string }[] = [
+    { id: 'all', label: 'Todos' },
+    { id: 'movies', label: 'Películas' },
+    { id: 'series', label: 'Series' },
+    { id: 'books', label: 'Libros' },
+  ];
+
+  return (
+    <div className="flex gap-1 p-1 bg-[#18181b] rounded-lg mb-6">
+      {tabs.map((tab) => (
+        <button
+          key={tab.id}
+          onClick={() => onTabChange(tab.id)}
+          className={cn(
+            "flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all",
+            activeTab === tab.id
+              ? "bg-[#a78bfa] text-white shadow-md"
+              : "text-[#71717a] hover:text-[#fafafa] hover:bg-[#27272a]"
+          )}
+        >
+          {tab.label} ({counts[tab.id]})
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function SearchResultCard({ result }: { result: SearchResult }) {
   const typeRoute = result.mediaType === "MOVIE" ? "movie" : result.mediaType === "SERIES" ? "series" : "book";
@@ -115,6 +153,8 @@ export default function SearchPage() {
   
   const { results, isLoading, error, search, clearSearch } = useSearch({ debounceMs: 300 });
   
+  const [activeTab, setActiveTab] = useState<TabType>('all');
+  
   // Search on mount with query param
   useEffect(() => {
     if (query) {
@@ -123,7 +163,17 @@ export default function SearchPage() {
     return () => clearSearch();
   }, [query, search, clearSearch]);
   
-  const totalResults = results.movies.length + results.series.length + results.books.length;
+  // Reset tab to 'all' when query changes
+  useEffect(() => {
+    setActiveTab('all');
+  }, [query]);
+  
+  const counts = {
+    all: results.movies.length + results.series.length + results.books.length,
+    movies: results.movies.length,
+    series: results.series.length,
+    books: results.books.length,
+  };
   
   return (
     <div className="min-h-screen bg-[#09090b] p-4 md:p-6 lg:p-8">
@@ -152,7 +202,7 @@ export default function SearchPage() {
           </div>
         )}
         
-        {!isLoading && !error && query && totalResults === 0 && (
+        {!isLoading && !error && query && counts.all === 0 && (
           <div className="text-center py-12 rounded-xl bg-[#121215] border border-[#27272a]">
             <span className="material-symbols-outlined text-5xl text-[#52525b] mb-4">search_off</span>
             <p className="text-[#fafafa] text-lg font-medium">No se encontraron resultados</p>
@@ -160,26 +210,38 @@ export default function SearchPage() {
           </div>
         )}
         
-        {!isLoading && !error && totalResults > 0 && (
+        {!isLoading && !error && counts.all > 0 && (
           <div className="space-y-8">
-            <SearchSection 
-              title="Películas" 
-              icon="movie" 
-              results={results.movies} 
-              color="text-purple-400"
+            <TabBar 
+              activeTab={activeTab} 
+              onTabChange={setActiveTab} 
+              counts={counts}
             />
-            <SearchSection 
-              title="Series" 
-              icon="tv" 
-              results={results.series} 
-              color="text-pink-400"
-            />
-            <SearchSection 
-              title="Libros" 
-              icon="menu_book" 
-              results={results.books} 
-              color="text-orange-400"
-            />
+            
+            {(activeTab === 'all' || activeTab === 'movies') && (
+              <SearchSection 
+                title="Películas" 
+                icon="movie" 
+                results={results.movies} 
+                color="text-purple-400"
+              />
+            )}
+            {(activeTab === 'all' || activeTab === 'series') && (
+              <SearchSection 
+                title="Series" 
+                icon="tv" 
+                results={results.series} 
+                color="text-pink-400"
+              />
+            )}
+            {(activeTab === 'all' || activeTab === 'books') && (
+              <SearchSection 
+                title="Libros" 
+                icon="menu_book" 
+                results={results.books} 
+                color="text-orange-400"
+              />
+            )}
           </div>
         )}
         
