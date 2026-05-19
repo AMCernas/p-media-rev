@@ -4,13 +4,13 @@ import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import type { SearchResult, SearchResults, MediaType } from '@/lib/types';
 
 /**
- * useSearch - Optimized unified search hook
+ * useSearch - Optimized unified search hook with pagination support
  * 
- * Improvements:
+ * Features:
  * - Remove trimming before search (allows spaces)
  * - Use Promise.race for faster response
  * - Optimize debounce
- * - Simplified state management
+ * - Pagination support for movies, series, and books independently
  */
 
 interface UseSearchOptions {
@@ -23,6 +23,20 @@ interface UseSearchState {
   results: SearchResults;
   isLoading: boolean;
   error: string | null;
+}
+
+// Pagination state per type
+interface PaginationState {
+  page: number;
+  totalPages: number;
+  totalResults: number;
+  hasMore: boolean;
+}
+
+interface PaginationStateMap {
+  movies: PaginationState;
+  series: PaginationState;
+  books: PaginationState;
 }
 
 // Transform functions - optimized
@@ -58,6 +72,13 @@ const transformBookResult = (volume: any): SearchResult => ({
   mediaId: volume.id,
 });
 
+const initialPagination: PaginationState = {
+  page: 1,
+  totalPages: 1,
+  totalResults: 0,
+  hasMore: false,
+};
+
 export function useSearch(options: UseSearchOptions = {}) {
   const { 
     debounceMs = 300,
@@ -71,12 +92,22 @@ export function useSearch(options: UseSearchOptions = {}) {
     error: null,
   });
 
+  // Pagination state
+  const [pagination, setPagination] = useState<PaginationStateMap>({
+    movies: initialPagination,
+    series: initialPagination,
+    books: initialPagination,
+  });
+
   const searchRef = useRef<string>('');
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const isSearchRef = useRef<boolean>(false);
 
-  // Execute search - optimized
+  // Execute initial search
   const executeSearch = useCallback(async (searchQuery: string) => {
+    isSearchRef.current = true;
+    
     // Cancel previous request
     if (abortRef.current) {
       abortRef.current.abort();
@@ -89,6 +120,11 @@ export function useSearch(options: UseSearchOptions = {}) {
         isLoading: false,
         error: null,
       });
+      setPagination({
+        movies: initialPagination,
+        series: initialPagination,
+        books: initialPagination,
+      });
       return;
     }
 
@@ -98,14 +134,16 @@ export function useSearch(options: UseSearchOptions = {}) {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      // Use Promise.all instead of allSettled for faster fail-fast
-      const tmdbRes = await fetch(`/api/tmdb?query=${encodeURIComponent(searchQuery)}&type=multi`, {
-        signal: abortController.signal,
-      }).catch(() => ({ ok: false, status: 500 } as Response));
-      
-      const booksRes = await fetch(`/api/books?query=${encodeURIComponent(searchQuery)}`, {
-        signal: abortController.signal,
-      }).catch(() => ({ ok: false, status: 500 } as Response));
+      // Fetch movies, series, and books in parallel
+      const [tmdbRes, booksRes] = await Promise.all([
+        fetch(`/api/tmdb?query=${encodeURIComponent(searchQuery)}&type=multi&page=1`, {
+          signal: abortController.signal,
+        }).catch(() => ({ ok: false, status: 500 } as Response)),
+        
+        fetch(`/api/books?query=${encodeURIComponent(searchQuery)}&page=1`, {
+          signal: abortController.signal,
+        }).catch(() => ({ ok: false, status: 500 } as Response)),
+      ]);
 
       const movies: SearchResult[] = [];
       const series: SearchResult[] = [];
@@ -117,6 +155,24 @@ export function useSearch(options: UseSearchOptions = {}) {
         try {
           const data = await tmdbRes.json();
           const results = data.results || [];
+          
+          // Update pagination state for movies and series
+          setPagination(prev => ({
+            ...prev,
+            movies: {
+              page: data.page || 1,
+              totalPages: data.total_pages || 1,
+              totalResults: data.total_results || 0,
+              hasMore: (data.page || 1) < (data.total_pages || 1),
+            },
+            series: {
+              page: data.page || 1,
+              totalPages: data.total_pages || 1,
+              totalResults: data.total_results || 0,
+              hasMore: (data.page || 1) < (data.total_pages || 1),
+            },
+          }));
+
           for (const item of results) {
             if (item.media_type === 'person') continue;
             if (item.media_type === 'movie') {
@@ -136,6 +192,18 @@ export function useSearch(options: UseSearchOptions = {}) {
       if (booksRes.ok) {
         try {
           const data = await booksRes.json();
+          
+          // Update books pagination
+          setPagination(prev => ({
+            ...prev,
+            books: {
+              page: 1,
+              totalPages: Math.ceil((data.totalItems || 0) / 20),
+              totalResults: data.totalItems || 0,
+              hasMore: (data.totalItems || 0) > 20,
+            },
+          }));
+
           for (const item of data.items || []) {
             books.push(transformBookResult(item));
           }
@@ -164,6 +232,95 @@ export function useSearch(options: UseSearchOptions = {}) {
     }
   }, [minLength]);
 
+  // Load more function for a specific type
+  const loadMore = useCallback(async (type: 'movies' | 'series' | 'books') => {
+    if (state.isLoading || !pagination[type].hasMore || !searchRef.current) return;
+
+    const nextPage = pagination[type].page + 1;
+
+    try {
+      let newResults: SearchResult[] = [];
+
+      if (type === 'movies') {
+        // Use searchMovies endpoint for pagination
+        const res = await fetch(
+          `/api/tmdb?query=${encodeURIComponent(searchRef.current)}&type=movie&page=${nextPage}`
+        );
+        
+        if (res.ok) {
+          const data = await res.json();
+          
+          newResults = (data.results || [])
+            .filter((item: any) => item.media_type === 'movie')
+            .map((item: any) => transformTMDBResult(item, 'movie'));
+
+          setPagination(prev => ({
+            ...prev,
+            movies: {
+              page: data.page || nextPage,
+              totalPages: data.total_pages || 1,
+              totalResults: data.total_results || 0,
+              hasMore: (data.page || nextPage) < (data.total_pages || 1),
+            },
+          }));
+        }
+      } else if (type === 'series') {
+        // Use searchSeries endpoint for pagination
+        const res = await fetch(
+          `/api/tmdb?query=${encodeURIComponent(searchRef.current)}&type=tv&page=${nextPage}`
+        );
+        
+        if (res.ok) {
+          const data = await res.json();
+          
+          newResults = (data.results || [])
+            .filter((item: any) => item.media_type === 'tv')
+            .map((item: any) => transformTMDBResult(item, 'tv'));
+
+          setPagination(prev => ({
+            ...prev,
+            series: {
+              page: data.page || nextPage,
+              totalPages: data.total_pages || 1,
+              totalResults: data.total_results || 0,
+              hasMore: (data.page || nextPage) < (data.total_pages || 1),
+            },
+          }));
+        }
+      } else if (type === 'books') {
+        const res = await fetch(
+          `/api/books?query=${encodeURIComponent(searchRef.current)}&page=${nextPage}`
+        );
+        
+        if (res.ok) {
+          const data = await res.json();
+          newResults = (data.items || []).map(transformBookResult);
+
+          setPagination(prev => ({
+            ...prev,
+            books: {
+              page: nextPage,
+              totalPages: Math.ceil((data.totalItems || 0) / 20),
+              totalResults: data.totalItems || 0,
+              hasMore: (nextPage * 20) < (data.totalItems || 0),
+            },
+          }));
+        }
+      }
+
+      // Append new results
+      setState(prev => ({
+        ...prev,
+        results: {
+          ...prev.results,
+          [type]: [...prev.results[type], ...newResults],
+        },
+      }));
+    } catch (error) {
+      console.error(`Error loading more ${type}:`, error);
+    }
+  }, [state.isLoading, pagination]);
+
   // Search function with debounce
   const search = useCallback((query: string) => {
     searchRef.current = query;
@@ -180,6 +337,11 @@ export function useSearch(options: UseSearchOptions = {}) {
         results: { movies: [], series: [], books: [], errors: [] },
         isLoading: false,
         error: null,
+      });
+      setPagination({
+        movies: initialPagination,
+        series: initialPagination,
+        books: initialPagination,
       });
       return;
     }
@@ -207,6 +369,11 @@ export function useSearch(options: UseSearchOptions = {}) {
       isLoading: false,
       error: null,
     });
+    setPagination({
+      movies: initialPagination,
+      series: initialPagination,
+      books: initialPagination,
+    });
   }, []);
 
   // Cleanup on unmount
@@ -226,7 +393,9 @@ export function useSearch(options: UseSearchOptions = {}) {
   return {
     ...state,
     totalResults,
+    pagination,
     search,
+    loadMore,
     clearSearch,
   };
 }

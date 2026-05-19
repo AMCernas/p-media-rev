@@ -3,11 +3,11 @@
 import { useSearch } from "@/hooks/use-search";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import type { SearchResult } from "@/lib/types";
 
-const MAX_RESULTS = 8;
+const INITIAL_LOAD = 8;
 
 type TabType = 'all' | 'movies' | 'series' | 'books';
 
@@ -111,20 +111,26 @@ function SearchResultCard({ result }: { result: SearchResult }) {
   );
 }
 
+interface SearchSectionProps {
+  title: string;
+  icon: string;
+  results: SearchResult[];
+  color: string;
+  hasMore: boolean;
+  isLoading: boolean;
+  onLoadMore: () => void;
+}
+
 function SearchSection({ 
   title, 
   icon, 
   results, 
-  color 
-}: { 
-  title: string; 
-  icon: string; 
-  results: SearchResult[];
-  color: string;
-}) {
+  color,
+  hasMore,
+  isLoading,
+  onLoadMore,
+}: SearchSectionProps) {
   if (results.length === 0) return null;
-  
-  const displayResults = results.slice(0, MAX_RESULTS);
   
   return (
     <section>
@@ -134,14 +140,36 @@ function SearchSection({
         <span className="text-sm text-[#71717a]">({results.length})</span>
       </div>
       <div className="grid gap-3">
-        {displayResults.map((result) => (
+        {results.map((result) => (
           <SearchResultCard key={`${result.mediaType}-${result.id}`} result={result} />
         ))}
       </div>
-      {results.length > MAX_RESULTS && (
-        <p className="text-center text-sm text-[#71717a] mt-3">
-          y {results.length - MAX_RESULTS} más...
-        </p>
+      {hasMore && (
+        <div className="mt-4 text-center">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              onLoadMore();
+            }}
+            disabled={isLoading}
+            className={cn(
+              "px-6 py-2.5 rounded-xl font-medium transition-colors text-sm",
+              isLoading
+                ? "bg-[#27272a] text-[#52525b] cursor-not-allowed"
+                : "bg-[#a78bfa]/10 text-[#a78bfa] hover:bg-[#a78bfa]/20 border border-[#a78bfa]/30"
+            )}
+          >
+            {isLoading ? (
+              <span className="flex items-center gap-2">
+                <span className="animate-spin">⏳</span>
+                Cargando...
+              </span>
+            ) : (
+              'Cargar más'
+            )}
+          </button>
+        </div>
       )}
     </section>
   );
@@ -151,9 +179,10 @@ export default function SearchPage() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   
-  const { results, isLoading, error, search, clearSearch } = useSearch({ debounceMs: 300 });
+  const { results, isLoading, error, search, clearSearch, pagination, loadMore } = useSearch({ debounceMs: 300 });
   
   const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [loadingType, setLoadingType] = useState<'movies' | 'series' | 'books' | null>(null);
   
   // Search on mount with query param
   useEffect(() => {
@@ -167,6 +196,12 @@ export default function SearchPage() {
   useEffect(() => {
     setActiveTab('all');
   }, [query]);
+
+  const handleLoadMore = useCallback(async (type: 'movies' | 'series' | 'books') => {
+    setLoadingType(type);
+    await loadMore(type);
+    setLoadingType(null);
+  }, [loadMore]);
   
   const counts = {
     all: results.movies.length + results.series.length + results.books.length,
@@ -174,6 +209,8 @@ export default function SearchPage() {
     series: results.series.length,
     books: results.books.length,
   };
+
+  const isLoadingMore = loadingType !== null;
   
   return (
     <div className="min-h-screen bg-[#09090b] p-4 md:p-6 lg:p-8">
@@ -224,6 +261,9 @@ export default function SearchPage() {
                 icon="movie" 
                 results={results.movies} 
                 color="text-purple-400"
+                hasMore={pagination.movies.hasMore}
+                isLoading={isLoadingMore && loadingType === 'movies'}
+                onLoadMore={() => handleLoadMore('movies')}
               />
             )}
             {(activeTab === 'all' || activeTab === 'series') && (
@@ -232,6 +272,9 @@ export default function SearchPage() {
                 icon="tv" 
                 results={results.series} 
                 color="text-pink-400"
+                hasMore={pagination.series.hasMore}
+                isLoading={isLoadingMore && loadingType === 'series'}
+                onLoadMore={() => handleLoadMore('series')}
               />
             )}
             {(activeTab === 'all' || activeTab === 'books') && (
@@ -240,6 +283,9 @@ export default function SearchPage() {
                 icon="menu_book" 
                 results={results.books} 
                 color="text-orange-400"
+                hasMore={pagination.books.hasMore}
+                isLoading={isLoadingMore && loadingType === 'books'}
+                onLoadMore={() => handleLoadMore('books')}
               />
             )}
           </div>
