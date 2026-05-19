@@ -67,24 +67,29 @@ screen_review/
 │   ├── (main)/
 │   │   ├── layout.tsx           ← Layout con Navbar/Sidebar
 │   │   ├── dashboard/
-│   │   │   └── page.tsx         ← Stats + Trending + Listas por tipo de media
+│   │   │   └── page.tsx         ← Trending + Popular + Actividad Reciente (clickeable)
 │   │   ├── details/
 │   │   │   └── [type]/
 │   │   │       └── [id]/
 │   │   │           └── page.tsx
 │   │   ├── library/
-│   │   │   ├── page.tsx         ← Server Component con filtros + botón ir al editor
+│   │   │   ├── page.tsx         ← Server Component con filtros + orden desde settings
 │   │   │   └── library-client.tsx
-│   │   └── editor/
-│   │       ├── [[...reviewId]]/
-│   │       │   ├── page.tsx     ← Landing + Editor (Server)
-│   │       │   ├── editor-client.tsx   ← Editor con auto-save
-│   │       │   └── editor-landing.tsx  ← Lista paginada (6 items) de borradores y completadas
-│   │       ├── drafts/
-│   │       │   └── page.tsx     ← Vista completa de todos los borradores
-│   │       ├── completed/
-│   │       │   └── page.tsx     ← Vista completa de todas las reseñas completadas
-│   │       └── page.tsx
+│   │   ├── editor/
+│   │   │   ├── [[...reviewId]]/
+│   │   │   │   ├── page.tsx     ← Landing + Editor (Server)
+│   │   │   │   ├── editor-client.tsx   ← Editor con auto-save
+│   │   │   │   └── editor-landing.tsx  ← Lista paginada (6 items) de borradores y completadas
+│   │   │   ├── drafts/
+│   │   │   │   └── page.tsx     ← Vista completa de todos los borradores
+│   │   │   ├── completed/
+│   │   │   │   └── page.tsx     ← Vista completa de todas las reseñas completadas
+│   │   │   └── page.tsx
+│   │   ├── search/
+│   │   │   └── page.tsx         ← Búsqueda con filtros por tipo (Todos/Películas/Series/Libros)
+│   │   └── settings/
+│   │       ├── page.tsx         ← Server Component (fetch settings desde DB)
+│   │       └── settings-client.tsx ← "use client" (form, guardar en DB)
 │   └── api/
 │       ├── tmdb/
 │       │   └── route.ts
@@ -108,6 +113,7 @@ screen_review/
 │   ├── books.ts                 ← Cliente Google Books API
 │   ├── prisma.ts                ← Cliente Prisma
 │   ├── supabase.ts              ← Supabase SSR helper
+│   ├── enrich.ts                 ← Funciones centralizadas de enriquecimiento
 │   └── utils.ts
 ├── hooks/
 │   ├── useWatchlist.ts
@@ -124,15 +130,15 @@ screen_review/
 ## Páginas y Responsabilidades
 
 ### `/dashboard`
-- Muestra **Stats**: Watchlist, Total Reseñas (borradores + completadas), Borradores (solo DRAFT), Publicadas (COMPLETED).
-- Sección **Trending** desde TMDB (`/trending/all/week`).
+- Muestra **Trending** desde TMDB (`/trending/all/week`).
 - Tres listas adicionales de descubrimiento, una por tipo de media:
   - **Películas Populares** → endpoint TMDB `/movie/popular`
   - **Series Populares** → endpoint TMDB `/tv/popular`
   - **Libros Populares** → endpoint Google Books (query configurable, ej. `subject:fiction`)
 - Cada lista se renderiza como una fila horizontal de `MediaCard` usando el componente reutilizable `MediaRow`.
-- **Actividad Reciente** (últimos 5 ítems actualizados del usuario).
-- Server Component. Fetch de datos en servidor. Los cuatro endpoints externos se pueden ejecutar en paralelo con `Promise.all`.
+- **Actividad Reciente** (últimos 5 ítems actualizados del usuario, clickeables).
+- Saludo personalizado con `profileName` de UserSettings o email como fallback.
+- Server Component. Fetch de datos en servidor.
 
 ### `/details/[type]/[id]`
 - `type` acepta: `movie`, `series`, `book`.
@@ -146,6 +152,7 @@ screen_review/
 - Muestra la **Watchlist**, **Borradores** y **Reseñas Completadas** del usuario.
 - Datos traídos desde la DB vía Prisma.
 - Permite filtrar por tipo (`movie`, `series`, `book`) y por estado.
+- Orden default de la biblioteca configurable desde Settings (`librarySort`).
 - En la sección **Reseñas** (borradores y completadas) cada `ReviewCard` incluye un botón **"Editar"** que redirige al editor con la ruta `/editor/[reviewId]`.
 - Server Component con `LibraryClient` para filtros.
 
@@ -176,6 +183,14 @@ screen_review/
 - Usa Supabase Auth.
 - Layout sin Navbar.
 
+### `/settings`
+- Permite al usuario configurar sus preferencias personales.
+- **Profile Name**: nombre visible en el Dashboard (saludo personalizado).
+- **Preferred Language**: idioma para resultados de TMDB (`es-ES` o `en-US`). Afecta trending, populares y detalles.
+- **Library Sort**: orden default para la biblioteca (`updatedAt_desc`, `updatedAt_asc`, `rating_desc`, `title_asc`).
+- Server Component que fetchea settings desde DB. Form interno es `"use client"`.
+- Guardar cambios → actualiza `UserSettings` en DB.
+
 ---
 
 ## Modelo de Datos (Prisma)
@@ -191,6 +206,18 @@ model Review {
   content   String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
+
+  @@index([userId])
+}
+
+model UserSettings {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  profileName        String?  // Nombre visible en dashboard
+  preferredLanguage  String   @default("es-ES") // es-ES | en-US
+  librarySort        String   @default("updatedAt_desc") // updatedAt_desc | updatedAt_asc | rating_desc | title_asc
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([userId])
 }
@@ -336,6 +363,7 @@ DATABASE_URL=
 8. Revisar si funcionalidad ya existe antes de agregar dependencias.
 9. **Editor landing** siempre muestra máximo 6 elementos por sección. El botón "Ver todos" solo aparece si el total de ítems supera 6.
 10. **`MediaRow`** es el componente canónico para listas horizontales de media en el Dashboard. No duplicar lógica de layout en cada sección.
+11. **Settings** se guardan en `UserSettings` (DB), no en localStorage, para que Server Components puedan leerlos.
 
 ---
 
@@ -359,6 +387,10 @@ DATABASE_URL=
 | Página /editor/drafts (vista completa borradores) | ✅ |
 | Página /editor/completed (vista completa completadas) | ✅ |
 | Library: botón "Editar" en ReviewCard | ✅ |
+| Search: filtro por tipo (Todos/Películas/Series/Libros) | ✅ |
+| Dashboard: actividad reciente clickeable | ✅ |
+| Dashboard: sin stats cards (simplificado) | ✅ |
+| Settings: perfil, idioma, orden biblioteca | 🔲 |
 
 ---
 
@@ -369,9 +401,8 @@ DATABASE_URL=
 - **Fix**: Routing `[id]` restaurado para cargar reseñas
 - **Fix**: Validación rating null (`!= null` en vez de `!== undefined`)
 - **Fix**: Redirect a draft existente desde Details (evita 409)
-- **Build**: Eliminado `[id]/route.ts` corrupto y recreado limpio
-- **Planeado**: Dashboard — agregar listas de Películas, Series y Libros Populares con `MediaRow`
-- **Planeado**: Library — botón "Editar" en cada `ReviewCard` hacia `/editor/[reviewId]`
-- **Feat**: Editor Enhancement — paginación 6 items, botones "Ver todos", páginas /editor/drafts y /editor/completed
-- **Feat**: Dashboard Enhancement — listas Películas, Series, Libros Populares con MediaRow
-- **Planeado**: Library — botón "Editar" en cada `ReviewCard` hacia `/editor/[reviewId]`
+- **Refactor**: Centralized enrichment logic in `lib/enrich.ts`
+- **Refactor**: API routes use `lib/tmdb` and `lib/books` functions
+- **Feat**: Search filter tabs (Todos/Películas/Series/Libros)
+- **Refactor**: Dashboard - removed stats cards, activity items now clickeable
+- **Planeado**: Settings page - profile name, preferred language, library sort order

@@ -27,6 +27,28 @@ interface SearchParams {
   search?: string;
 }
 
+/**
+ * Convert librarySort string to Prisma orderBy object
+ * Handles nulls last for rating_desc
+ */
+function getSortOrder(librarySort: string): any {
+  switch (librarySort) {
+    case 'updatedAt_asc':
+      return { updatedAt: 'asc' };
+    case 'rating_desc':
+      // Handle nulls last for rating - put items without rating at the end
+      return [
+        { rating: 'desc' },
+        { updatedAt: 'desc' },
+      ];
+    case 'title_asc':
+      return { title: 'asc' };
+    case 'updatedAt_desc':
+    default:
+      return { updatedAt: 'desc' };
+  }
+}
+
 // Use centralized enrichment from lib/enrich
 // Wrapper para mantener compatibilidad de tipos
 
@@ -43,6 +65,24 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
   const page = parseInt(searchParams.page || '1', 10);
   const search = searchParams.search || '';
 
+  // Fetch user settings for librarySort (auto-create if not exists)
+  let userSettings = await prisma.userSettings.findUnique({
+    where: { userId: user.id },
+  });
+  
+  if (!userSettings) {
+    userSettings = await prisma.userSettings.create({
+      data: {
+        userId: user.id,
+        profileName: null,
+        preferredLanguage: 'es-ES',
+        librarySort: 'updatedAt_desc',
+      },
+    });
+  }
+  
+  const sortOrder = getSortOrder(userSettings.librarySort);
+
   // Fetch counts (for stats display - not paginated)
   const [watchlistCount, draftsCount, publishedCount] = await Promise.all([
     prisma.review.count({ where: { userId: user.id, status: 'WATCHLIST' } }),
@@ -50,15 +90,15 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
     prisma.review.count({ where: { userId: user.id, status: 'COMPLETED' } }),
   ]);
 
-  // Fetch watchlist (limit to 6 items for "Todo" view)
+  // Fetch watchlist (limit to 6 items for "Todo" view) - apply user sort
   const watchlistRaw = await prisma.review.findMany({
     where: { userId: user.id, status: 'WATCHLIST' },
-    orderBy: { updatedAt: 'desc' },
+    orderBy: sortOrder,
     take: 6, // Limit to 6 for "Todo" view
   });
   const watchlist = await enrichWatchlistItems(watchlistRaw);
 
-  // Fetch reviews (paginated - 12 items per page)
+  // Fetch reviews (paginated - 12 items per page) - apply user sort
   const limit = 12;
   const skip = (page - 1) * limit;
   
@@ -70,7 +110,7 @@ export default async function LibraryPage(props: { searchParams: Promise<SearchP
         // Search by title (if available)
         ...(search ? { title: { contains: search, mode: 'insensitive' } } : {}),
       },
-      orderBy: { updatedAt: 'desc' },
+      orderBy: sortOrder,
       skip,
       take: limit,
     }),

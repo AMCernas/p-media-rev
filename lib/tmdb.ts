@@ -198,9 +198,10 @@ export async function searchMulti(query: string, page: number = 1): Promise<TMDB
 /**
  * Get trending content for the week
  */
-export async function getTrending(page: number = 1): Promise<TrendingResponse> {
+export async function getTrending(page: number = 1, language: string = 'es-ES'): Promise<TrendingResponse> {
   return tmdbFetch<TrendingResponse>('/trending/all/week', {
     page: String(page),
+    language,
   });
 }
 
