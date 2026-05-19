@@ -39,3 +39,15 @@ model Review {
   @@index([userId])
   @@index([title]) // Index for search performance
 }
+
+model UserSettings {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  profileName        String?
+  preferredLanguage String   @default("es-ES") // es-ES | en-US
+  librarySort        String   @default("updatedAt_desc") // updatedAt_desc | updatedAt_asc | rating_desc | title_asc
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([userId])
+}

@@ -107,20 +107,40 @@ export default async function DashboardPage() {
     );
   }
 
-  // Fetch data in parallel
+  // Fetch user settings (for profileName greeting and language preference)
+  let userSettings = await prisma.userSettings.findUnique({
+    where: { userId: user.id },
+  });
+  
+  // Auto-create settings if not exists
+  if (!userSettings) {
+    userSettings = await prisma.userSettings.create({
+      data: {
+        userId: user.id,
+        profileName: null,
+        preferredLanguage: 'es-ES',
+        librarySort: 'updatedAt_desc',
+      },
+    });
+  }
+  
+  const preferredLanguage = userSettings.preferredLanguage;
+  const profileName = userSettings.profileName;
+
+  // Fetch data in parallel - use preferredLanguage for TMDB calls
   const [trendingData, popularMoviesData, popularSeriesData, popularBooksData, recentActivityRaw] = await Promise.all([
-    // Fetch Trending from TMDB
-    getTrending(1).catch((error) => {
+    // Fetch Trending from TMDB (with user's preferred language)
+    getTrending(1, preferredLanguage).catch((error) => {
       console.error('Failed to fetch trending:', error);
       return { results: [] as TMDBSearchResult[], total_results: 0 };
     }),
-    // Fetch Popular Movies from TMDB
-    getPopularMovies(1, 'es-ES').catch((error) => {
+    // Fetch Popular Movies from TMDB (with user's preferred language)
+    getPopularMovies(1, preferredLanguage).catch((error) => {
       console.error('Failed to fetch popular movies:', error);
       return { results: [] as TMDBSearchResult[], total_results: 0 };
     }),
-    // Fetch Popular TV Series from TMDB
-    getPopularTV(1, 'es-ES').catch((error) => {
+    // Fetch Popular TV Series from TMDB (with user's preferred language)
+    getPopularTV(1, preferredLanguage).catch((error) => {
       console.error('Failed to fetch popular series:', error);
       return { results: [] as TMDBSearchResult[], total_results: 0 };
     }),
@@ -151,7 +171,7 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold text-[#fafafa]">Dashboard</h1>
           <p className="text-[#a1a1aa] mt-1">
-            Bienvenido de nuevo, {user.email?.split('@')[0] || 'Usuario'}
+            Bienvenido de nuevo, {profileName || user.email?.split('@')[0] || 'Usuario'}
           </p>
         </div>
         <div className="hidden md:block flex-1 max-w-sm">
