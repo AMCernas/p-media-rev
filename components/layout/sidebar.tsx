@@ -16,6 +16,7 @@ const navItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
   { label: "Biblioteca", href: "/library", icon: "library_books" },
   { label: "Editor", href: "/editor", icon: "edit_note" },
+  { label: "Configuración", href: "/settings", icon: "settings" },
 ];
 
 interface SidebarProps {
