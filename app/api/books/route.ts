@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('query');
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
 
   if (!query) {
     return NextResponse.json(
@@ -21,8 +22,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    // Google Books uses startIndex for pagination
+    const startIndex = (page - 1) * 20;
     const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=20`
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=20&startIndex=${startIndex}`
     );
 
     if (!response.ok) {
@@ -43,7 +46,10 @@ export async function GET(request: NextRequest) {
       },
     }));
 
-    return NextResponse.json({ items });
+    return NextResponse.json({
+      items,
+      totalItems: data.totalItems || 0,
+    });
   } catch (error) {
     console.error('Google Books API error:', error);
     return NextResponse.json(
