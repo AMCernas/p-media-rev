@@ -64,8 +64,8 @@ const transformBookResult = (volume: any): SearchResult => ({
   title: volume.volumeInfo.title,
   subtitle: volume.volumeInfo.subtitle,
   overview: volume.volumeInfo.description,
-  imageUrl: volume.volumeInfo.imageLinks?.thumbnail 
-    || volume.volumeInfo.imageLinks?.smallThumbnail 
+  imageUrl: volume.volumeInfo.imageLinks?.thumbnail?.replace('http://', 'https://')
+    || volume.volumeInfo.imageLinks?.smallThumbnail?.replace('http://', 'https://')
     || null,
   year: (volume.volumeInfo.publishedDate || '').split('-')[0],
   rating: volume.volumeInfo.averageRating,
