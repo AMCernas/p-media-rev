@@ -54,7 +54,7 @@ function SearchResultCard({ result }: { result: SearchResult }) {
     <Link
       href={`/details/${typeRoute}/${result.id}`}
       className={cn(
-        "flex gap-4 p-3 rounded-lg",
+        "flex gap-4 p-3 rounded-lg w-full",
         "bg-[#121215] border border-[#27272a]",
         "hover:border-[#a78bfa]/50 hover:bg-[#18181b]",
         "transition-all duration-200"
@@ -139,7 +139,7 @@ function SearchSection({
         <h2 className="text-lg font-semibold">{title}</h2>
         <span className="text-sm text-[#71717a]">({results.length})</span>
       </div>
-      <div className="grid gap-3">
+      <div className="grid grid-cols-1 gap-3">
         {results.map((result) => (
           <SearchResultCard key={`${result.mediaType}-${result.id}`} result={result} />
         ))}
