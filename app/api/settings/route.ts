@@ -16,10 +16,12 @@ interface UpdateSettingsBody {
   profileName?: string;
   preferredLanguage?: string;
   librarySort?: string;
+  theme?: string;
 }
 
 const VALID_LANGUAGES = ['es-ES', 'en-US'];
 const VALID_SORTS = ['updatedAt_desc', 'updatedAt_asc', 'rating_desc', 'title_asc'];
+const VALID_THEMES = ['dark', 'light'];
 
 /**
  * GET /api/settings - Get user settings
@@ -83,7 +85,7 @@ export async function PATCH(request: NextRequest) {
     }
     
     const body: UpdateSettingsBody = await request.json();
-    const { profileName, preferredLanguage, librarySort } = body;
+    const { profileName, preferredLanguage, librarySort, theme } = body;
     
     // Validate preferredLanguage if provided
     if (preferredLanguage && !VALID_LANGUAGES.includes(preferredLanguage)) {
@@ -101,11 +103,20 @@ export async function PATCH(request: NextRequest) {
       );
     }
     
+    // Validate theme if provided
+    if (theme && !VALID_THEMES.includes(theme)) {
+      return NextResponse.json(
+        { error: `Invalid theme. Must be one of: ${VALID_THEMES.join(', ')}` },
+        { status: 400 }
+      );
+    }
+    
     // Build update data (only include provided fields)
     const updateData: any = {};
     if (profileName !== undefined) updateData.profileName = profileName;
     if (preferredLanguage !== undefined) updateData.preferredLanguage = preferredLanguage;
     if (librarySort !== undefined) updateData.librarySort = librarySort;
+    if (theme !== undefined) updateData.theme = theme;
     
     // Upsert: update if exists, create if not
     const settings = await prisma.userSettings.upsert({
@@ -116,6 +127,7 @@ export async function PATCH(request: NextRequest) {
         profileName: profileName ?? null,
         preferredLanguage: preferredLanguage ?? 'es-ES',
         librarySort: librarySort ?? 'updatedAt_desc',
+        theme: theme ?? 'dark',
       },
     });
     

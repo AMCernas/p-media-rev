@@ -115,6 +115,41 @@ textarea:focus {
   --sidebar-ring: #a78bfa;
 }
 
+/* Light theme override via data-theme */
+[data-theme="light"] {
+  --background: #fafafa;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #09090b;
+  --muted: #e4e4e7;
+  --muted-foreground: #52525b;
+  --accent: #e4e4e7;
+  --accent-foreground: #09090b;
+  --destructive: #ef4444;
+  --border: #d4d4d8;
+  --input: #d4d4d8;
+  --ring: #7c3aed;
+  --chart-1: #7c3aed;
+  --chart-2: #10b981;
+  --chart-3: #ec4899;
+  --chart-4: #f59e0b;
+  --chart-5: #3b82f6;
+  --sidebar: #f4f4f5;
+  --sidebar-foreground: #09090b;
+  --sidebar-primary: #7c3aed;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e4e4e7;
+  --sidebar-accent-foreground: #09090b;
+  --sidebar-border: #d4d4d8;
+  --sidebar-ring: #7c3aed;
+}
+
 /* Theme Obsidian - Single dark theme */
 
 @layer base {
