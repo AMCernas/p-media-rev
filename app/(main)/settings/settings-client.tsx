@@ -66,7 +66,7 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
     <div className="space-y-6">
       {/* Profile Name */}
       <div className="space-y-2">
-        <label htmlFor="profileName" className="block text-sm font-medium text-[#fafafa]">
+        <label htmlFor="profileName" className="block text-sm font-medium text-foreground">
           Nombre de perfil
         </label>
         <input
@@ -75,49 +75,49 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
           value={profileName}
           onChange={(e) => setProfileName(e.target.value)}
           placeholder="Tu nombre personalizado"
-          className="w-full px-4 py-3 bg-[#27272a] border border-[#3f3f46] rounded-lg text-[#fafafa] placeholder-[#71717a] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-colors"
+          className="w-full px-4 py-3 bg-muted border border-input rounded-lg text-foreground placeholder:text-muted-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
         />
-        <p className="text-xs text-[#71717a]">
+        <p className="text-xs text-muted-2">
           Este nombre aparecerá en el saludo del Dashboard
         </p>
       </div>
 
       {/* Preferred Language */}
       <div className="space-y-2">
-        <label htmlFor="preferredLanguage" className="block text-sm font-medium text-[#fafafa]">
+        <label htmlFor="preferredLanguage" className="block text-sm font-medium text-foreground">
           Idioma preferido
         </label>
         <select
           id="preferredLanguage"
           value={preferredLanguage}
           onChange={(e) => setPreferredLanguage(e.target.value)}
-          className="w-full px-4 py-3 bg-[#27272a] border border-[#3f3f46] rounded-lg text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-colors appearance-none cursor-pointer"
+          className="w-full px-4 py-3 bg-muted border border-input rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors appearance-none cursor-pointer"
         >
           <option value="es-ES">Español</option>
           <option value="en-US">English</option>
         </select>
-        <p className="text-xs text-[#71717a]">
+        <p className="text-xs text-muted-2">
           Afecta los resultados de TMDB (películas y series populares, trending)
         </p>
       </div>
 
       {/* Library Sort */}
       <div className="space-y-2">
-        <label htmlFor="librarySort" className="block text-sm font-medium text-[#fafafa]">
+        <label htmlFor="librarySort" className="block text-sm font-medium text-foreground">
           Orden predeterminado de la biblioteca
         </label>
         <select
           id="librarySort"
           value={librarySort}
           onChange={(e) => setLibrarySort(e.target.value)}
-          className="w-full px-4 py-3 bg-[#27272a] border border-[#3f3f46] rounded-lg text-[#fafafa] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-colors appearance-none cursor-pointer"
+          className="w-full px-4 py-3 bg-muted border border-input rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors appearance-none cursor-pointer"
         >
           <option value="updatedAt_desc">Más reciente primero</option>
           <option value="updatedAt_asc">Más antiguo primero</option>
           <option value="rating_desc">Mejor rating primero</option>
           <option value="title_asc">Orden alfabético (A-Z)</option>
         </select>
-        <p className="text-xs text-[#71717a]">
+        <p className="text-xs text-muted-2">
           Orden por defecto al ver tu biblioteca
         </p>
       </div>
@@ -129,8 +129,8 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
           disabled={!hasChanges || isSaving}
           className={`px-6 py-3 rounded-lg font-medium transition-colors ${
             hasChanges && !isSaving
-              ? 'bg-[#8b5cf6] text-white hover:bg-[#7c3aed] cursor-pointer'
-              : 'bg-[#3f3f46] text-[#a1a1aa] cursor-not-allowed'
+              ? 'bg-primary text-white hover:bg-[#7c3aed] cursor-pointer'
+              : 'bg-muted text-muted-foreground cursor-not-allowed'
           }`}
         >
           {isSaving ? 'Guardando...' : 'Guardar cambios'}

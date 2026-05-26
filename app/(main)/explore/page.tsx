@@ -97,12 +97,12 @@ function TMDBCard({ item }: { item: TMDBSearchResult }) {
     <Link
       href={`/details/${mediaType}/${item.id}`}
       className={cn(
-        'group block rounded-lg border border-[#27272a] bg-[#121215] overflow-hidden',
-        'transition-all hover:border-[#a78bfa]/50 hover:shadow-lg',
-        'hover:shadow-[#a78bfa]/10'
+        'group block rounded-lg border border-border bg-card overflow-hidden',
+        'transition-all hover:border-primary/50 hover:shadow-lg',
+        'hover:shadow-primary/10'
       )}
     >
-      <div className="aspect-[2/3] relative bg-[#18181b] overflow-hidden">
+      <div className="aspect-[2/3] relative bg-muted overflow-hidden">
         {posterUrl ? (
           <img
             src={posterUrl}
@@ -110,21 +110,21 @@ function TMDBCard({ item }: { item: TMDBSearchResult }) {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#52525b]">
+          <div className="w-full h-full flex items-center justify-center text-muted-3">
             <span className="material-symbols-outlined text-3xl">movie</span>
           </div>
         )}
         {item.vote_average && item.vote_average > 0 && (
-          <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-[#09090b]/80 text-xs text-[#fafafa] flex items-center gap-1">
+          <div className="absolute top-2 right-2 px-2 py-1 rounded-full bg-background/80 text-xs text-foreground flex items-center gap-1">
             <span className="text-yellow-400">★</span>
             {item.vote_average.toFixed(1)}
           </div>
         )}
       </div>
       <div className="p-3">
-        <h3 className="font-medium text-[#fafafa] text-sm truncate">{title}</h3>
-        {year && <p className="text-xs text-[#52525b] mt-1">{year}</p>}
-        <p className="text-xs text-[#71717a] mt-2 line-clamp-2">{item.overview}</p>
+        <h3 className="font-medium text-foreground text-sm truncate">{title}</h3>
+        {year && <p className="text-xs text-muted-3 mt-1">{year}</p>}
+        <p className="text-xs text-muted-2 mt-2 line-clamp-2">{item.overview}</p>
       </div>
     </Link>
   );
@@ -145,12 +145,12 @@ function BookCard({ item }: { item: GoogleBookVolume }) {
     <Link
       href={`/details/book/${item.id}`}
       className={cn(
-        'group block rounded-lg border border-[#27272a] bg-[#121215] overflow-hidden',
-        'transition-all hover:border-[#a78bfa]/50 hover:shadow-lg',
-        'hover:shadow-[#a78bfa]/10'
+        'group block rounded-lg border border-border bg-card overflow-hidden',
+        'transition-all hover:border-primary/50 hover:shadow-lg',
+        'hover:shadow-primary/10'
       )}
     >
-      <div className="aspect-[2/3] relative bg-[#18181b] overflow-hidden flex items-center justify-center">
+      <div className="aspect-[2/3] relative bg-muted overflow-hidden flex items-center justify-center">
         {coverUrl ? (
           <img
             src={coverUrl}
@@ -158,17 +158,17 @@ function BookCard({ item }: { item: GoogleBookVolume }) {
             className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#52525b]">
+          <div className="w-full h-full flex items-center justify-center text-muted-3">
             <span className="material-symbols-outlined text-3xl">menu_book</span>
           </div>
         )}
       </div>
       <div className="p-3">
-        <h3 className="font-medium text-[#fafafa] text-sm truncate">{title}</h3>
-        {authors && <p className="text-xs text-[#71717a] mt-1 truncate">{authors}</p>}
-        {year && <p className="text-xs text-[#52525b] mt-1">{year}</p>}
+        <h3 className="font-medium text-foreground text-sm truncate">{title}</h3>
+        {authors && <p className="text-xs text-muted-2 mt-1 truncate">{authors}</p>}
+        {year && <p className="text-xs text-muted-3 mt-1">{year}</p>}
         {item.volumeInfo.description && (
-          <p className="text-xs text-[#71717a] mt-2 line-clamp-2">
+          <p className="text-xs text-muted-2 mt-2 line-clamp-2">
             {item.volumeInfo.description}
           </p>
         )}
@@ -209,8 +209,8 @@ function Pagination({
         <Link
           href={href(currentPage - 1)}
           className={cn(
-            'px-4 py-2 rounded-lg border border-[#27272a] text-[#a1a1aa]',
-            'hover:border-[#a78bfa]/50 hover:text-[#a78bfa]',
+            'px-4 py-2 rounded-lg border border-border text-muted-foreground',
+            'hover:border-primary/50 hover:text-primary',
             'transition-colors'
           )}
         >
@@ -227,8 +227,8 @@ function Pagination({
             className={cn(
               'w-10 h-10 flex items-center justify-center rounded-lg text-sm',
               page === currentPage
-                ? 'bg-[#a78bfa] text-[#09090b] font-medium'
-                : 'border border-[#27272a] text-[#a1a1aa] hover:border-[#a78bfa]/50 hover:text-[#a78bfa]',
+                ? 'bg-primary text-primary-foreground font-medium'
+                : 'border border-border text-muted-foreground hover:border-primary/50 hover:text-primary',
               'transition-colors'
             )}
           >
@@ -241,8 +241,8 @@ function Pagination({
         <Link
           href={href(currentPage + 1)}
           className={cn(
-            'px-4 py-2 rounded-lg border border-[#27272a] text-[#a1a1aa]',
-            'hover:border-[#a78bfa]/50 hover:text-[#a78bfa]',
+            'px-4 py-2 rounded-lg border border-border text-muted-foreground',
+            'hover:border-primary/50 hover:text-primary',
             'transition-colors'
           )}
         >
@@ -274,13 +274,13 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
       <div className="mb-8">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-1 text-sm text-[#a78bfa] hover:text-[#c4b5fd] mb-4"
+          className="inline-flex items-center gap-1 text-sm text-primary hover:text-primary/80 mb-4"
         >
           <span className="material-symbols-outlined text-sm">arrow_back</span>
           Volver al dashboard
         </Link>
-        <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight">{title}</h1>
-        <p className="text-sm text-[#a1a1aa] mt-1">
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">{title}</h1>
+        <p className="text-sm text-muted-foreground mt-1">
           Explora contenido{' '}
           {type === 'trending' ? 'en tendencia' : type === 'movie' ? 'popular' : type === 'series' ? 'popular' : 'popular'}
         </p>
@@ -297,8 +297,8 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
               className={cn(
                 'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap',
                 isActive
-                  ? 'bg-[#a78bfa] text-[#09090b]'
-                  : 'text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b]',
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent',
                 'transition-colors'
               )}
             >
@@ -316,9 +316,9 @@ export default async function ExplorePage({ searchParams }: ExplorePageProps) {
           ))}
         </div>
       ) : (
-        <div className="py-16 text-center rounded-xl bg-[#121215] border border-[#27272a]">
-          <span className="material-symbols-outlined text-4xl text-[#52525b] mb-3">search_off</span>
-          <p className="text-[#71717a]">No se encontró contenido</p>
+        <div className="py-16 text-center rounded-xl bg-card border border-border">
+          <span className="material-symbols-outlined text-4xl text-muted-3 mb-3">search_off</span>
+          <p className="text-muted-2">No se encontró contenido</p>
         </div>
       )}
 

@@ -69,29 +69,29 @@ export function DetailHero({
           {/* Info */}
           <div className="flex-1 text-center md:text-left md:self-center">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
-              <span className="px-2.5 py-1 rounded-md bg-[#27272a]/80 text-[#e4e4e7] text-xs font-medium border border-white/5">
+              <span className="px-2.5 py-1 rounded-md bg-muted/80 text-tag text-xs font-medium border border-border/10">
                 {mediaTypeLabel}
               </span>
               {year && (
-                <span className="px-2.5 py-1 rounded-md bg-[#27272a]/80 text-[#e4e4e7] text-xs font-medium border border-white/5">
+                <span className="px-2.5 py-1 rounded-md bg-muted/80 text-tag text-xs font-medium border border-border/10">
                   {year}
                 </span>
               )}
             </div>
             
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#fafafa] mb-2">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-2">
               {title}
             </h1>
             
             {subtitle && (
-              <p className="text-xl text-[#d4d4d8] italic mb-4">
+              <p className="text-xl text-body italic mb-4">
                 {subtitle}
               </p>
             )}
             
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
               {rating !== undefined && rating !== null && (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#09090b]/70 text-[#fbbf24] font-bold backdrop-blur-sm border border-white/10">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/70 text-[#fbbf24] font-bold backdrop-blur-sm border border-border/20">
                   <span>★</span>
                   <span>{rating.toFixed(1)}</span>
                 </div>
@@ -102,13 +102,13 @@ export function DetailHero({
                   {genres.slice(0, 4).map((genre) => (
                     <span
                       key={genre}
-                      className="px-3 py-1.5 rounded-full bg-[#27272a]/80 text-[#e4e4e7] text-sm border border-white/5 backdrop-blur-sm"
+                      className="px-3 py-1.5 rounded-full bg-muted/80 text-tag text-sm border border-border/10 backdrop-blur-sm"
                     >
                       {genre}
                     </span>
                   ))}
                   {genres.length > 4 && (
-                    <span className="px-3 py-1.5 rounded-full bg-[#27272a]/80 text-[#e4e4e7] text-sm border border-white/5 backdrop-blur-sm">
+                    <span className="px-3 py-1.5 rounded-full bg-muted/80 text-tag text-sm border border-border/10 backdrop-blur-sm">
                       +{genres.length - 4}
                     </span>
                   )}

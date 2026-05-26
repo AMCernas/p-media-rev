@@ -61,13 +61,13 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#09090b] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-[#fafafa]">
-            Screen Review
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            Shelf
           </h1>
-          <p className="mt-2 text-sm text-[#a1a1aa]">
+          <p className="mt-2 text-sm text-muted-foreground">
             Inicia sesión en tu cuenta
           </p>
         </div>
@@ -76,7 +76,7 @@ export default function LoginPage() {
           <div className="space-y-2">
             <label
               htmlFor="email"
-              className="text-sm font-medium text-[#fafafa]"
+              className="text-sm font-medium text-foreground"
             >
               Email
             </label>
@@ -88,9 +88,9 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className={cn(
-                "flex h-10 w-full rounded-lg border border-[#27272a] bg-[#121215] px-3 py-2 text-sm text-[#fafafa]",
-                "placeholder:text-[#a1a1aa]",
-                "focus:outline-none focus:ring-2 focus:ring-[#a78bfa] focus:ring-offset-2 focus:ring-offset-[#09090b]",
+                "flex h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground",
+                "placeholder:text-muted-foreground",
+                "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
                 "disabled:cursor-not-allowed disabled:opacity-50"
               )}
             />
@@ -99,7 +99,7 @@ export default function LoginPage() {
           <div className="space-y-2">
             <label
               htmlFor="password"
-              className="text-sm font-medium text-[#fafafa]"
+              className="text-sm font-medium text-foreground"
             >
               Contraseña
             </label>
@@ -111,16 +111,16 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className={cn(
-                "flex h-10 w-full rounded-lg border border-[#27272a] bg-[#121215] px-3 py-2 text-sm text-[#fafafa]",
-                "placeholder:text-[#a1a1aa]",
-                "focus:outline-none focus:ring-2 focus:ring-[#a78bfa] focus:ring-offset-2 focus:ring-offset-[#09090b]",
+                "flex h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground",
+                "placeholder:text-muted-foreground",
+                "focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background",
                 "disabled:cursor-not-allowed disabled:opacity-50"
               )}
             />
           </div>
 
           {error && (
-            <div className="rounded-lg bg-[#ef4444]/10 border border-[#ef4444]/20 p-3 text-sm text-[#ef4444]">
+            <div className="rounded-lg bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
               {error}
             </div>
           )}
@@ -129,8 +129,8 @@ export default function LoginPage() {
             type="submit"
             disabled={loading}
             className={cn(
-              "w-full h-10 rounded-lg bg-[#a78bfa] text-[#09090b] px-4 py-2 text-sm font-semibold",
-              "hover:bg-[#a78bfa]/90",
+              "w-full h-10 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold",
+              "hover:bg-primary/90",
               "disabled:pointer-events-none disabled:opacity-50",
               "transition-colors"
             )}
