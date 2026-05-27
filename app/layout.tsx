@@ -44,7 +44,7 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="es" className={`${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased dark`} suppressHydrationWarning>
+    <html lang="es" data-theme={initialTheme} className={`${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased ${initialTheme === 'dark' ? 'dark' : ''}`} suppressHydrationWarning>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..900;1,9..40,100..900&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-20..48&display=swap" rel="stylesheet" />
