@@ -20,6 +20,7 @@ interface UserSettings {
   profileName: string | null;
   preferredLanguage: string;
   librarySort: string;
+  theme: string;
 }
 
 /**
@@ -65,6 +66,7 @@ export default async function SettingsPage() {
             profileName: settings.profileName || '',
             preferredLanguage: settings.preferredLanguage,
             librarySort: settings.librarySort,
+            theme: settings.theme,
           }}
         />
       </div>

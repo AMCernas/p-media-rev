@@ -390,7 +390,7 @@ DATABASE_URL=
 | Search: filtro por tipo (Todos/Películas/Series/Libros) | ✅ |
 | Dashboard: actividad reciente clickeable | ✅ |
 | Dashboard: sin stats cards (simplificado) | ✅ |
-| Settings: perfil, idioma, orden biblioteca | 🔲 |
+| Settings: perfil, idioma, orden biblioteca, tema | ✅ |
 
 ---
 

@@ -1,19 +1,23 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useTheme, type Theme } from '@/lib/theme-context';
 
 interface SettingsClientProps {
   initialSettings: {
     profileName: string;
     preferredLanguage: string;
     librarySort: string;
+    theme: string;
   };
 }
 
 export function SettingsClient({ initialSettings }: SettingsClientProps) {
+  const { theme: currentTheme, setTheme } = useTheme();
   const [profileName, setProfileName] = useState(initialSettings.profileName);
   const [preferredLanguage, setPreferredLanguage] = useState(initialSettings.preferredLanguage);
   const [librarySort, setLibrarySort] = useState(initialSettings.librarySort);
+  const [themeValue, setThemeValue] = useState(initialSettings.theme);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -23,9 +27,10 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
     const changed = 
       profileName !== initialSettings.profileName ||
       preferredLanguage !== initialSettings.preferredLanguage ||
-      librarySort !== initialSettings.librarySort;
+      librarySort !== initialSettings.librarySort ||
+      themeValue !== initialSettings.theme;
     setHasChanges(changed);
-  }, [profileName, preferredLanguage, librarySort, initialSettings]);
+  }, [profileName, preferredLanguage, librarySort, themeValue, initialSettings]);
 
   const handleSave = useCallback(async () => {
     setIsSaving(true);
@@ -41,6 +46,7 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
           profileName: profileName || null,
           preferredLanguage,
           librarySort,
+          theme: themeValue,
         }),
       });
       
@@ -60,7 +66,12 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
     } finally {
       setIsSaving(false);
     }
-  }, [profileName, preferredLanguage, librarySort]);
+  }, [profileName, preferredLanguage, librarySort, themeValue]);
+
+  const handleThemeChange = useCallback((newTheme: Theme) => {
+    setTheme(newTheme);                 // apply to DOM immediately
+    setThemeValue(newTheme);            // track for save
+  }, [setTheme]);
 
   return (
     <div className="space-y-6">
@@ -119,6 +130,42 @@ export function SettingsClient({ initialSettings }: SettingsClientProps) {
         </select>
         <p className="text-xs text-muted-2">
           Orden por defecto al ver tu biblioteca
+        </p>
+      </div>
+
+      {/* Theme Toggle */}
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-foreground">
+          Tema de la aplicación
+        </label>
+        <div className="flex gap-2 p-1 bg-muted rounded-xl w-fit">
+          <button
+            type="button"
+            onClick={() => handleThemeChange('dark')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              currentTheme === 'dark'
+                ? 'bg-background text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">dark_mode</span>
+            Oscuro
+          </button>
+          <button
+            type="button"
+            onClick={() => handleThemeChange('light')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              currentTheme === 'light'
+                ? 'bg-background text-foreground shadow-sm'
+                : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">light_mode</span>
+            Claro
+          </button>
+        </div>
+        <p className="text-xs text-muted-2">
+          Cambia entre tema oscuro y claro. El cambio es inmediato.
         </p>
       </div>
 
