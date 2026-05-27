@@ -102,7 +102,7 @@ export default async function DashboardPage() {
   if (!user) {
     return (
       <div className="container py-8">
-        <p className="text-[#a1a1aa]">Debes iniciar sesión para ver el dashboard.</p>
+        <p className="text-muted-foreground">Debes iniciar sesión para ver el dashboard.</p>
       </div>
     );
   }
@@ -169,8 +169,8 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#fafafa]">Dashboard</h1>
-          <p className="text-[#a1a1aa] mt-1">
+          <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
+          <p className="text-muted-foreground mt-1">
             Bienvenido de nuevo, {profileName || user.email?.split('@')[0] || 'Usuario'}
           </p>
         </div>
@@ -185,8 +185,8 @@ export default async function DashboardPage() {
       {/* Trending Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-[#fafafa]">Trending Esta Semana</h2>
-          <Link href="/explore?type=trending&section=trending&page=1" className="text-sm text-[#a78bfa] hover:text-[#c4b5fd] flex items-center gap-1 transition-colors">
+          <h2 className="text-lg font-semibold text-foreground">Trending Esta Semana</h2>
+          <Link href="/explore?type=trending&section=trending&page=1" className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 transition-colors">
             Ver más
             <span className="material-symbols-outlined text-sm">arrow_forward</span>
           </Link>
@@ -198,9 +198,9 @@ export default async function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-xl bg-[#121215] border border-[#27272a] p-8 text-center">
-            <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">movie_filter</span>
-            <p className="text-[#a1a1aa]">No hay contenido trending disponible.</p>
+          <div className="rounded-xl bg-card border border-border p-8 text-center">
+            <span className="material-symbols-outlined text-4xl text-muted-foreground mb-3">movie_filter</span>
+            <p className="text-muted-foreground">No hay contenido trending disponible.</p>
           </div>
         )}
       </section>
@@ -232,10 +232,10 @@ export default async function DashboardPage() {
       {/* Recent Activity Section */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-[#fafafa]">Actividad Reciente</h2>
+          <h2 className="text-lg font-semibold text-foreground">Actividad Reciente</h2>
         </div>
         {recentActivity.length > 0 ? (
-          <div className="rounded-xl bg-[#121215] border border-[#27272a] divide-y divide-[#27272a]">
+          <div className="rounded-xl bg-card border border-border divide-y divide-border">
             {recentActivity.map((item) => {
               const typeRoute = item.mediaType === 'MOVIE' ? 'movie' : item.mediaType === 'SERIES' ? 'series' : 'book';
               const href = item.status === 'WATCHLIST'
@@ -246,22 +246,22 @@ export default async function DashboardPage() {
                 <Link
                   key={item.id}
                   href={href}
-                  className="flex items-center justify-between p-4 hover:bg-[#18181b] transition-colors"
+                  className="flex items-center justify-between p-4 hover:bg-accent transition-colors"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-[#fafafa] truncate">
+                    <p className="text-sm font-medium text-foreground truncate">
                       {item.title || item.mediaId}
                     </p>
-                    <p className="text-xs text-[#a1a1aa] mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       {getMediaTypeLabel(item.mediaType)}
                       {item.rating && ` • ★ ${item.rating}/5`}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs px-3 py-1 rounded-full bg-[#18181b] text-[#a1a1aa] border border-[#27272a]">
+                    <span className="text-xs px-3 py-1 rounded-full bg-muted text-muted-foreground border border-border">
                       {getStatusLabel(item.status)}
                     </span>
-                    <span className="text-xs text-[#a1a1aa]">
+                    <span className="text-xs text-muted-foreground">
                       {item.updatedAt.toLocaleDateString('es-AR', {
                         day: 'numeric',
                         month: 'short',
@@ -273,10 +273,10 @@ export default async function DashboardPage() {
             })}
           </div>
         ) : (
-          <div className="rounded-xl bg-[#121215] border border-[#27272a] p-8 text-center">
-            <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">history</span>
-            <p className="text-[#a1a1aa]">No tienes actividad reciente.</p>
-            <p className="text-sm text-[#a1a1aa] mt-1">¡Explora contenido para añadir a tu lista!</p>
+          <div className="rounded-xl bg-card border border-border p-8 text-center">
+            <span className="material-symbols-outlined text-4xl text-muted-foreground mb-3">history</span>
+            <p className="text-muted-foreground">No tienes actividad reciente.</p>
+            <p className="text-sm text-muted-foreground mt-1">¡Explora contenido para añadir a tu lista!</p>
           </div>
         )}
       </section>

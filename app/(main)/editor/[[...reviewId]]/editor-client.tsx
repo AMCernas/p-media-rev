@@ -289,8 +289,8 @@ export function EditorClient({
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-2 border-[#a78bfa] border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-[#a1a1aa]">Cargando editor...</p>
+          <div className="w-10 h-10 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-sm text-muted-foreground">Cargando editor...</p>
         </div>
       </div>
     );
@@ -300,7 +300,7 @@ export function EditorClient({
     <div className="p-4 md:p-6 lg:p-8 max-w-4xl mx-auto">
       {/* Media Header - Show when we have media info */}
       {mediaInfo && (
-        <div className="flex items-center gap-4 p-4 mb-6 rounded-xl bg-[#121215] border border-[#27272a]">
+        <div className="flex items-center gap-4 p-4 mb-6 rounded-xl bg-card border border-border">
           {mediaInfo.imageUrl && (
             <img
               src={mediaInfo.imageUrl}
@@ -309,16 +309,16 @@ export function EditorClient({
             />
           )}
           <div className="flex-1 min-w-0">
-            <h2 className="text-lg font-semibold text-[#fafafa] truncate">
+            <h2 className="text-lg font-semibold text-foreground truncate">
               {mediaInfo.title}
             </h2>
             {mediaInfo.year && (
-              <p className="text-sm text-[#52525b]">{mediaInfo.year}</p>
+              <p className="text-sm text-muted-3">{mediaInfo.year}</p>
             )}
           </div>
           <a
             href={`/details/${mediaType?.toLowerCase() || 'movie'}/${mediaId}`}
-            className="flex items-center gap-1 px-3 py-1.5 text-sm text-[#a78bfa] hover:text-[#c4b5fd] transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 text-sm text-primary hover:text-primary/80 transition-colors"
           >
             <span className="material-symbols-outlined text-sm">open_in_new</span>
             Ver detalles
@@ -329,20 +329,20 @@ export function EditorClient({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">
             {reviewId ? 'Editar Reseña' : 'Nueva Reseña'}
           </h1>
-          <p className="text-sm text-[#a1a1aa] mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             Escribe tu opinión sobre esta obra
           </p>
         </div>
         
         {/* Save status indicator */}
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#121215] border border-[#27272a]">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card border border-border">
           {saveStatus === 'saving' && (
             <>
-              <div className="w-3 h-3 border-2 border-[#a78bfa] border-t-transparent rounded-full animate-spin" />
-              <span className="text-xs text-[#a1a1aa]">Guardando...</span>
+              <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="text-xs text-muted-foreground">Guardando...</span>
             </>
           )}
           {saveStatus === 'saved' && (
@@ -359,8 +359,8 @@ export function EditorClient({
           )}
           {saveStatus === 'idle' && lastSaved && (
             <>
-              <span className="material-symbols-outlined text-sm text-[#a1a1aa]">schedule</span>
-              <span className="text-xs text-[#a1a1aa]">
+              <span className="material-symbols-outlined text-sm text-muted-foreground">schedule</span>
+              <span className="text-xs text-muted-foreground">
                 {lastSaved.toLocaleTimeString('es-AR', { 
                   hour: '2-digit', 
                   minute: '2-digit' 
@@ -373,7 +373,7 @@ export function EditorClient({
       
       {/* Rating section */}
       <div className="mb-8">
-        <label className="block text-sm font-medium text-[#a1a1aa] mb-3">
+        <label className="block text-sm font-medium text-muted-foreground mb-3">
           Tu calificación
         </label>
         <div className="flex gap-2">
@@ -382,14 +382,14 @@ export function EditorClient({
               key={star}
               type="button"
               onClick={() => handleRatingChange(star)}
-              className="p-2 rounded-lg transition-all duration-150 hover:bg-[#121215] focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50"
+              className="p-2 rounded-lg transition-all duration-150 hover:bg-accent focus:outline-none focus:ring-2 focus:ring-primary/50"
               aria-label={`Calificar ${star} estrellas`}
             >
               <svg
                 className={`w-10 h-10 transition-all duration-150 ${
                   rating !== null && star <= rating
                     ? 'text-yellow-400 fill-yellow-400 scale-110'
-                    : 'text-[#27272a] hover:text-[#52525b]'
+                    : 'text-muted-3 hover:text-muted-2'
                 }`}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -406,48 +406,48 @@ export function EditorClient({
             </button>
           ))}
         </div>
-        <p className="text-xs text-[#a1a1aa] mt-2">
+        <p className="text-xs text-muted-foreground mt-2">
           {rating ? `Seleccionaste ${rating} de 5 estrellas` : 'Haz clic para calificar'}
         </p>
       </div>
       
       {/* Content textarea */}
       <div className="mb-8">
-        <label className="block text-sm font-medium text-[#a1a1aa] mb-3">
+        <label className="block text-sm font-medium text-muted-foreground mb-3">
           Tu reseña
         </label>
         <textarea
           value={content}
           onChange={handleContentChange}
           placeholder="Escribe tu reseña aquí... Cuéntanos qué te gustó, qué no, y a quién se la recomendarías."
-          className="w-full min-h-[320px] p-5 rounded-xl border border-[#27272a] bg-[#0c0c0f] text-[#fafafa] text-sm leading-relaxed resize-y focus:outline-none focus:border-[#a78bfa] focus:ring-2 focus:ring-[#a78bfa]/20 transition-all duration-200 placeholder:text-[#52525b]"
+          className="w-full min-h-[320px] p-5 rounded-xl border border-border bg-sidebar text-foreground text-sm leading-relaxed resize-y focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 placeholder:text-muted-3"
         />
         <div className="flex justify-between items-center mt-2">
-          <p className="text-xs text-[#52525b]">
+          <p className="text-xs text-muted-3">
             Los cambios se guardan automáticamente
           </p>
-          <p className={`text-xs ${content.length > 9000 ? 'text-[#fb923c]' : 'text-[#52525b]'}`}>
+          <p className={`text-xs ${content.length > 9000 ? 'text-[#fb923c]' : 'text-muted-3'}`}>
             {content.length}/10,000
           </p>
         </div>
       </div>
       
       {/* Action buttons */}
-      <div className="flex gap-3 justify-end pt-4 border-t border-[#27272a]">
+      <div className="flex gap-3 justify-end pt-4 border-t border-border">
         <button
           onClick={handleCancel}
-          className="px-5 py-2.5 rounded-lg text-sm font-medium text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#121215] transition-colors"
+          className="px-5 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
         >
           Cancelar
         </button>
         <button
           onClick={handleComplete}
           disabled={isPublishing}
-          className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#a78bfa] text-[#09090b] hover:bg-[#a78bfa]/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+          className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
         >
           {isPublishing ? (
             <>
-              <div className="w-4 h-4 border-2 border-[#09090b] border-t-transparent rounded-full animate-spin" />
+              <div className="w-4 h-4 border-2 border-foreground border-t-transparent rounded-full animate-spin" />
               Completando...
             </>
           ) : (

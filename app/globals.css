@@ -63,6 +63,10 @@ textarea:focus {
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
+  --color-muted-2: var(--muted-2);
+  --color-muted-3: var(--muted-3);
+  --color-body: var(--body);
+  --color-tag: var(--tag);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
   --color-primary-foreground: var(--primary-foreground);
@@ -104,6 +108,10 @@ textarea:focus {
   --chart-3: #f472b6;
   --chart-4: #fb923c;
   --chart-5: #60a5fa;
+  --muted-2: #71717a;
+  --muted-3: #52525b;
+  --body: #d4d4d8;
+  --tag: #e4e4e7;
   --radius: 0.625rem;
   --sidebar: #0c0c0f;
   --sidebar-foreground: #fafafa;
@@ -140,6 +148,10 @@ textarea:focus {
   --chart-3: #ec4899;
   --chart-4: #f59e0b;
   --chart-5: #3b82f6;
+  --muted-2: #a1a1aa;
+  --muted-3: #d4d4d8;
+  --body: #3f3f46;
+  --tag: #52525b;
   --sidebar: #f4f4f5;
   --sidebar-foreground: #09090b;
   --sidebar-primary: #7c3aed;

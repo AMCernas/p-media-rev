@@ -20,6 +20,7 @@ interface UserSettings {
   profileName: string | null;
   preferredLanguage: string;
   librarySort: string;
+  theme: string;
 }
 
 /**
@@ -44,8 +45,8 @@ export default async function SettingsPage() {
   if (!user) {
     return (
       <div className="p-4 md:p-6 lg:p-8">
-        <h1 className="text-2xl font-bold text-[#fafafa]">Settings</h1>
-        <p className="text-[#a1a1aa] mt-2">Please log in to access settings.</p>
+        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <p className="text-muted-foreground mt-2">Please log in to access settings.</p>
       </div>
     );
   }
@@ -55,9 +56,9 @@ export default async function SettingsPage() {
   return (
     <div className="p-4 md:p-6 lg:p-8">
       <div className="max-w-2xl">
-        <h1 className="text-2xl font-bold text-[#fafafa] mb-2">Configuración</h1>
-        <p className="text-[#a1a1aa] mb-6">
-          Personaliza tu experiencia en Screen Review
+        <h1 className="text-2xl font-bold text-foreground mb-2">Configuración</h1>
+        <p className="text-muted-foreground mb-6">
+          Personaliza tu experiencia en Shelf
         </p>
         
         <SettingsClient
@@ -65,6 +66,7 @@ export default async function SettingsPage() {
             profileName: settings.profileName || '',
             preferredLanguage: settings.preferredLanguage,
             librarySort: settings.librarySort,
+            theme: settings.theme,
           }}
         />
       </div>

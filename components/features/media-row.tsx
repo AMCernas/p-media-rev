@@ -79,11 +79,11 @@ export function MediaRow({ title, items, mediaType, viewMoreHref }: MediaRowProp
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-[#fafafa]">{title}</h2>
+        <h2 className="text-lg font-semibold text-foreground">{title}</h2>
         {viewMoreHref && (
           <Link
             href={viewMoreHref}
-            className="text-sm text-[#a78bfa] hover:text-[#c4b5fd] flex items-center gap-1 transition-colors"
+            className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
           >
             Ver más
             <span className="material-symbols-outlined text-sm">arrow_forward</span>
@@ -154,11 +154,11 @@ export function MediaRow({ title, items, mediaType, viewMoreHref }: MediaRowProp
           })}
         </div>
       ) : (
-        <div className="rounded-xl bg-[#121215] border border-[#27272a] p-8 text-center">
-          <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">
+        <div className="rounded-xl bg-card border border-border p-8 text-center">
+          <span className="material-symbols-outlined text-4xl text-muted-foreground mb-3">
             {mediaType === 'movie' ? 'movie' : mediaType === 'series' ? 'tv' : 'menu_book'}
           </span>
-          <p className="text-[#a1a1aa]">No hay {typeLabel.toLowerCase()}s populares disponibles.</p>
+          <p className="text-muted-foreground">No hay {typeLabel.toLowerCase()}s populares disponibles.</p>
         </div>
       )}
     </section>

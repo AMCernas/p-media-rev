@@ -47,7 +47,7 @@ function formatDate(date: Date | string) {
  */
 function RatingStars({ rating }: { rating: number | null | undefined }) {
   if (rating === null || rating === undefined) {
-    return <span className="text-sm text-[#52525b]">Sin rating</span>;
+    return <span className="text-sm text-muted-3">Sin rating</span>;
   }
 
   return (
@@ -57,13 +57,13 @@ function RatingStars({ rating }: { rating: number | null | undefined }) {
           key={star}
           className={cn(
             'text-sm',
-            star <= rating ? 'text-yellow-400' : 'text-[#27272a]'
+            star <= rating ? 'text-yellow-400' : 'text-muted-3'
           )}
         >
           ★
         </span>
       ))}
-      <span className="ml-1 text-sm text-[#a1a1aa]">{rating}/5</span>
+      <span className="ml-1 text-sm text-muted-foreground">{rating}/5</span>
     </div>
   );
 }
@@ -136,10 +136,10 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
     <a
       href={`/editor/${review.id}`}
       className={cn(
-        'block w-full text-left p-4 rounded-xl border bg-[#121215]',
-        'hover:bg-[#18181b] hover:border-[#a78bfa]/30',
+        'block w-full text-left p-4 rounded-xl border bg-card',
+        'hover:bg-accent hover:border-primary/30',
         'transition-all duration-200',
-        'focus:outline-none focus:ring-2 focus:ring-[#a78bfa]/50',
+        'focus:outline-none focus:ring-2 focus:ring-primary/50',
         isDeleting && 'opacity-50 pointer-events-none'
       )}
     >
@@ -148,7 +148,7 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
         <div className="flex items-start gap-2 flex-1 min-w-0">
           <MediaTypeBadge mediaType={review.mediaType} />
           {review.title && (
-            <span className="font-medium text-[#fafafa] text-sm truncate">
+            <span className="font-medium text-foreground text-sm truncate">
               {review.title}
             </span>
           )}
@@ -159,8 +159,8 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
             disabled={isDeleting}
             className={cn(
               'flex-shrink-0 p-2 rounded-lg border',
-              'text-[#52525b] hover:text-[#ef4444] hover:border-[#ef4444]/50',
-              'focus:outline-none focus:ring-2 focus:ring-[#ef4444]/50',
+              'text-muted-3 hover:text-destructive hover:border-destructive/50',
+              'focus:outline-none focus:ring-2 focus:ring-destructive/50',
               'transition-colors duration-150',
               isDeleting && 'opacity-50 cursor-not-allowed'
             )}
@@ -199,21 +199,21 @@ function ReviewCard({ review, onDelete }: { review: EnrichedReview; onDelete?: (
         <div className="flex-1 min-w-0">
           <RatingStars rating={review.rating} />
           {review.year && (
-            <p className="text-xs text-[#52525b] mt-1">{review.year}</p>
+            <p className="text-xs text-muted-3 mt-1">{review.year}</p>
           )}
         </div>
       </div>
 
       {/* Content Preview */}
       {contentPreview && (
-        <p className="text-sm text-[#71717a] line-clamp-2 mb-3">
+        <p className="text-sm text-muted-2 line-clamp-2 mb-3">
           {contentPreview}...
         </p>
       )}
 
       {/* Footer: Date */}
-      <div className="mt-auto pt-3 border-t border-[#27272a]">
-        <span className="text-xs text-[#52525b]">
+      <div className="mt-auto pt-3 border-t border-border">
+        <span className="text-xs text-muted-3">
           Editado {formatDate(review.updatedAt)}
         </span>
       </div>
@@ -235,11 +235,11 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center justify-between mb-4">
-      <h2 className="text-lg font-semibold text-[#fafafa] flex items-center gap-2">
-        <span className="material-symbols-outlined text-[#a78bfa]">{icon}</span>
+      <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">{icon}</span>
         {title}
       </h2>
-      <span className="text-sm px-3 py-1 rounded-full bg-[#121215] border border-[#27272a] text-[#a1a1aa]">
+      <span className="text-sm px-3 py-1 rounded-full bg-card border border-border text-muted-foreground">
         {count} {count === 1 ? 'ítem' : 'ítems'}
       </span>
     </div>
@@ -255,9 +255,9 @@ function ViewAllButton({ href, label }: { href: string; label: string }) {
       href={href}
       className={cn(
         'inline-flex items-center gap-1 px-4 py-2 rounded-lg',
-        'text-sm font-medium text-[#a78bfa]',
-        'bg-[#a78bfa]/10 border border-[#a78bfa]/30',
-        'hover:bg-[#a78bfa]/20 hover:border-[#a78bfa]/50',
+        'text-sm font-medium text-primary',
+        'bg-primary/10 border border-primary/30',
+        'hover:bg-primary/20 hover:border-primary/50',
         'transition-all duration-200'
       )}
     >
@@ -272,11 +272,11 @@ function ViewAllButton({ href, label }: { href: string; label: string }) {
  */
 function EmptySection({ message, icon }: { message: string; icon: string }) {
   return (
-    <div className="py-12 text-center rounded-xl bg-[#121215] border border-[#27272a]">
-      <span className="material-symbols-outlined text-4xl text-[#52525b] mb-3">
+    <div className="py-12 text-center rounded-xl bg-card border border-border">
+      <span className="material-symbols-outlined text-4xl text-muted-3 mb-3">
         {icon}
       </span>
-      <p className="text-[#71717a]">{message}</p>
+      <p className="text-muted-2">{message}</p>
     </div>
   );
 }
@@ -299,10 +299,10 @@ export function EditorLanding({
     <div className="p-4 md:p-6 lg:p-8 max-w-6xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-[#fafafa] tracking-tight">
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">
           Editor de Reseñas
         </h1>
-        <p className="text-sm text-[#a1a1aa] mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Continúa escribiendo tus reseñas desde la página de detalles
         </p>
       </div>

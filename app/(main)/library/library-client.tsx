@@ -198,35 +198,35 @@ export function LibraryClient({
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
-      <h1 className="text-2xl font-bold text-[#fafafa] mb-6">Mi Biblioteca</h1>
+      <h1 className="text-2xl font-bold text-foreground mb-6">Mi Biblioteca</h1>
 
       {/* Hero Stats - Bento Grid */}
       <div className="grid grid-cols-3 gap-4 mb-8">
-        <div className="rounded-xl bg-gradient-to-br from-[#a78bfa]/20 to-[#a78bfa]/5 border border-[#a78bfa]/20 p-5">
+        <div className="rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 p-5">
           <div className="flex items-center gap-3 mb-2">
-            <span className="material-symbols-outlined text-[#a78bfa]">bookmark</span>
+            <span className="material-symbols-outlined text-primary">bookmark</span>
           </div>
-          <div className="text-3xl font-bold text-[#fafafa]">{watchlistCount}</div>
-          <div className="text-sm text-[#a1a1aa]">En Watchlist</div>
+          <div className="text-3xl font-bold text-foreground">{watchlistCount}</div>
+          <div className="text-sm text-muted-foreground">En Watchlist</div>
         </div>
-        <div className="rounded-xl bg-[#121215] border border-[#27272a] p-5">
+        <div className="rounded-xl bg-card border border-border p-5">
           <div className="flex items-center gap-3 mb-2">
             <span className="material-symbols-outlined text-[#fb923c]">draft</span>
           </div>
-          <div className="text-3xl font-bold text-[#fafafa]">{draftsCount}</div>
-          <div className="text-sm text-[#a1a1aa]">Borradores</div>
+          <div className="text-3xl font-bold text-foreground">{draftsCount}</div>
+          <div className="text-sm text-muted-foreground">Borradores</div>
         </div>
-        <div className="rounded-xl bg-[#121215] border border-[#27272a] p-5">
+        <div className="rounded-xl bg-card border border-border p-5">
           <div className="flex items-center gap-3 mb-2">
             <span className="material-symbols-outlined text-[#34d399]">publish</span>
           </div>
-          <div className="text-3xl font-bold text-[#fafafa]">{publishedCount}</div>
-          <div className="text-sm text-[#a1a1aa]">Publicadas</div>
+          <div className="text-3xl font-bold text-foreground">{publishedCount}</div>
+          <div className="text-sm text-muted-foreground">Publicadas</div>
         </div>
       </div>
 
       {/* Tabs - with aria-pressed for accessibility */}
-      <div className="flex gap-2 mb-4 p-1 rounded-xl bg-[#121215] border border-[#27272a]">
+      <div className="flex gap-2 mb-4 p-1 rounded-xl bg-card border border-border">
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -235,8 +235,8 @@ export function LibraryClient({
             className={cn(
               "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors",
               activeTab === tab.id
-                ? "bg-[#a78bfa] text-[#09090b]"
-                : "text-[#a1a1aa] hover:text-[#fafafa] hover:bg-[#18181b]"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground hover:bg-accent"
             )}
           >
             {tab.label}
@@ -249,7 +249,7 @@ export function LibraryClient({
       {activeTab === 'reviews' && (
         <div className="mb-4">
           <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-[#52525b]">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-muted-3">
               search
             </span>
             <input
@@ -259,9 +259,9 @@ export function LibraryClient({
               onChange={(e) => handleSearchChange(e.target.value)}
               className={cn(
                 "w-full pl-10 pr-4 py-2.5 rounded-xl",
-                "bg-[#121215] border border-[#27272a]",
-                "text-[#fafafa] placeholder-[#52525b]",
-                "focus:outline-none focus:border-[#a78bfa] focus:ring-1 focus:ring-[#a78bfa]/50",
+                "bg-card border border-border",
+                "text-foreground placeholder:text-muted-3",
+                "focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50",
                 "transition-colors"
               )}
             />
@@ -273,7 +273,7 @@ export function LibraryClient({
                   setSearchQuery('');
                   router.push('/library?page=1');
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#52525b] hover:text-[#fafafa]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-3 hover:text-foreground"
               >
                 <span className="material-symbols-outlined text-sm">close</span>
               </button>
@@ -284,10 +284,10 @@ export function LibraryClient({
 
       {/* Filters - Only show for reviews tab */}
       {activeTab === 'reviews' && (
-        <div className="flex flex-wrap gap-4 mb-6 p-4 rounded-xl bg-[#121215] border border-[#27272a]">
+        <div className="flex flex-wrap gap-4 mb-6 p-4 rounded-xl bg-card border border-border">
           {/* Type filter */}
           <div className="flex items-center gap-3">
-            <label className="text-sm text-[#a1a1aa]">Tipo:</label>
+            <label className="text-sm text-muted-foreground">Tipo:</label>
             <div className="flex gap-2">
               {typeOptions.map((option) => (
                 <button
@@ -297,8 +297,8 @@ export function LibraryClient({
                   className={cn(
                     "px-3 py-1.5 text-sm rounded-lg transition-colors",
                     filterType === option.value
-                      ? "bg-[#a78bfa] text-[#09090b]"
-                      : "bg-[#18181b] text-[#a1a1aa] hover:text-[#fafafa]"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {option.label}
@@ -309,7 +309,7 @@ export function LibraryClient({
 
           {/* Status filter */}
           <div className="flex items-center gap-3">
-            <label className="text-sm text-[#a1a1aa]">Estado:</label>
+            <label className="text-sm text-muted-foreground">Estado:</label>
             <div className="flex gap-2">
               {statusOptions.map((option) => (
                 <button
@@ -319,8 +319,8 @@ export function LibraryClient({
                   className={cn(
                     "px-3 py-1.5 text-sm rounded-lg transition-colors",
                     filterStatus === option.value
-                      ? "bg-[#a78bfa] text-[#09090b]"
-                      : "bg-[#18181b] text-[#a1a1aa] hover:text-[#fafafa]"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {option.label}
@@ -361,8 +361,8 @@ export function LibraryClient({
                     className={cn(
                       "px-6 py-3 rounded-xl font-medium transition-colors",
                       isLoading
-                        ? "bg-[#27272a] text-[#52525b] cursor-not-allowed"
-                        : "bg-[#a78bfa]/10 text-[#a78bfa] hover:bg-[#a78bfa]/20 border border-[#a78bfa]/30"
+                        ? "bg-muted text-muted-3 cursor-not-allowed"
+                        : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30"
                     )}
                   >
                     {isLoading ? (
@@ -377,21 +377,21 @@ export function LibraryClient({
                 </div>
               )}
               {!hasMore && filteredReviews.length > 0 && (
-                <div className="mt-8 text-center text-sm text-[#52525b]">
+                <div className="mt-8 text-center text-sm text-muted-3">
                   {totalReviews > 0 ? `Mostrando ${filteredReviews.length} de ${totalReviews} reseñas` : 'No hay más reseñas'}
                 </div>
               )}
             </>
           ) : (
-            <div className="py-12 text-center rounded-xl bg-[#121215] border border-[#27272a]">
-              <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">search_off</span>
-              <p className="text-[#a1a1aa]">
+            <div className="py-12 text-center rounded-xl bg-card border border-border">
+              <span className="material-symbols-outlined text-4xl text-muted-foreground mb-3">search_off</span>
+              <p className="text-muted-foreground">
                 {searchQuery ? `No hay reseñas que coincidan con "${searchQuery}"` : 'No hay reseñas que coincidan con los filtros'}
               </p>
               {searchQuery && (
                 <button
                   onClick={() => handleSearchChange('')}
-                  className="mt-4 text-sm text-[#a78bfa] hover:underline"
+                  className="mt-4 text-sm text-primary hover:underline"
                 >
                   Limpiar búsqueda
                 </button>
@@ -405,8 +405,8 @@ export function LibraryClient({
             {/* Watchlist section */}
             {watchlistItems.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-lg font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
-                  <span className="material-symbols-outlined text-[#a78bfa]">bookmark</span>
+                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">bookmark</span>
                   Watchlist
                 </h2>
                 <WatchlistSection
@@ -419,10 +419,10 @@ export function LibraryClient({
             {/* Reviews section - paginated */}
             {reviewItems.length > 0 && (
               <div>
-                <h2 className="text-lg font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
+                <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                   <span className="material-symbols-outlined text-[#34d399]">edit_note</span>
                   Reseñas
-                  <span className="text-sm text-[#52525b] font-normal">
+                  <span className="text-sm text-muted-3 font-normal">
                     ({totalReviews || reviewItems.length})
                   </span>
                 </h2>
@@ -444,8 +444,8 @@ export function LibraryClient({
                       className={cn(
                         "px-6 py-3 rounded-xl font-medium transition-colors",
                         isLoading
-                          ? "bg-[#27272a] text-[#52525b] cursor-not-allowed"
-                          : "bg-[#a78bfa]/10 text-[#a78bfa] hover:bg-[#a78bfa]/20 border border-[#a78bfa]/30"
+                          ? "bg-muted text-muted-3 cursor-not-allowed"
+                          : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30"
                       )}
                     >
                       {isLoading ? 'Cargando...' : 'Cargar más'}
@@ -456,12 +456,12 @@ export function LibraryClient({
             )}
 
             {watchlistItems.length === 0 && reviewItems.length === 0 && (
-              <div className="py-12 text-center rounded-xl bg-[#121215] border border-[#27272a]">
-                <span className="material-symbols-outlined text-4xl text-[#a1a1aa] mb-3">library_books</span>
-                <p className="text-[#fafafa] font-medium">
+              <div className="py-12 text-center rounded-xl bg-card border border-border">
+                <span className="material-symbols-outlined text-4xl text-muted-foreground mb-3">library_books</span>
+                <p className="text-foreground font-medium">
                   Tu biblioteca está vacía
                 </p>
-                <p className="text-sm text-[#a1a1aa] mt-2">
+                <p className="text-sm text-muted-foreground mt-2">
                   Busca películas, series o libros para agregar a tu lista
                 </p>
               </div>

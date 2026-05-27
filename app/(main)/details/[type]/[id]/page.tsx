@@ -263,18 +263,18 @@ function InfoSection({ mediaData }: { mediaData: MediaData }) {
   
   return (
     <div className="mt-12 max-w-3xl mx-auto">
-      <h2 className="text-xl font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
-        <span className="material-symbols-outlined text-[#a78bfa]">info</span>
+      <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">info</span>
         Información
       </h2>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {infoItems.map((item) => (
-          <div key={item.label} className="bg-[#121215] border border-[#27272a] rounded-lg p-3">
-            <div className="flex items-center gap-2 text-[#a1a1aa] text-sm mb-1">
+          <div key={item.label} className="bg-card border border-border rounded-lg p-3">
+            <div className="flex items-center gap-2 text-muted-foreground text-sm mb-1">
               <span className="material-symbols-outlined text-base">{item.icon}</span>
               {item.label}
             </div>
-            <div className="text-[#fafafa] font-medium">{item.value}</div>
+            <div className="text-foreground font-medium">{item.value}</div>
           </div>
         ))}
       </div>
@@ -290,14 +290,14 @@ function CastSection({ credits }: { credits: TMDbCredits | null | undefined }) {
   
   return (
     <div className="mt-12 max-w-3xl mx-auto">
-      <h2 className="text-xl font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
-        <span className="material-symbols-outlined text-[#a78bfa]">group</span>
+      <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">group</span>
         Reparto Principal
       </h2>
       <div className="flex gap-4 overflow-x-auto pb-2">
         {mainCast.map((actor) => (
           <div key={actor.id} className="flex-shrink-0 w-24">
-            <div className="w-24 h-24 rounded-full overflow-hidden bg-[#27272a] mb-2">
+            <div className="w-24 h-24 rounded-full overflow-hidden bg-muted mb-2">
               {actor.profile_path ? (
                 <img
                   src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
@@ -305,13 +305,13 @@ function CastSection({ credits }: { credits: TMDbCredits | null | undefined }) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-[#a1a1aa]">
+                <div className="w-full h-full flex items-center justify-center text-muted-foreground">
                   <span className="material-symbols-outlined text-3xl">person</span>
                 </div>
               )}
             </div>
-            <p className="text-[#fafafa] text-sm font-medium text-center truncate">{actor.name}</p>
-            <p className="text-[#a1a1aa] text-xs text-center truncate">{actor.character}</p>
+            <p className="text-foreground text-sm font-medium text-center truncate">{actor.name}</p>
+            <p className="text-muted-foreground text-xs text-center truncate">{actor.character}</p>
           </div>
         ))}
       </div>
@@ -353,7 +353,7 @@ export default async function DetailsPage({ params, searchParams }: DetailsPageP
   }
   
   return (
-    <div className="min-h-screen bg-[#09090b]">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <DetailHero
         title={mediaData.title}
@@ -384,7 +384,7 @@ export default async function DetailsPage({ params, searchParams }: DetailsPageP
             href={`/editor?mediaId=${id}&mediaType=${type.toUpperCase()}`}
             className={cn(
               'inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold',
-              'bg-[#a78bfa] text-[#09090b] hover:bg-[#a78bfa]/90',
+              'bg-primary text-primary-foreground hover:bg-primary/90',
               'transition-colors'
             )}
           >
@@ -395,11 +395,11 @@ export default async function DetailsPage({ params, searchParams }: DetailsPageP
         
         {mediaData.overview && (
           <div className="mt-12 max-w-3xl mx-auto">
-            <h2 className="text-xl font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#a78bfa]">description</span>
+            <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span className="material-symbols-outlined text-primary">description</span>
               Sinopsis
             </h2>
-            <p className="text-[#d4d4d8] leading-relaxed whitespace-pre-line">
+            <p className="text-body leading-relaxed whitespace-pre-line">
               {mediaData.overview}
             </p>
           </div>

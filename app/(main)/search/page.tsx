@@ -28,7 +28,7 @@ function TabBar({
   ];
 
   return (
-    <div className="flex gap-1 p-1 bg-[#18181b] rounded-lg mb-6">
+    <div className="flex gap-1 p-1 bg-muted rounded-lg mb-6">
       {tabs.map((tab) => (
         <button
           key={tab.id}
@@ -36,8 +36,8 @@ function TabBar({
           className={cn(
             "flex-1 px-4 py-2 rounded-md text-sm font-medium transition-all",
             activeTab === tab.id
-              ? "bg-[#a78bfa] text-white shadow-md"
-              : "text-[#71717a] hover:text-[#fafafa] hover:bg-[#27272a]"
+              ? "bg-primary text-white shadow-md"
+              : "text-muted-2 hover:text-foreground hover:bg-muted"
           )}
         >
           {tab.label} ({counts[tab.id]})
@@ -55,13 +55,13 @@ function SearchResultCard({ result }: { result: SearchResult }) {
       href={`/details/${typeRoute}/${result.id}`}
       className={cn(
         "flex gap-4 p-3 rounded-lg w-full",
-        "bg-[#121215] border border-[#27272a]",
-        "hover:border-[#a78bfa]/50 hover:bg-[#18181b]",
+        "bg-card border border-border",
+        "hover:border-primary/50 hover:bg-accent",
         "transition-all duration-200"
       )}
     >
       {/* Poster/Image */}
-      <div className="w-16 h-24 flex-shrink-0 rounded overflow-hidden bg-[#27272a]">
+      <div className="w-16 h-24 flex-shrink-0 rounded overflow-hidden bg-muted">
         {result.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -70,7 +70,7 @@ function SearchResultCard({ result }: { result: SearchResult }) {
             className="w-full h-full object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-[#52525b]">
+          <div className="w-full h-full flex items-center justify-center text-muted-3">
             <span className="material-symbols-outlined text-2xl">movie</span>
           </div>
         )}
@@ -92,11 +92,11 @@ function SearchResultCard({ result }: { result: SearchResult }) {
               {result.mediaType === "SERIES" && "Serie"}
               {result.mediaType === "BOOK" && "Libro"}
             </span>
-            {result.year && <span className="text-xs text-[#71717a]">{result.year}</span>}
+            {result.year && <span className="text-xs text-muted-2">{result.year}</span>}
           </div>
-          <h3 className="text-[#fafafa] font-medium text-sm truncate">{result.title}</h3>
+          <h3 className="text-foreground font-medium text-sm truncate">{result.title}</h3>
           {result.overview && (
-            <p className="text-xs text-[#71717a] line-clamp-2 mt-1">{result.overview}</p>
+            <p className="text-xs text-muted-2 line-clamp-2 mt-1">{result.overview}</p>
           )}
         </div>
         
@@ -137,7 +137,7 @@ function SearchSection({
       <div className={cn("flex items-center gap-2 mb-4", color)}>
         <span className="material-symbols-outlined">{icon}</span>
         <h2 className="text-lg font-semibold">{title}</h2>
-        <span className="text-sm text-[#71717a]">({results.length})</span>
+        <span className="text-sm text-muted-2">({results.length})</span>
       </div>
       <div className="grid grid-cols-1 gap-3">
         {results.map((result) => (
@@ -156,8 +156,8 @@ function SearchSection({
             className={cn(
               "px-6 py-2.5 rounded-xl font-medium transition-colors text-sm",
               isLoading
-                ? "bg-[#27272a] text-[#52525b] cursor-not-allowed"
-                : "bg-[#a78bfa]/10 text-[#a78bfa] hover:bg-[#a78bfa]/20 border border-[#a78bfa]/30"
+                ? "bg-muted text-muted-3 cursor-not-allowed"
+                : "bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30"
             )}
           >
             {isLoading ? (
@@ -213,13 +213,13 @@ export default function SearchPage() {
   const isLoadingMore = loadingType !== null;
   
   return (
-    <div className="min-h-screen bg-[#09090b] p-4 md:p-6 lg:p-8">
+    <div className="min-h-screen bg-background p-4 md:p-6 lg:p-8">
       {/* Header */}
       <div className="max-w-4xl mx-auto mb-8">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#fafafa] mb-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
           Búsqueda
         </h1>
-        <p className="text-[#71717a]">
+        <p className="text-muted-2">
           {query ? `Resultados para "${query}"` : "Buscar películas, series y libros"}
         </p>
       </div>
@@ -228,7 +228,7 @@ export default function SearchPage() {
       <div className="max-w-4xl mx-auto">
         {isLoading && (
           <div className="flex items-center justify-center py-12">
-            <div className="w-8 h-8 border-2 border-[#a78bfa] border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
           </div>
         )}
         
@@ -240,10 +240,10 @@ export default function SearchPage() {
         )}
         
         {!isLoading && !error && query && counts.all === 0 && (
-          <div className="text-center py-12 rounded-xl bg-[#121215] border border-[#27272a]">
-            <span className="material-symbols-outlined text-5xl text-[#52525b] mb-4">search_off</span>
-            <p className="text-[#fafafa] text-lg font-medium">No se encontraron resultados</p>
-            <p className="text-[#71717a] mt-1">Intenta con otras palabras clave</p>
+          <div className="text-center py-12 rounded-xl bg-card border border-border">
+            <span className="material-symbols-outlined text-5xl text-muted-3 mb-4">search_off</span>
+            <p className="text-foreground text-lg font-medium">No se encontraron resultados</p>
+            <p className="text-muted-2 mt-1">Intenta con otras palabras clave</p>
           </div>
         )}
         
@@ -292,10 +292,10 @@ export default function SearchPage() {
         )}
         
         {!query && (
-          <div className="text-center py-12 rounded-xl bg-[#121215] border border-[#27272a]">
-            <span className="material-symbols-outlined text-5xl text-[#52525b] mb-4">search</span>
-            <p className="text-[#fafafa] text-lg font-medium">Ingresa un término de búsqueda</p>
-            <p className="text-[#71717a] mt-1">Busca películas, series o libros</p>
+          <div className="text-center py-12 rounded-xl bg-card border border-border">
+            <span className="material-symbols-outlined text-5xl text-muted-3 mb-4">search</span>
+            <p className="text-foreground text-lg font-medium">Ingresa un término de búsqueda</p>
+            <p className="text-muted-2 mt-1">Busca películas, series o libros</p>
           </div>
         )}
       </div>

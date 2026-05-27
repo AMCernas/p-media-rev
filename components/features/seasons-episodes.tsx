@@ -81,8 +81,8 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
 
   return (
     <div className="mt-12 max-w-3xl mx-auto">
-      <h2 className="text-xl font-semibold text-[#fafafa] mb-4 flex items-center gap-2">
-        <span className="material-symbols-outlined text-[#a78bfa]">tv</span>
+      <h2 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+        <span className="material-symbols-outlined text-primary">tv</span>
         Temporadas y Episodios
       </h2>
 
@@ -95,8 +95,8 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
             className={cn(
               "px-4 py-2 rounded-lg text-sm font-medium transition-colors",
               selectedSeason === season.season_number
-                ? "bg-[#a78bfa] text-[#09090b]"
-                : "bg-[#27272a] text-[#a1a1aa] hover:bg-[#3f3f46] hover:text-[#fafafa]"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted hover:text-foreground"
             )}
           >
             {season.name.replace(/^Season /i, "Temporada ")}
@@ -107,7 +107,7 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
       {/* Episodes List */}
       {loadingEpisodes && (
         <div className="flex items-center justify-center py-8">
-          <div className="w-8 h-8 border-2 border-[#a78bfa] border-t-transparent rounded-full animate-spin" />
+          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
         </div>
       )}
 
@@ -120,10 +120,10 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
           {episodes.map((episode) => (
             <div
               key={episode.id}
-              className="flex gap-4 p-3 rounded-lg bg-[#121215] border border-[#27272a] hover:border-[#a78bfa]/30 transition-colors"
+              className="flex gap-4 p-3 rounded-lg bg-card border border-border hover:border-primary/30 transition-colors"
             >
               {/* Episode Image/Number */}
-              <div className="flex-shrink-0 w-32 h-20 rounded overflow-hidden bg-[#27272a]">
+              <div className="flex-shrink-0 w-32 h-20 rounded overflow-hidden bg-muted">
                 {episode.still_path ? (
                   <img
                     src={`https://image.tmdb.org/t/p/w300${episode.still_path}`}
@@ -131,7 +131,7 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-[#a1a1aa]">
+                  <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
                     <span className="text-2xl font-bold">E{episode.episode_number}</span>
                   </div>
                 )}
@@ -140,25 +140,25 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
               {/* Episode Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[#a78bfa] font-semibold text-sm">
+                  <span className="text-primary font-semibold text-sm">
                     Episodio {episode.episode_number}
                   </span>
                   {episode.air_date && (
-                    <span className="text-xs text-[#a1a1aa]">
+                    <span className="text-xs text-muted-foreground">
                       {formatDate(episode.air_date)}
                     </span>
                   )}
                   {episode.runtime && (
-                    <span className="text-xs text-[#a1a1aa]">
+                    <span className="text-xs text-muted-foreground">
                       • {episode.runtime} min
                     </span>
                   )}
                 </div>
-                <h3 className="text-[#fafafa] font-medium text-sm mb-1 truncate">
+                <h3 className="text-foreground font-medium text-sm mb-1 truncate">
                   {episode.name}
                 </h3>
                 {episode.overview && (
-                  <p className="text-xs text-[#a1a1aa] line-clamp-2">
+                  <p className="text-xs text-muted-foreground line-clamp-2">
                     {episode.overview}
                   </p>
                 )}
@@ -177,7 +177,7 @@ export function SeasonsEpisodes({ seasons, seriesId, seriesTitle }: SeasonsEpiso
       )}
 
       {!loadingEpisodes && !error && episodes.length === 0 && selectedSeason && (
-        <div className="text-center py-8 text-[#a1a1aa]">
+        <div className="text-center py-8 text-muted-foreground">
           No hay episodios disponibles para esta temporada
         </div>
       )}

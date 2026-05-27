@@ -1,4 +1,4 @@
-# AGENTS.md — Screen Review App
+# AGENTS.md — Shelf App
 
 Guía de referencia para agentes de IA que trabajen en este repositorio. Leer completo antes de modificar cualquier archivo.
 
@@ -6,7 +6,7 @@ Guía de referencia para agentes de IA que trabajen en este repositorio. Leer co
 
 ## Visión General del Proyecto
 
-Aplicación web personal para reseñar series, películas y libros. Permite al usuario buscar contenido a través de APIs externas, agregar ítems a una watchlist, escribir reseñas y administrarlas desde un editor.
+**Shelf** — Aplicación web personal para reseñar series, películas y libros. Permite al usuario buscar contenido a través de APIs externas, agregar ítems a una watchlist, escribir reseñas y administrarlas desde un editor.
 
 ---
 
@@ -390,7 +390,7 @@ DATABASE_URL=
 | Search: filtro por tipo (Todos/Películas/Series/Libros) | ✅ |
 | Dashboard: actividad reciente clickeable | ✅ |
 | Dashboard: sin stats cards (simplificado) | ✅ |
-| Settings: perfil, idioma, orden biblioteca | 🔲 |
+| Settings: perfil, idioma, orden biblioteca, tema | ✅ |
 
 ---
 
