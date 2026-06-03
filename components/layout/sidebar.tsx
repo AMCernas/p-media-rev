@@ -118,7 +118,7 @@ export function Sidebar({ user, profileName }: SidebarProps) {
         <div className="p-5 border-b border-border/10">
           <Link href="/dashboard" className="flex items-center gap-3 group" onClick={closeSidebar}>
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#a78bfa] to-[#7c3aed] flex items-center justify-center shadow-lg shadow-primary/20">
-              <span className="material-symbols-outlined text-primary-foreground text-xl">movie</span>
+              <img src="/logo.png" alt="Shelf" className="w-7 h-auto object-contain" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-foreground tracking-tight">Shelf</h1>
